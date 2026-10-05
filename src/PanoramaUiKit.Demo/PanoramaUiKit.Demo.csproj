@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    A consumer of the kit: references ONLY PanoramaUiKit.Shared, never PanoramaManager.
+    Private=false: the server loads the Shared DLL once from shared/PanoramaUiKit.Shared/; a copy
+    next to this plugin would be another type identity and the capability would resolve to null.
+  -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AssemblyName>PanoramaUiKit.Demo</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CounterStrikeSharp.API" Version="$(CounterStrikeSharpVersion)" ExcludeAssets="runtime" />
+    <ProjectReference Include="../PanoramaUiKit.Shared/PanoramaUiKit.Shared.csproj" Private="false" />
+  </ItemGroup>
+
+</Project>

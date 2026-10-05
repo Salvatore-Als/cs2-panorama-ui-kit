@@ -1,0 +1,288 @@
+/*
+    uikit_abilities - ability strip, bottom centre. One flat plaque: hairline, #12171e, key + name
+    per slot. Accent (style-* on ab_bar) colours the key and the recharge gauge.
+    Contract "abilities" (docs/CONTRACTS.md). cd-N / hold-N must match AbilityLayout.
+*/
+
+.ab-bar-row {
+    flow-children: right;
+    horizontal-align: center;
+    vertical-align: bottom;
+    margin-bottom: 22px;
+    padding: 10px 6px 8px 6px;
+    border-radius: 4px;
+    border: 1px solid #ffffff14;
+    background-color: #12171e;
+    box-shadow: #00000070 0px 4px 12px 0px;
+}
+
+/* Slot --------------------------------------------------------------------- */
+
+.ab-slot {
+    flow-children: down;
+    width: 220px;
+    padding: 0px 10px;
+}
+
+.ab-card {
+    width: 40px;
+    height: 28px;
+    horizontal-align: center;
+    border-radius: 3px;
+    border: 1px solid #ffffff14;
+    background-color: #ffffff08;
+}
+
+.ab-key,
+.ab-cd {
+    ignore-parent-flow: true;
+    horizontal-align: center;
+    vertical-align: center;
+    text-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+
+.ab-key {
+    color: #f2f4f7;
+}
+
+.ab-cd {
+    color: #9aa2ac;
+    opacity: 0;
+}
+
+.ab-slot.cooldown .ab-key { opacity: 0; }
+.ab-slot.cooldown .ab-cd  { opacity: 1; }
+
+.ab-gauge {
+    ignore-parent-flow: true;
+    width: 100%;
+    height: 2px;
+    vertical-align: bottom;
+    background-color: #ffffff12;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-out;
+}
+
+.ab-slot.holding .ab-gauge { opacity: 1; }
+
+/* Both bars are layered in the gauge (no flow); the hold bar only shows while holding. */
+.ab-bar {
+    width: 100%;
+    height: 100%;
+    background-color: #9aa2ac;
+    clip: rect( 0%, 0%, 100%, 0% );
+    transition-property: clip;
+    transition-timing-function: linear;
+    transition-duration: 0.0s;
+}
+
+.ab-bar.run { clip: rect( 0%, 100%, 100%, 0% ); }
+
+.ab-hold {
+    width: 100%;
+    height: 100%;
+    background-color: #f2f4f7;
+    clip: rect( 0%, 0%, 100%, 0% );
+    opacity: 0;
+    transition-property: clip;
+    transition-timing-function: linear;
+    transition-duration: 0.0s;
+}
+
+.ab-slot.holding .ab-hold { opacity: 1; }
+.ab-hold.run              { clip: rect( 0%, 100%, 100%, 0% ); }
+
+.ab-name {
+    width: 100%;
+    text-align: center;
+    margin-top: 12px;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* States ------------------------------------------------------------------- */
+
+.ab-slot.cooldown .ab-name { color: #61686f; }
+
+/* Unusable for another reason than a cooldown: dimmed, no timer. */
+.ab-slot.blocked .ab-card { opacity: 0.35; }
+.ab-slot.blocked .ab-name { color: #61686f; }
+
+/* Recharge durations, seconds (match AbilityLayout.MaxCooldownSeconds) - */
+
+.ab-bar.cd-1 { transition-duration: 1.0s; }
+.ab-bar.cd-2 { transition-duration: 2.0s; }
+.ab-bar.cd-3 { transition-duration: 3.0s; }
+.ab-bar.cd-4 { transition-duration: 4.0s; }
+.ab-bar.cd-5 { transition-duration: 5.0s; }
+.ab-bar.cd-6 { transition-duration: 6.0s; }
+.ab-bar.cd-7 { transition-duration: 7.0s; }
+.ab-bar.cd-8 { transition-duration: 8.0s; }
+.ab-bar.cd-9 { transition-duration: 9.0s; }
+.ab-bar.cd-10 { transition-duration: 10.0s; }
+.ab-bar.cd-11 { transition-duration: 11.0s; }
+.ab-bar.cd-12 { transition-duration: 12.0s; }
+.ab-bar.cd-13 { transition-duration: 13.0s; }
+.ab-bar.cd-14 { transition-duration: 14.0s; }
+.ab-bar.cd-15 { transition-duration: 15.0s; }
+.ab-bar.cd-16 { transition-duration: 16.0s; }
+.ab-bar.cd-17 { transition-duration: 17.0s; }
+.ab-bar.cd-18 { transition-duration: 18.0s; }
+.ab-bar.cd-19 { transition-duration: 19.0s; }
+.ab-bar.cd-20 { transition-duration: 20.0s; }
+.ab-bar.cd-21 { transition-duration: 21.0s; }
+.ab-bar.cd-22 { transition-duration: 22.0s; }
+.ab-bar.cd-23 { transition-duration: 23.0s; }
+.ab-bar.cd-24 { transition-duration: 24.0s; }
+.ab-bar.cd-25 { transition-duration: 25.0s; }
+.ab-bar.cd-26 { transition-duration: 26.0s; }
+.ab-bar.cd-27 { transition-duration: 27.0s; }
+.ab-bar.cd-28 { transition-duration: 28.0s; }
+.ab-bar.cd-29 { transition-duration: 29.0s; }
+.ab-bar.cd-30 { transition-duration: 30.0s; }
+.ab-bar.cd-31 { transition-duration: 31.0s; }
+.ab-bar.cd-32 { transition-duration: 32.0s; }
+.ab-bar.cd-33 { transition-duration: 33.0s; }
+.ab-bar.cd-34 { transition-duration: 34.0s; }
+.ab-bar.cd-35 { transition-duration: 35.0s; }
+.ab-bar.cd-36 { transition-duration: 36.0s; }
+.ab-bar.cd-37 { transition-duration: 37.0s; }
+.ab-bar.cd-38 { transition-duration: 38.0s; }
+.ab-bar.cd-39 { transition-duration: 39.0s; }
+.ab-bar.cd-40 { transition-duration: 40.0s; }
+.ab-bar.cd-41 { transition-duration: 41.0s; }
+.ab-bar.cd-42 { transition-duration: 42.0s; }
+.ab-bar.cd-43 { transition-duration: 43.0s; }
+.ab-bar.cd-44 { transition-duration: 44.0s; }
+.ab-bar.cd-45 { transition-duration: 45.0s; }
+.ab-bar.cd-46 { transition-duration: 46.0s; }
+.ab-bar.cd-47 { transition-duration: 47.0s; }
+.ab-bar.cd-48 { transition-duration: 48.0s; }
+.ab-bar.cd-49 { transition-duration: 49.0s; }
+.ab-bar.cd-50 { transition-duration: 50.0s; }
+.ab-bar.cd-51 { transition-duration: 51.0s; }
+.ab-bar.cd-52 { transition-duration: 52.0s; }
+.ab-bar.cd-53 { transition-duration: 53.0s; }
+.ab-bar.cd-54 { transition-duration: 54.0s; }
+.ab-bar.cd-55 { transition-duration: 55.0s; }
+.ab-bar.cd-56 { transition-duration: 56.0s; }
+.ab-bar.cd-57 { transition-duration: 57.0s; }
+.ab-bar.cd-58 { transition-duration: 58.0s; }
+.ab-bar.cd-59 { transition-duration: 59.0s; }
+.ab-bar.cd-60 { transition-duration: 60.0s; }
+.ab-bar.cd-61 { transition-duration: 61.0s; }
+.ab-bar.cd-62 { transition-duration: 62.0s; }
+.ab-bar.cd-63 { transition-duration: 63.0s; }
+.ab-bar.cd-64 { transition-duration: 64.0s; }
+.ab-bar.cd-65 { transition-duration: 65.0s; }
+.ab-bar.cd-66 { transition-duration: 66.0s; }
+.ab-bar.cd-67 { transition-duration: 67.0s; }
+.ab-bar.cd-68 { transition-duration: 68.0s; }
+.ab-bar.cd-69 { transition-duration: 69.0s; }
+.ab-bar.cd-70 { transition-duration: 70.0s; }
+.ab-bar.cd-71 { transition-duration: 71.0s; }
+.ab-bar.cd-72 { transition-duration: 72.0s; }
+.ab-bar.cd-73 { transition-duration: 73.0s; }
+.ab-bar.cd-74 { transition-duration: 74.0s; }
+.ab-bar.cd-75 { transition-duration: 75.0s; }
+.ab-bar.cd-76 { transition-duration: 76.0s; }
+.ab-bar.cd-77 { transition-duration: 77.0s; }
+.ab-bar.cd-78 { transition-duration: 78.0s; }
+.ab-bar.cd-79 { transition-duration: 79.0s; }
+.ab-bar.cd-80 { transition-duration: 80.0s; }
+.ab-bar.cd-81 { transition-duration: 81.0s; }
+.ab-bar.cd-82 { transition-duration: 82.0s; }
+.ab-bar.cd-83 { transition-duration: 83.0s; }
+.ab-bar.cd-84 { transition-duration: 84.0s; }
+.ab-bar.cd-85 { transition-duration: 85.0s; }
+.ab-bar.cd-86 { transition-duration: 86.0s; }
+.ab-bar.cd-87 { transition-duration: 87.0s; }
+.ab-bar.cd-88 { transition-duration: 88.0s; }
+.ab-bar.cd-89 { transition-duration: 89.0s; }
+.ab-bar.cd-90 { transition-duration: 90.0s; }
+.ab-bar.cd-91 { transition-duration: 91.0s; }
+.ab-bar.cd-92 { transition-duration: 92.0s; }
+.ab-bar.cd-93 { transition-duration: 93.0s; }
+.ab-bar.cd-94 { transition-duration: 94.0s; }
+.ab-bar.cd-95 { transition-duration: 95.0s; }
+.ab-bar.cd-96 { transition-duration: 96.0s; }
+.ab-bar.cd-97 { transition-duration: 97.0s; }
+.ab-bar.cd-98 { transition-duration: 98.0s; }
+.ab-bar.cd-99 { transition-duration: 99.0s; }
+.ab-bar.cd-100 { transition-duration: 100.0s; }
+.ab-bar.cd-101 { transition-duration: 101.0s; }
+.ab-bar.cd-102 { transition-duration: 102.0s; }
+.ab-bar.cd-103 { transition-duration: 103.0s; }
+.ab-bar.cd-104 { transition-duration: 104.0s; }
+.ab-bar.cd-105 { transition-duration: 105.0s; }
+.ab-bar.cd-106 { transition-duration: 106.0s; }
+.ab-bar.cd-107 { transition-duration: 107.0s; }
+.ab-bar.cd-108 { transition-duration: 108.0s; }
+.ab-bar.cd-109 { transition-duration: 109.0s; }
+.ab-bar.cd-110 { transition-duration: 110.0s; }
+.ab-bar.cd-111 { transition-duration: 111.0s; }
+.ab-bar.cd-112 { transition-duration: 112.0s; }
+.ab-bar.cd-113 { transition-duration: 113.0s; }
+.ab-bar.cd-114 { transition-duration: 114.0s; }
+.ab-bar.cd-115 { transition-duration: 115.0s; }
+.ab-bar.cd-116 { transition-duration: 116.0s; }
+.ab-bar.cd-117 { transition-duration: 117.0s; }
+.ab-bar.cd-118 { transition-duration: 118.0s; }
+.ab-bar.cd-119 { transition-duration: 119.0s; }
+.ab-bar.cd-120 { transition-duration: 120.0s; }
+
+/* Hold durations, tenths of a second (match AbilityLayout.HoldStepTenths / MaxHoldTenths) -- */
+
+.ab-hold.hold-5 { transition-duration: 0.5s; }
+.ab-hold.hold-10 { transition-duration: 1.0s; }
+.ab-hold.hold-15 { transition-duration: 1.5s; }
+.ab-hold.hold-20 { transition-duration: 2.0s; }
+.ab-hold.hold-25 { transition-duration: 2.5s; }
+.ab-hold.hold-30 { transition-duration: 3.0s; }
+.ab-hold.hold-35 { transition-duration: 3.5s; }
+.ab-hold.hold-40 { transition-duration: 4.0s; }
+.ab-hold.hold-45 { transition-duration: 4.5s; }
+.ab-hold.hold-50 { transition-duration: 5.0s; }
+.ab-hold.hold-55 { transition-duration: 5.5s; }
+.ab-hold.hold-60 { transition-duration: 6.0s; }
+.ab-hold.hold-65 { transition-duration: 6.5s; }
+.ab-hold.hold-70 { transition-duration: 7.0s; }
+.ab-hold.hold-75 { transition-duration: 7.5s; }
+.ab-hold.hold-80 { transition-duration: 8.0s; }
+.ab-hold.hold-85 { transition-duration: 8.5s; }
+.ab-hold.hold-90 { transition-duration: 9.0s; }
+.ab-hold.hold-95 { transition-duration: 9.5s; }
+.ab-hold.hold-100 { transition-duration: 10.0s; }
+
+/* Accents (UiStyle): the key letter and the gauge ------------------------- */
+
+.ab-bar-row.style-neutral .ab-key { color: #f2f4f7; }
+.ab-bar-row.style-neutral .ab-bar { background-color: #9aa2ac; }
+
+.ab-bar-row.style-info .ab-key { color: #56a0dd; }
+.ab-bar-row.style-info .ab-bar { background-color: #56a0dd; }
+
+.ab-bar-row.style-success .ab-key { color: #9ccf4f; }
+.ab-bar-row.style-success .ab-bar { background-color: #9ccf4f; }
+
+.ab-bar-row.style-warn .ab-key { color: #f0a531; }
+.ab-bar-row.style-warn .ab-bar { background-color: #f0a531; }
+
+.ab-bar-row.style-danger .ab-key { color: #e0432f; }
+.ab-bar-row.style-danger .ab-bar { background-color: #e0432f; }
+
+.ab-bar-row.style-purple .ab-key { color: #8847ff; }
+.ab-bar-row.style-purple .ab-bar { background-color: #8847ff; }
+
+.ab-bar-row.style-gold .ab-key { color: #e0a24a; }
+.ab-bar-row.style-gold .ab-bar { background-color: #e0a24a; }

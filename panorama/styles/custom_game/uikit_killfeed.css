@@ -1,0 +1,89 @@
+/*
+    uikit_killfeed - top right, where the native kill feed sits: dark row, accent edge,
+    attacker / tag / victim. Rows are a pool, newest on top. Row 0 replays its entry by alternating
+    flash-a / flash-b (a same-tick off-then-on class reaches nobody).
+    Contract "killfeed" (docs/CONTRACTS.md).
+*/
+
+.kf-list {
+    flow-children: down;
+    horizontal-align: right;
+    vertical-align: top;
+    margin-top: 14px;
+    margin-right: 16px;
+}
+
+.kf-row {
+    flow-children: right;
+    horizontal-align: right;
+    margin-bottom: 5px;
+    padding: 8px 16px 8px 14px;
+    border-radius: 4px;
+    border-left: 3px solid #9aa2ac;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #12171eeb ), to( #0b0f14f2 ) );
+    box-shadow: #00000070 0px 4px 12px 0px;
+}
+
+.kf-attacker,
+.kf-victim {
+    vertical-align: center;
+    max-width: 220px;
+    font-family: Stratum2 Bold;
+    font-size: 17px;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.kf-tag {
+    vertical-align: center;
+    margin: 0px 12px;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 13px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+}
+
+.kf-row.flash-a { animation-name: kf-in-a; }
+.kf-row.flash-b { animation-name: kf-in-b; }
+
+.kf-row.flash-a,
+.kf-row.flash-b {
+    animation-duration: 0.35s;
+    animation-timing-function: ease-out;
+}
+
+/* Two names, same animation. Names quoted: unquoted fails the whole stylesheet. */
+@keyframes 'kf-in-a' {
+    0%   { opacity: 0.0; transform: translateX( 40px ); brightness: 2.0; }
+    100% { opacity: 1.0; transform: translateX( 0px ); brightness: 1.0; }
+}
+
+@keyframes 'kf-in-b' {
+    0%   { opacity: 0.0; transform: translateX( 40px ); brightness: 2.0; }
+    100% { opacity: 1.0; transform: translateX( 0px ); brightness: 1.0; }
+}
+
+/* Styles (UiStyle): edge and tag ------------------------------------------- */
+
+.kf-row.style-neutral { border-left: 3px solid #9aa2ac; }
+.kf-row.style-neutral .kf-tag { color: #9aa2ac; }
+
+.kf-row.style-info { border-left: 3px solid #56a0dd; }
+.kf-row.style-info .kf-tag { color: #56a0dd; }
+
+.kf-row.style-success { border-left: 3px solid #9ccf4f; }
+.kf-row.style-success .kf-tag { color: #9ccf4f; }
+
+.kf-row.style-warn { border-left: 3px solid #f0a531; }
+.kf-row.style-warn .kf-tag { color: #f0a531; }
+
+.kf-row.style-danger { border-left: 3px solid #e0432f; }
+.kf-row.style-danger .kf-tag { color: #e0432f; }
+
+.kf-row.style-purple { border-left: 3px solid #8847ff; }
+.kf-row.style-purple .kf-tag { color: #8847ff; }
+
+.kf-row.style-gold { border-left: 3px solid #e0a24a; }
+.kf-row.style-gold .kf-tag { color: #e0a24a; }

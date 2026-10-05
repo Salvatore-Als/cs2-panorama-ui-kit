@@ -1,0 +1,86 @@
+{
+  "component": "abilities",
+  "csharp": "AbilityLayout / IAbilityService",
+  "summary": "Per-player ability bar: key, name, cooldown gauge, hold gauge. Tick-friendly.",
+  "params": {
+    "slots": {
+      "default": 4,
+      "doc": "Tiles in the pool (AbilityLayout.Slots)."
+    }
+  },
+  "repeat": {
+    "n": "slots"
+  },
+  "panels": [
+    {
+      "id": "ab_bar",
+      "required": true,
+      "classes": [
+        "style-*"
+      ],
+      "doc": "The bar. Style = accent.",
+      "once": true
+    },
+    {
+      "id": "ab_{n}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "cooldown",
+        "holding",
+        "blocked"
+      ],
+      "doc": "A tile. Author it `hidden`."
+    },
+    {
+      "id": "ab_{n}_bar",
+      "required": false,
+      "classes": [
+        "cd-N",
+        "run"
+      ],
+      "doc": "Recharge gauge: `cd-N` = N seconds (1..MaxCooldownSeconds), `run` fills it."
+    },
+    {
+      "id": "ab_{n}_hold",
+      "required": false,
+      "classes": [
+        "hold-N",
+        "run"
+      ],
+      "doc": "Hold gauge: `hold-N` = N tenths of a second (by HoldStepTenths), `run` fills it."
+    }
+  ],
+  "texts": [
+    {
+      "var": "ab_{n}_key",
+      "required": true,
+      "doc": "AbilitySlot.Key"
+    },
+    {
+      "var": "ab_{n}_name",
+      "required": true,
+      "doc": "AbilitySlot.Name"
+    },
+    {
+      "var": "ab_{n}_cd",
+      "required": false,
+      "doc": "Seconds left, while `cooldown`"
+    },
+    {
+      "var": "ab_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "AbilityBarOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "cooldown",
+    "holding",
+    "run",
+    "cd-1",
+    "hold-5",
+    "style-neutral"
+  ]
+}

@@ -1,0 +1,39 @@
+/*
+    uikit_shared - primitives every Panorama UI Kit layout includes first.
+
+        <include src="s2r://panorama/styles/custom_game/uikit_shared.vcss_c" />
+        <include src="s2r://panorama/styles/custom_game/<layout>.vcss_c" />
+
+    Contract classes the kit toggles by name live here. Changing what they mean breaks every layout.
+
+    Palette (no var() in Panorama - copy the hex, keep this list the source of truth):
+        panel   #12171e     edge    #ffffff14     ink     #f2f4f7     muted   #9aa2ac    dim  #61686f
+        neutral #9aa2ac     info    #56a0dd       success #9ccf4f     warn    #f0a531
+        danger  #e0432f     purple  #8847ff       gold    #e0a24a
+*/
+
+/* LayoutContract.HiddenClass - collapse, so an unused slot leaves no gap. */
+.hidden {
+    visibility: collapse;
+}
+
+/* Blank optional text: the kit adds "empty", the line goes away. */
+.empty {
+    visibility: collapse;
+}
+
+/*
+    Full-screen wrapper. The loader-assigned root cannot carry an id, so this is the anonymous level.
+    z-index must sit on the OUTERMOST panel to order the layout above the game HUD.
+*/
+.uikit-screen {
+    width: 100%;
+    height: 100%;
+    overflow: noclip;
+    z-index: 99999;
+}
+
+.uikit-fill {
+    width: 100%;
+    height: 100%;
+}

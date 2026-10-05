@@ -1,0 +1,124 @@
+{
+  "component": "match",
+  "csharp": "MatchLayout / IMatchService",
+  "summary": "Compact top bar: a count + title on each side, a timer in the middle, optional score tabs under the sides. Same text for everyone. Tick-friendly.",
+  "params": {},
+  "repeat": {},
+  "panels": [
+    {
+      "id": "m_bar",
+      "required": true,
+      "classes": [
+        "style-*",
+        "urgent"
+      ],
+      "doc": "The bar. `urgent` for the last seconds; style-* colours the centre's bottom edge."
+    },
+    {
+      "id": "m_left",
+      "required": false,
+      "classes": [
+        "style-*"
+      ],
+      "doc": "Left block: style-* colours its count and title (MatchOptions.LeftStyle)."
+    },
+    {
+      "id": "m_right",
+      "required": false,
+      "classes": [
+        "style-*"
+      ],
+      "doc": "Right block: style-* colours its count and title (MatchOptions.RightStyle)."
+    },
+    {
+      "id": "m_center_sub",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label under the centre, `empty` when blank."
+    },
+    {
+      "id": "m_scores",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "doc": "Score tabs row. Author it `hidden`; shown only with MatchOptions.ShowScore and a score."
+    },
+    {
+      "id": "m_left_tab",
+      "required": false,
+      "classes": [
+        "style-*"
+      ],
+      "doc": "Left score tab (MatchOptions.LeftStyle)."
+    },
+    {
+      "id": "m_right_tab",
+      "required": false,
+      "classes": [
+        "style-*"
+      ],
+      "doc": "Right score tab (MatchOptions.RightStyle)."
+    }
+  ],
+  "texts": [
+    {
+      "var": "m_center",
+      "required": true,
+      "doc": "MatchOptions.Center"
+    },
+    {
+      "var": "m_center_sub",
+      "required": false,
+      "doc": "MatchOptions.CenterSub"
+    },
+    {
+      "var": "m_left_value",
+      "required": false,
+      "doc": "MatchOptions.LeftValue"
+    },
+    {
+      "var": "m_left_label",
+      "required": false,
+      "doc": "MatchOptions.LeftLabel"
+    },
+    {
+      "var": "m_left_score",
+      "required": false,
+      "doc": "MatchOptions.LeftScore"
+    },
+    {
+      "var": "m_right_value",
+      "required": false,
+      "doc": "MatchOptions.RightValue"
+    },
+    {
+      "var": "m_right_label",
+      "required": false,
+      "doc": "MatchOptions.RightLabel"
+    },
+    {
+      "var": "m_right_score",
+      "required": false,
+      "doc": "MatchOptions.RightScore"
+    },
+    {
+      "var": "m_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "MatchOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "urgent",
+    "hidden",
+    "empty",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

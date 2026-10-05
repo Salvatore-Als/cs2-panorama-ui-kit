@@ -1,0 +1,54 @@
+{
+  "component": "banner",
+  "csharp": "BannerLayout / IBannerService",
+  "summary": "One sticky line across the top. A new banner on a visible one rewrites it in place.",
+  "params": {},
+  "repeat": {},
+  "panels": [
+    {
+      "id": "b_card",
+      "required": true,
+      "classes": [
+        "hidden",
+        "show",
+        "style-*"
+      ],
+      "doc": "The banner. `show` plays the entry."
+    },
+    {
+      "id": "b_kicker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the kicker, `empty` when blank."
+    }
+  ],
+  "texts": [
+    {
+      "var": "b_text",
+      "required": true,
+      "doc": "BannerOptions.Text"
+    },
+    {
+      "var": "b_kicker",
+      "required": false,
+      "doc": "BannerOptions.Kicker"
+    },
+    {
+      "var": "b_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "BannerOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "show",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

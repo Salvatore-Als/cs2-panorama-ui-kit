@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AssemblyName>PanoramaUiKit</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- runtime excluded: the server ships its own CounterStrikeSharp.API.dll. -->
+    <PackageReference Include="CounterStrikeSharp.API" Version="$(CounterStrikeSharpVersion)" ExcludeAssets="runtime" />
+    <PackageReference Include="PanoramaManager" Version="0.4.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Not copied: the server loads it once from shared/PanoramaUiKit.Shared/. -->
+    <ProjectReference Include="../PanoramaUiKit.Shared/PanoramaUiKit.Shared.csproj" Private="false" />
+  </ItemGroup>
+
+  <!-- Copy PanoramaManager.dll next to the plugin (CSS probes the plugin folder), and nothing else. -->
+  <Target Name="CopyPanoramaManager" AfterTargets="ResolveLockFileCopyLocalFiles">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Include="@(RuntimeCopyLocalItems)" Condition="'%(RuntimeCopyLocalItems.NuGetPackageId)' == 'PanoramaManager'" />
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup>
+    <PanoramaValidator>$(MSBuildThisFileDirectory)../../.claude/skills/cs2-panorama-hud/scripts/validate.py</PanoramaValidator>
+    <UiKitTools>$(MSBuildThisFileDirectory)../../tools</UiKitTools>
+    <PanoramaPython Condition="'$(PanoramaPython)' == '' and '$(OS)' == 'Windows_NT'">python</PanoramaPython>
+    <PanoramaPython Condition="'$(PanoramaPython)' == ''">python3</PanoramaPython>
+  </PropertyGroup>
+
+  <!--
+    Fails the build on an invalid layout, stylesheet, or a bundled layout that breaks its contract:
+    in game all three fail silently. Skipped with a warning when Python is missing.
+    Disable with -p:ValidatePanorama=false.
+  -->
+  <Target Name="ValidatePanorama" BeforeTargets="Build" Condition="'$(ValidatePanorama)' != 'false'">
+    <Exec Command="$(PanoramaPython) --version" IgnoreExitCode="true" StandardOutputImportance="low" StandardErrorImportance="low">
+      <Output TaskParameter="ExitCode" PropertyName="_PanoramaPythonExit" />
+    </Exec>
+    <Warning Condition="'$(_PanoramaPythonExit)' != '0'" Text="Panorama: '$(PanoramaPython)' not found, layouts not validated." />
+    <Exec Condition="'$(_PanoramaPythonExit)' == '0' and Exists('$(PanoramaValidator)')" Command="$(PanoramaPython) &quot;$(PanoramaValidator)&quot; &quot;$(MSBuildThisFileDirectory)../..&quot;" />
+    <Exec Condition="'$(_PanoramaPythonExit)' == '0'" WorkingDirectory="$(UiKitTools)" Command="$(PanoramaPython) -m uikit check-all" />
+  </Target>
+
+</Project>

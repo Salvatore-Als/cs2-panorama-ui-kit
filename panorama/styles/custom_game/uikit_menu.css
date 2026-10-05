@@ -1,0 +1,370 @@
+/*
+    uikit_menu - menu card, left of centre: header (back, title, close), breadcrumb, entries, pager.
+    Contract "menu" (docs/CONTRACTS.md).
+
+    "no-back" on mn_menu hides the back button (root menu), "no-pager" hides the pager (one page).
+    An entry (mn_entry_<n>): kind-* decides what it shows - kind-submenu the arrow, kind-toggle the
+    switch ("on" = enabled), kind-select a field with a caret that opens a dropdown ("open" shows
+    it, "active" marks the current choice), kind-button the value. "disabled" greys it, style-*
+    colours its label and value.
+    style-* on mn_menu is the accent: top edge and entry numbers.
+*/
+
+.mn-menu {
+    width: 100%;
+    height: 100%;
+}
+
+/* Card --------------------------------------------------------------------- */
+
+.mn-card {
+    width: 440px;
+    flow-children: down;
+    horizontal-align: left;
+    vertical-align: center;
+    margin-left: 64px;
+    border-radius: 4px;
+    border: 1px solid #ffffff14;
+    border-top: 3px solid #9aa2ac;
+    world-blur: gaussian( 4.0 );
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #12171e ), to( #0c1014 ) );
+    box-shadow: #000000cc 0px 18px 48px 0px;
+
+    opacity: 0;
+    transform: translateX( -24px );
+    transition-property: opacity, transform;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+}
+
+.mn-menu.show .mn-card {
+    opacity: 1;
+    transform: translateX( 0px );
+}
+
+/* Header ------------------------------------------------------------------- */
+
+.mn-head {
+    flow-children: right;
+    width: 100%;
+    padding: 14px 14px 12px 14px;
+    border-bottom: 1px solid #ffffff0a;
+}
+
+.mn-head-copy {
+    flow-children: down;
+    width: fill-parent-flow( 1.0 );
+    vertical-align: center;
+    margin: 0px 10px;
+}
+
+.mn-title {
+    font-family: Stratum2 Bold;
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: shrink min( 14px ) ellipsis;
+}
+
+.mn-subtitle {
+    margin-top: 1px;
+    font-family: Stratum2;
+    font-size: 14px;
+    color: #9aa2ac;
+}
+
+.mn-icon {
+    width: 34px;
+    height: 34px;
+    vertical-align: center;
+    border-radius: 3px;
+    border: 1px solid #ffffff14;
+    background-color: #ffffff0a;
+    transition-property: background-color, opacity;
+    transition-duration: 0.12s;
+    transition-timing-function: ease-out;
+}
+
+.mn-icon:hover { background-color: #ffffff1f; }
+
+.mn-icon-label {
+    horizontal-align: center;
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 18px;
+    color: #f2f4f7;
+}
+
+.mn-close .mn-icon-label { font-size: 14px; }
+.mn-close:hover { background-color: #e0432f40; border-color: #e0432f99; }
+
+.mn-menu.no-back .mn-back { visibility: collapse; }
+
+.mn-path {
+    width: 100%;
+    padding: 8px 16px 0px 16px;
+    font-family: Stratum2 Mono;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #61686f;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Entries ------------------------------------------------------------------ */
+
+.mn-items {
+    flow-children: down;
+    width: 100%;
+    padding: 8px 8px;
+}
+
+.mn-entry {
+    flow-children: down;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.mn-item {
+    flow-children: right;
+    width: 100%;
+    min-height: 46px;
+    padding: 8px 12px 8px 8px;
+    border-radius: 3px;
+    background-color: #ffffff05;
+    transition-property: background-color;
+    transition-duration: 0.12s;
+    transition-timing-function: ease-out;
+}
+
+.mn-item:hover { background-color: #ffffff14; }
+
+.mn-item-index {
+    width: 28px;
+    vertical-align: center;
+    text-align: center;
+    font-family: Stratum2 Mono;
+    font-size: 13px;
+    color: #9aa2ac;
+}
+
+.mn-item-copy {
+    flow-children: down;
+    width: fill-parent-flow( 1.0 );
+    vertical-align: center;
+    margin-left: 8px;
+}
+
+.mn-item-label {
+    font-family: Stratum2 Bold;
+    font-size: 16px;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.mn-item-desc {
+    margin-top: 1px;
+    font-family: Stratum2;
+    font-size: 13px;
+    color: #9aa2ac;
+    white-space: normal;
+}
+
+.mn-item-value {
+    vertical-align: center;
+    margin-left: 10px;
+    font-family: Stratum2 Mono;
+    font-size: 14px;
+    color: #cdd3da;
+}
+
+.mn-item-arrow {
+    vertical-align: center;
+    margin-left: 10px;
+    font-family: Stratum2 Bold;
+    font-size: 20px;
+    color: #9aa2ac;
+    visibility: collapse;
+}
+
+.mn-entry.kind-submenu .mn-item-arrow { visibility: visible; }
+
+/* Button: nothing extra, the plain row is the button. Its value, when set, sits on the right. */
+.mn-entry.kind-button .mn-item-value { color: #cdd3da; }
+
+/* Select: the value is a field with a caret; clicking the row opens the dropdown under it. */
+.mn-item-caret {
+    vertical-align: center;
+    margin-left: 6px;
+    font-family: Stratum2 Bold;
+    font-size: 14px;
+    color: #9aa2ac;
+    visibility: collapse;
+}
+
+.mn-entry.kind-select .mn-item-caret { visibility: visible; }
+
+.mn-entry.kind-select .mn-item-value {
+    padding: 3px 10px;
+    border-radius: 3px;
+    border: 1px solid #ffffff1c;
+    background-color: #ffffff0d;
+    font-family: Stratum2 Bold;
+    font-size: 13px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+}
+
+/* Toggle: track + knob; "on" slides the knob and lights the track. */
+.mn-item-switch {
+    width: 44px;
+    height: 22px;
+    vertical-align: center;
+    margin-left: 10px;
+    border-radius: 11px;
+    background-color: #ffffff1a;
+    visibility: collapse;
+    transition-property: background-color;
+    transition-duration: 0.14s;
+    transition-timing-function: ease-out;
+}
+
+.mn-item-knob {
+    width: 16px;
+    height: 16px;
+    margin: 3px;
+    border-radius: 8px;
+    background-color: #f2f4f7;
+    transform: translateX( 0px );
+    transition-property: transform;
+    transition-duration: 0.14s;
+    transition-timing-function: ease-out;
+}
+
+.mn-entry.kind-toggle .mn-item-switch { visibility: visible; }
+.mn-entry.kind-toggle.on .mn-item-switch { background-color: #9ccf4f; }
+.mn-entry.kind-toggle.on .mn-item-knob   { transform: translateX( 22px ); }
+
+/* Dropdown (kind-select + open): the choices under the row, on a darker ground. */
+.mn-drop {
+    flow-children: down;
+    width: 100%;
+    margin-top: 2px;
+    padding: 4px;
+    border-radius: 3px;
+    border: 1px solid #ffffff1c;
+    background-color: #0a0d11;
+    visibility: collapse;
+}
+
+.mn-entry.kind-select.open .mn-drop { visibility: visible; }
+.mn-entry.kind-select.open .mn-item-caret { color: #f2f4f7; }
+
+.mn-choice {
+    flow-children: right;
+    width: 100%;
+    height: 34px;
+    padding: 0px 12px;
+    border-radius: 3px;
+    background-color: #ffffff00;
+    transition-property: background-color;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-out;
+}
+
+.mn-choice:hover { background-color: #ffffff14; }
+
+.mn-choice-label {
+    width: fill-parent-flow( 1.0 );
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 14px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #cdd3da;
+}
+
+.mn-choice-check {
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 14px;
+    color: #9ccf4f;
+    visibility: collapse;
+}
+
+.mn-choice.active .mn-choice-label { color: #f2f4f7; }
+.mn-choice.active .mn-choice-check { visibility: visible; }
+
+.mn-entry.disabled { opacity: 0.38; }
+.mn-entry.disabled .mn-item:hover { background-color: #ffffff05; }
+
+/* Pager -------------------------------------------------------------------- */
+
+.mn-pager {
+    flow-children: right;
+    width: 100%;
+    padding: 8px 14px 12px 14px;
+    border-top: 1px solid #ffffff0a;
+}
+
+.mn-menu.no-pager .mn-pager { visibility: collapse; }
+
+.mn-page {
+    width: fill-parent-flow( 1.0 );
+    vertical-align: center;
+    text-align: center;
+    font-family: Stratum2 Mono;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #9aa2ac;
+}
+
+.mn-step.disabled { opacity: 0.3; }
+.mn-step.disabled:hover { background-color: #ffffff0a; }
+
+/* Accent (UiStyle on mn_menu): top edge and entry numbers ------------------ */
+
+.mn-menu.style-neutral .mn-card { border-top-color: #9aa2ac; }
+.mn-menu.style-neutral .mn-item-index { color: #9aa2ac; }
+
+.mn-menu.style-info .mn-card { border-top-color: #56a0dd; }
+.mn-menu.style-info .mn-item-index { color: #56a0dd; }
+
+.mn-menu.style-success .mn-card { border-top-color: #9ccf4f; }
+.mn-menu.style-success .mn-item-index { color: #9ccf4f; }
+
+.mn-menu.style-warn .mn-card { border-top-color: #f0a531; }
+.mn-menu.style-warn .mn-item-index { color: #f0a531; }
+
+.mn-menu.style-danger .mn-card { border-top-color: #e0432f; }
+.mn-menu.style-danger .mn-item-index { color: #e0432f; }
+
+.mn-menu.style-purple .mn-card { border-top-color: #8847ff; }
+.mn-menu.style-purple .mn-item-index { color: #8847ff; }
+
+.mn-menu.style-gold .mn-card { border-top-color: #e0a24a; }
+.mn-menu.style-gold .mn-item-index { color: #e0a24a; }
+
+/* Entry colours (UiStyle on mn_item_<n>): label and value ------------------ */
+
+.mn-entry.style-info .mn-item-label { color: #56a0dd; }
+.mn-entry.style-info .mn-item-value { color: #56a0dd; }
+
+.mn-entry.style-success .mn-item-label { color: #9ccf4f; }
+.mn-entry.style-success .mn-item-value { color: #9ccf4f; }
+
+.mn-entry.style-warn .mn-item-label { color: #f0a531; }
+.mn-entry.style-warn .mn-item-value { color: #f0a531; }
+
+.mn-entry.style-danger .mn-item-label { color: #e0432f; }
+.mn-entry.style-danger .mn-item-value { color: #e0432f; }
+
+.mn-entry.style-purple .mn-item-label { color: #8847ff; }
+.mn-entry.style-purple .mn-item-value { color: #8847ff; }
+
+.mn-entry.style-gold .mn-item-label { color: #e0a24a; }
+.mn-entry.style-gold .mn-item-value { color: #e0a24a; }

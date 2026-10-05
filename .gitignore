@@ -1,0 +1,17 @@
+artifacts/
+dist/
+**/bin/
+**/obj/
+*.nupkg
+.vs/
+.idea/
+*.user
+.DS_Store
+__pycache__/
+*.pyc
+*.preview.html
+.claude/settings.local.json
+.pytest_cache/
+previews/
+.claude/
+discord.md

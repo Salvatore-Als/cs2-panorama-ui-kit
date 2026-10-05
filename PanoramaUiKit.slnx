@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PanoramaUiKit.Shared/PanoramaUiKit.Shared.csproj" />
+    <Project Path="src/PanoramaUiKit/PanoramaUiKit.csproj" />
+    <Project Path="src/PanoramaUiKit.Demo/PanoramaUiKit.Demo.csproj" />
+  </Folder>
+</Solution>

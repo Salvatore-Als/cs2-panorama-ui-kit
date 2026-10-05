@@ -1,0 +1,115 @@
+{
+  "component": "toast",
+  "csharp": "ToastLayout / IToastService",
+  "summary": "Stacked, auto-dismissing notifications. A fixed pool of cards per placement.",
+  "params": {
+    "placements": {
+      "default": [
+        "tl",
+        "tc",
+        "tr",
+        "ml",
+        "mr",
+        "bl",
+        "bc",
+        "br"
+      ],
+      "doc": "Placement codes the layout has a stack for (ToastLayout.Placements)."
+    },
+    "depth": {
+      "default": 4,
+      "doc": "Cards per placement (ToastLayout.Depth)."
+    }
+  },
+  "repeat": {
+    "p": "placements",
+    "n": "depth"
+  },
+  "panels": [
+    {
+      "id": "t_{p}_{n}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "show",
+        "style-*",
+        "anim-from-left",
+        "anim-from-right",
+        "anim-from-top",
+        "anim-from-bottom",
+        "anim-fade"
+      ],
+      "doc": "The card. Author it with class `hidden`. `anim-*` is the side it rests on while not `show`."
+    },
+    {
+      "id": "t_{p}_{n}_kicker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the kicker, `empty` when blank."
+    },
+    {
+      "id": "t_{p}_{n}_desc",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the description, `empty` when blank."
+    },
+    {
+      "id": "t_{p}_{n}_track",
+      "required": false,
+      "classes": [
+        "has-progress"
+      ],
+      "doc": "Progress track, `has-progress` while the toast has a duration."
+    },
+    {
+      "id": "t_{p}_{n}_bar",
+      "required": false,
+      "classes": [
+        "dur-N",
+        "run"
+      ],
+      "doc": "Progress bar: `dur-N` (N in ToastLayout.Durations) sets the transition, `run` drains it. Use `clip`, not `width`."
+    }
+  ],
+  "texts": [
+    {
+      "var": "t_{p}_{n}_title",
+      "required": true,
+      "doc": "ToastOptions.Title"
+    },
+    {
+      "var": "t_{p}_{n}_kicker",
+      "required": false,
+      "doc": "ToastOptions.Kicker"
+    },
+    {
+      "var": "t_{p}_{n}_desc",
+      "required": false,
+      "doc": "ToastOptions.Description"
+    },
+    {
+      "var": "t_{p}_{n}_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "ToastOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "show",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger",
+    "anim-from-left",
+    "anim-from-right",
+    "anim-from-top",
+    "anim-from-bottom",
+    "anim-fade"
+  ]
+}

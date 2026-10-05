@@ -1,0 +1,69 @@
+{
+  "component": "announce",
+  "csharp": "AnnounceLayout / IAnnounceService",
+  "summary": "Centred card (reveal, objective, round intro). A new one plays the exit of the previous first.",
+  "params": {},
+  "repeat": {},
+  "panels": [
+    {
+      "id": "a_card",
+      "required": true,
+      "classes": [
+        "hidden",
+        "show",
+        "style-*",
+        "animate-title"
+      ],
+      "doc": "The card. `animate-title` is set when AnnounceOptions.AnimateTitle: animate the title only under it."
+    },
+    {
+      "id": "a_kicker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the kicker, `empty` when blank."
+    },
+    {
+      "id": "a_desc",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the description, `empty` when blank."
+    }
+  ],
+  "texts": [
+    {
+      "var": "a_title",
+      "required": true,
+      "doc": "AnnounceOptions.Title"
+    },
+    {
+      "var": "a_kicker",
+      "required": false,
+      "doc": "AnnounceOptions.Kicker"
+    },
+    {
+      "var": "a_desc",
+      "required": false,
+      "doc": "AnnounceOptions.Description"
+    },
+    {
+      "var": "a_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "AnnounceOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "show",
+    "animate-title",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

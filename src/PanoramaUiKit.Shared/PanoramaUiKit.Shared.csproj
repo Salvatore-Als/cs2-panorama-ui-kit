@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The API every consumer compiles against. Ships ONCE on the server, in
+    addons/counterstrikesharp/shared/PanoramaUiKit.Shared/PanoramaUiKit.Shared.dll, so the kit and
+    every consumer resolve the same types. Consumers reference it with ExcludeAssets/Private=false:
+    a second copy next to a plugin is a different type identity and the capability lookup returns null.
+
+    No PanoramaManager types here - a consumer must not need that package.
+  -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CounterStrikeSharp.API" Version="$(CounterStrikeSharpVersion)" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+</Project>

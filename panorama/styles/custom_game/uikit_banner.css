@@ -1,0 +1,90 @@
+/*
+    uikit_banner - one line under the top of the screen, flanked by accent rules. Optional kicker
+    before the text. "show" plays the entry; style-* colours the rules and the kicker.
+    Contract "banner" (docs/CONTRACTS.md).
+*/
+
+.banner {
+    horizontal-align: center;
+    vertical-align: top;
+    margin-top: 110px;
+    width: 980px;
+    height: 52px;
+    flow-children: right;
+    padding: 0px 28px;
+    border-radius: 0px 0px 10px 10px;
+    border-left: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-top: 0px solid #ffffff00;
+    background-color: #12171e;
+
+    opacity: 0;
+    transform: translateY( 10px );
+    transition-property: opacity, transform;
+    transition-duration: 0.28s;
+    transition-timing-function: ease-out;
+}
+
+.banner.show {
+    opacity: 1;
+    transform: translateY( 0px );
+}
+
+.banner-line {
+    width: fill-parent-flow( 1.0 );
+    height: 2px;
+    vertical-align: center;
+    background-color: #9aa2ac66;
+}
+
+.banner-body {
+    flow-children: right;
+    vertical-align: center;
+    padding: 0px 22px;
+}
+
+.banner-kicker {
+    vertical-align: center;
+    margin-right: 12px;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 13px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+}
+
+.banner-text {
+    max-width: 680px;
+    vertical-align: center;
+    text-align: center;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 18px;
+    letter-spacing: 0.6px;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: shrink min( 12px ) ellipsis;
+}
+
+/* Styles (UiStyle): the flanking rules and the kicker ---------------------- */
+
+.banner.style-neutral .banner-line   { background-color: #9aa2ac; }
+.banner.style-neutral .banner-kicker { color: #9aa2ac; }
+
+.banner.style-info .banner-line   { background-color: #56a0dd; }
+.banner.style-info .banner-kicker { color: #56a0dd; }
+
+.banner.style-success .banner-line   { background-color: #9ccf4f; }
+.banner.style-success .banner-kicker { color: #9ccf4f; }
+
+.banner.style-warn .banner-line   { background-color: #f0a531; }
+.banner.style-warn .banner-kicker { color: #f0a531; }
+
+.banner.style-danger .banner-line   { background-color: #e0432f; }
+.banner.style-danger .banner-kicker { color: #e0432f; }
+
+.banner.style-purple .banner-line   { background-color: #8847ff; }
+.banner.style-purple .banner-kicker { color: #8847ff; }
+
+.banner.style-gold .banner-line   { background-color: #e0a24a; }
+.banner.style-gold .banner-kicker { color: #e0a24a; }

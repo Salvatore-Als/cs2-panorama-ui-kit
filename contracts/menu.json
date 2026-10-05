@@ -1,0 +1,197 @@
+{
+  "component": "menu",
+  "csharp": "MenuLayout / IMenuService",
+  "summary": "Menus and sub-menus: entries paginated by the pool size, back button on sub-menus, pager at the bottom. Takes the mouse.",
+  "params": {
+    "items": {
+      "default": 8,
+      "doc": "Entries per page (MenuLayout.Items)."
+    },
+    "choices": {
+      "default": 6,
+      "doc": "Choices a select's dropdown can list (MenuLayout.Choices); more are ignored."
+    }
+  },
+  "repeat": {
+    "n": "items",
+    "c": "choices"
+  },
+  "panels": [
+    {
+      "id": "mn_menu",
+      "required": true,
+      "classes": [
+        "show",
+        "style-*",
+        "no-back",
+        "no-pager"
+      ],
+      "doc": "Everything under the root. `show` plays the entry; style-* = accent; `no-back` on a root menu; `no-pager` with a single page."
+    },
+    {
+      "id": "mn_close",
+      "required": true,
+      "classes": [],
+      "tag": "Button",
+      "doc": "Close button (click)."
+    },
+    {
+      "id": "mn_back",
+      "required": true,
+      "classes": [],
+      "tag": "Button",
+      "doc": "Back to the parent menu (click). Hide it under `no-back`."
+    },
+    {
+      "id": "mn_prev",
+      "required": true,
+      "classes": [
+        "disabled"
+      ],
+      "tag": "Button",
+      "doc": "Previous page (click), `disabled` on the first page."
+    },
+    {
+      "id": "mn_next",
+      "required": true,
+      "classes": [
+        "disabled"
+      ],
+      "tag": "Button",
+      "doc": "Next page (click), `disabled` on the last page."
+    },
+    {
+      "id": "mn_subtitle",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the subtitle, `empty` when blank."
+    },
+    {
+      "id": "mn_path",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the breadcrumb, `empty` on a root menu."
+    },
+    {
+      "id": "mn_entry_{n}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "kind-button",
+        "kind-toggle",
+        "kind-select",
+        "kind-submenu",
+        "on",
+        "open",
+        "style-*",
+        "disabled"
+      ],
+      "doc": "An entry. Author it `hidden`. `kind-*` decides which parts show: the arrow (submenu), the switch (toggle, `on` = enabled), the value and caret (button, select); `open` shows a select's dropdown."
+    },
+    {
+      "id": "mn_item_{n}",
+      "required": true,
+      "classes": [],
+      "tag": "Button",
+      "doc": "The entry's row (click). Inside `mn_entry_{n}`."
+    },
+    {
+      "id": "mn_item_{n}_desc",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the entry description, `empty` when blank."
+    },
+    {
+      "id": "mn_item_{n}_value",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the entry value, `empty` when blank."
+    },
+    {
+      "id": "mn_choice_{n}_{c}",
+      "required": false,
+      "classes": [
+        "hidden",
+        "active"
+      ],
+      "tag": "Button",
+      "doc": "A choice of the select's dropdown (click). Author it `hidden`. `active` = the current choice. Needed only for menus with a select."
+    }
+  ],
+  "texts": [
+    {
+      "var": "mn_title",
+      "required": true,
+      "doc": "MenuOptions.Title"
+    },
+    {
+      "var": "mn_subtitle",
+      "required": false,
+      "doc": "MenuOptions.Subtitle"
+    },
+    {
+      "var": "mn_path",
+      "required": false,
+      "doc": "Titles of the open menus, root first"
+    },
+    {
+      "var": "mn_page",
+      "required": false,
+      "doc": "\"page / pages\""
+    },
+    {
+      "var": "mn_item_{n}_label",
+      "required": true,
+      "doc": "MenuEntry.Label"
+    },
+    {
+      "var": "mn_item_{n}_desc",
+      "required": false,
+      "doc": "MenuEntry.Description"
+    },
+    {
+      "var": "mn_item_{n}_value",
+      "required": false,
+      "doc": "MenuEntry.Value, or the current choice of a select"
+    },
+    {
+      "var": "mn_choice_{n}_{c}_label",
+      "required": false,
+      "doc": "A choice of a select"
+    },
+    {
+      "var": "mn_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "MenuOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "show",
+    "empty",
+    "no-back",
+    "no-pager",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger",
+    "kind-button",
+    "kind-toggle",
+    "kind-select",
+    "kind-submenu",
+    "on",
+    "open",
+    "active",
+    "disabled"
+  ]
+}

@@ -1,0 +1,303 @@
+/*
+    uikit_victory - end of round screen. Dark veil, one card; elements enter one after the other
+    through transition-delay, so the whole sequence is one "show". Title slams in. style-* on
+    v_screen is the outcome colour, style-* on a chip its own accent.
+    Contract "victory" (docs/CONTRACTS.md).
+*/
+
+.victory-screen {
+    width: 100%;
+    height: 100%;
+}
+
+/* Backdrop ----------------------------------------------------------------- */
+
+.victory-dim {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.45s;
+    transition-timing-function: ease-out;
+}
+
+.victory-screen.show .victory-dim { opacity: 0.78; }
+
+/* Card --------------------------------------------------------------------- */
+
+.victory-card {
+    width: 920px;
+    horizontal-align: center;
+    vertical-align: center;
+    flow-children: down;
+    border-radius: 4px;
+    border-top: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-left: 1px solid #ffffff14;
+    background-color: #12171e;
+    overflow: noclip;
+
+    opacity: 0;
+    transform: translateY( 22px );
+    transition-property: opacity, transform;
+    transition-duration: 0.38s;
+    transition-timing-function: ease-out;
+}
+
+.victory-screen.show .victory-card {
+    opacity: 1;
+    transform: translateY( 0px );
+    sound: "UIPanorama.container_reveal";
+}
+
+.victory-card-accent {
+    width: 100%;
+    height: 3px;
+    background-color: #9aa2ac;
+}
+
+/* The accent is the card's first child; the content has its own padding below it. */
+.victory-body {
+    flow-children: down;
+    width: 100%;
+    padding: 34px 36px 30px 36px;
+}
+
+.victory-kicker,
+.victory-subtitle,
+.victory-chips,
+.victory-restart {
+    horizontal-align: center;
+    opacity: 0;
+    transform: translateY( 14px );
+    transition-property: opacity, transform;
+    transition-duration: 0.38s;
+    transition-timing-function: ease-out;
+}
+
+.victory-screen.show .victory-kicker,
+.victory-screen.show .victory-subtitle,
+.victory-screen.show .victory-chips,
+.victory-screen.show .victory-restart {
+    opacity: 1;
+    transform: translateY( 0px );
+}
+
+.victory-kicker {
+    font-family: Stratum2 Mono;
+    font-size: 13px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #9aa4b5;
+    transition-delay: 0.08s;
+}
+
+.victory-title {
+    width: 100%;
+    margin-top: 12px;
+    text-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 56px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: shrink min( 28px ) ellipsis;
+    opacity: 0;
+}
+
+.victory-screen.show .victory-title {
+    animation-name: victory-slam;
+    animation-duration: 0.55s;
+    animation-delay: 0.16s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+}
+
+@keyframes 'victory-slam' {
+    0%   { opacity: 0.0; transform: scale3d( 1.55, 1.55, 1.0 ); brightness: 3.2; }
+    55%  { opacity: 1.0; transform: scale3d( 0.96, 0.96, 1.0 ); brightness: 1.7; }
+    100% { opacity: 1.0; transform: scale3d( 1.0, 1.0, 1.0 ); brightness: 1.0; }
+}
+
+.victory-rule {
+    width: 96px;
+    height: 3px;
+    margin-top: 18px;
+    horizontal-align: center;
+    border-radius: 2px;
+    background-color: #9aa4b5;
+    clip: rect( 0%, 50%, 100%, 50% );
+    transition-property: clip;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-out;
+    transition-delay: 0.32s;
+}
+
+.victory-screen.show .victory-rule { clip: rect( 0%, 100%, 100%, 0% ); }
+
+.victory-subtitle {
+    width: 100%;
+    margin-top: 16px;
+    text-align: center;
+    font-family: Stratum2;
+    font-size: 17px;
+    color: #9aa2ac;
+    white-space: normal;
+    transition-delay: 0.4s;
+}
+
+/* Chips -------------------------------------------------------------------- */
+
+.victory-chips {
+    flow-children: right;
+    margin-top: 28px;
+    transition-delay: 0.52s;
+}
+
+.victory-chip {
+    flow-children: down;
+    min-width: 176px;
+    margin: 0px 6px;
+    padding: 0px;
+    border-radius: 4px;
+    border-top: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-left: 1px solid #ffffff14;
+    background-color: #1a222c;
+    overflow: noclip;
+}
+
+.victory-chip-accent {
+    ignore-parent-flow: true;
+    width: 3px;
+    height: 100%;
+    horizontal-align: left;
+    vertical-align: top;
+    x: 0px;
+    y: 0px;
+    background-color: #9aa2ac;
+}
+
+.victory-chip-label {
+    horizontal-align: center;
+    margin: 12px 18px 0px 18px;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 11px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+}
+
+.victory-chip-name {
+    horizontal-align: center;
+    max-width: 230px;
+    margin: 4px 18px 12px 18px;
+    font-family: Stratum2 Bold;
+    font-size: 18px;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Restart ------------------------------------------------------------------ */
+
+.victory-restart {
+    flow-children: right;
+    width: 260px;
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid #ffffff14;
+    transition-delay: 0.66s;
+}
+
+.victory-restart-label {
+    font-family: Stratum2 Medium Condensed;
+    font-size: 13px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #61686f;
+    width: 50%;
+    text-align: right;
+    vertical-align: center;
+}
+
+.victory-restart-eta {
+    width: 50%;
+    text-align: left;
+    margin-left: 8px;
+    font-family: Stratum2 Mono;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: #f2f4f7;
+    vertical-align: center;
+}
+
+/* Outcome (UiStyle on v_screen) ------------------------------------------ */
+
+.victory-screen.style-neutral .victory-card-accent { background-color: #9aa2ac; }
+.victory-screen.style-neutral .victory-kicker { color: #9aa2ac; }
+.victory-screen.style-neutral .victory-rule { background-color: #9aa2ac; }
+.victory-screen.style-neutral .victory-restart-eta { color: #9aa2ac; }
+
+.victory-screen.style-info .victory-card-accent { background-color: #56a0dd; }
+.victory-screen.style-info .victory-kicker { color: #56a0dd; }
+.victory-screen.style-info .victory-rule { background-color: #56a0dd; }
+.victory-screen.style-info .victory-restart-eta { color: #56a0dd; }
+.victory-screen.style-info .victory-title { color: #56a0dd; }
+
+.victory-screen.style-success .victory-card-accent { background-color: #9ccf4f; }
+.victory-screen.style-success .victory-kicker { color: #9ccf4f; }
+.victory-screen.style-success .victory-rule { background-color: #9ccf4f; }
+.victory-screen.style-success .victory-restart-eta { color: #9ccf4f; }
+.victory-screen.style-success .victory-title { color: #9ccf4f; }
+
+.victory-screen.style-warn .victory-card-accent { background-color: #f0a531; }
+.victory-screen.style-warn .victory-kicker { color: #f0a531; }
+.victory-screen.style-warn .victory-rule { background-color: #f0a531; }
+.victory-screen.style-warn .victory-restart-eta { color: #f0a531; }
+.victory-screen.style-warn .victory-title { color: #f0a531; }
+
+.victory-screen.style-danger .victory-card-accent { background-color: #e0432f; }
+.victory-screen.style-danger .victory-kicker { color: #e0432f; }
+.victory-screen.style-danger .victory-rule { background-color: #e0432f; }
+.victory-screen.style-danger .victory-restart-eta { color: #e0432f; }
+.victory-screen.style-danger .victory-title { color: #e0432f; }
+
+.victory-screen.style-purple .victory-card-accent { background-color: #8847ff; }
+.victory-screen.style-purple .victory-kicker { color: #8847ff; }
+.victory-screen.style-purple .victory-rule { background-color: #8847ff; }
+.victory-screen.style-purple .victory-restart-eta { color: #8847ff; }
+.victory-screen.style-purple .victory-title { color: #8847ff; }
+
+.victory-screen.style-gold .victory-card-accent { background-color: #e0a24a; }
+.victory-screen.style-gold .victory-kicker { color: #e0a24a; }
+.victory-screen.style-gold .victory-rule { background-color: #e0a24a; }
+.victory-screen.style-gold .victory-restart-eta { color: #e0a24a; }
+.victory-screen.style-gold .victory-title { color: #e0a24a; }
+
+/* Chips (UiStyle on v_chip_<n>) ------------------------------------------ */
+
+.victory-chip.style-neutral .victory-chip-accent { background-color: #9aa2ac; }
+.victory-chip.style-neutral .victory-chip-label { color: #9aa2ac; }
+
+.victory-chip.style-info .victory-chip-accent { background-color: #56a0dd; }
+.victory-chip.style-info .victory-chip-label { color: #56a0dd; }
+
+.victory-chip.style-success .victory-chip-accent { background-color: #9ccf4f; }
+.victory-chip.style-success .victory-chip-label { color: #9ccf4f; }
+
+.victory-chip.style-warn .victory-chip-accent { background-color: #f0a531; }
+.victory-chip.style-warn .victory-chip-label { color: #f0a531; }
+
+.victory-chip.style-danger .victory-chip-accent { background-color: #e0432f; }
+.victory-chip.style-danger .victory-chip-label { color: #e0432f; }
+
+.victory-chip.style-purple .victory-chip-accent { background-color: #8847ff; }
+.victory-chip.style-purple .victory-chip-label { color: #8847ff; }
+
+.victory-chip.style-gold .victory-chip-accent { background-color: #e0a24a; }
+.victory-chip.style-gold .victory-chip-label { color: #e0a24a; }

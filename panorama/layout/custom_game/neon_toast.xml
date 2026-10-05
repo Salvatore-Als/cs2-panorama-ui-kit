@@ -1,0 +1,109 @@
+<root>
+	<styles>
+		<include src="s2r://panorama/styles/custom_game/uikit_shared.vcss_c" />
+		<include src="s2r://panorama/styles/custom_game/neon_toast.vcss_c" />
+	</styles>
+
+	<!-- uikit:toast placements=tc,bl depth=3 -->
+	<!--
+		Started with `python -m uikit scaffold toast neon_toast`, then authored by hand: same ids, same
+		{s:...} slots and classes as the bundled toast (the contract), its own markup and look. It also
+		adds the free text slot t_<place>_<n>_footer (ToastOptions.Texts["footer"]), which the bundled
+		toast does not have.
+
+		Slot reference: docs/CONTRACTS.md, or `python -m uikit slots toast`.
+		Root authored hidden: a custom_hud_layout is shown to every player; per-player state only overlays.
+	-->
+	<Panel class="uikit-screen" hittest="false">
+		<Panel id="neon_toast_root" class="uikit-fill hidden" hittest="false">
+			<Panel class="neon-stack stack-tc" hittest="false">
+				<Panel id="t_tc_0" class="neon hidden" hittest="false">
+					<Panel class="neon-row" hittest="false">
+						<Panel class="neon-dot" hittest="false" />
+						<Panel class="neon-body" hittest="false">
+							<Label id="t_tc_0_kicker" class="neon-kicker" hittest="false" text="{s:t_tc_0_kicker}" />
+							<Label class="neon-title" hittest="false" text="{s:t_tc_0_title}" />
+							<Label id="t_tc_0_desc" class="neon-desc" hittest="false" text="{s:t_tc_0_desc}" />
+							<Label id="t_tc_0_footer" class="neon-footer" hittest="false" text="{s:t_tc_0_footer}" />
+						</Panel>
+					</Panel>
+					<Panel id="t_tc_0_track" class="neon-track" hittest="false">
+						<Panel id="t_tc_0_bar" class="neon-bar" hittest="false" />
+					</Panel>
+				</Panel>
+				<Panel id="t_tc_1" class="neon hidden" hittest="false">
+					<Panel class="neon-row" hittest="false">
+						<Panel class="neon-dot" hittest="false" />
+						<Panel class="neon-body" hittest="false">
+							<Label id="t_tc_1_kicker" class="neon-kicker" hittest="false" text="{s:t_tc_1_kicker}" />
+							<Label class="neon-title" hittest="false" text="{s:t_tc_1_title}" />
+							<Label id="t_tc_1_desc" class="neon-desc" hittest="false" text="{s:t_tc_1_desc}" />
+							<Label id="t_tc_1_footer" class="neon-footer" hittest="false" text="{s:t_tc_1_footer}" />
+						</Panel>
+					</Panel>
+					<Panel id="t_tc_1_track" class="neon-track" hittest="false">
+						<Panel id="t_tc_1_bar" class="neon-bar" hittest="false" />
+					</Panel>
+				</Panel>
+				<Panel id="t_tc_2" class="neon hidden" hittest="false">
+					<Panel class="neon-row" hittest="false">
+						<Panel class="neon-dot" hittest="false" />
+						<Panel class="neon-body" hittest="false">
+							<Label id="t_tc_2_kicker" class="neon-kicker" hittest="false" text="{s:t_tc_2_kicker}" />
+							<Label class="neon-title" hittest="false" text="{s:t_tc_2_title}" />
+							<Label id="t_tc_2_desc" class="neon-desc" hittest="false" text="{s:t_tc_2_desc}" />
+							<Label id="t_tc_2_footer" class="neon-footer" hittest="false" text="{s:t_tc_2_footer}" />
+						</Panel>
+					</Panel>
+					<Panel id="t_tc_2_track" class="neon-track" hittest="false">
+						<Panel id="t_tc_2_bar" class="neon-bar" hittest="false" />
+					</Panel>
+				</Panel>
+			</Panel>
+			<Panel class="neon-stack stack-bl" hittest="false">
+				<Panel id="t_bl_0" class="neon hidden" hittest="false">
+					<Panel class="neon-row" hittest="false">
+						<Panel class="neon-dot" hittest="false" />
+						<Panel class="neon-body" hittest="false">
+							<Label id="t_bl_0_kicker" class="neon-kicker" hittest="false" text="{s:t_bl_0_kicker}" />
+							<Label class="neon-title" hittest="false" text="{s:t_bl_0_title}" />
+							<Label id="t_bl_0_desc" class="neon-desc" hittest="false" text="{s:t_bl_0_desc}" />
+							<Label id="t_bl_0_footer" class="neon-footer" hittest="false" text="{s:t_bl_0_footer}" />
+						</Panel>
+					</Panel>
+					<Panel id="t_bl_0_track" class="neon-track" hittest="false">
+						<Panel id="t_bl_0_bar" class="neon-bar" hittest="false" />
+					</Panel>
+				</Panel>
+				<Panel id="t_bl_1" class="neon hidden" hittest="false">
+					<Panel class="neon-row" hittest="false">
+						<Panel class="neon-dot" hittest="false" />
+						<Panel class="neon-body" hittest="false">
+							<Label id="t_bl_1_kicker" class="neon-kicker" hittest="false" text="{s:t_bl_1_kicker}" />
+							<Label class="neon-title" hittest="false" text="{s:t_bl_1_title}" />
+							<Label id="t_bl_1_desc" class="neon-desc" hittest="false" text="{s:t_bl_1_desc}" />
+							<Label id="t_bl_1_footer" class="neon-footer" hittest="false" text="{s:t_bl_1_footer}" />
+						</Panel>
+					</Panel>
+					<Panel id="t_bl_1_track" class="neon-track" hittest="false">
+						<Panel id="t_bl_1_bar" class="neon-bar" hittest="false" />
+					</Panel>
+				</Panel>
+				<Panel id="t_bl_2" class="neon hidden" hittest="false">
+					<Panel class="neon-row" hittest="false">
+						<Panel class="neon-dot" hittest="false" />
+						<Panel class="neon-body" hittest="false">
+							<Label id="t_bl_2_kicker" class="neon-kicker" hittest="false" text="{s:t_bl_2_kicker}" />
+							<Label class="neon-title" hittest="false" text="{s:t_bl_2_title}" />
+							<Label id="t_bl_2_desc" class="neon-desc" hittest="false" text="{s:t_bl_2_desc}" />
+							<Label id="t_bl_2_footer" class="neon-footer" hittest="false" text="{s:t_bl_2_footer}" />
+						</Panel>
+					</Panel>
+					<Panel id="t_bl_2_track" class="neon-track" hittest="false">
+						<Panel id="t_bl_2_bar" class="neon-bar" hittest="false" />
+					</Panel>
+				</Panel>
+			</Panel>
+		</Panel>
+	</Panel>
+</root>

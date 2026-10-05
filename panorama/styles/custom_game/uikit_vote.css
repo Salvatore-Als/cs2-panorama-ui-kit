@@ -1,0 +1,301 @@
+/*
+    uikit_vote - the screen of a vote, right of centre, compact: question, one line per choice (label,
+    count, share) over a thin bar, then total / pager / countdown.
+    Contract "vote" (docs/CONTRACTS.md).
+
+    A choice (vt_choice_<n>) is a button: style-* colours its bar, "selected" marks the viewer's pick,
+    "leading" the choice with most votes. The bar is vt_choice_<n>_fill with p-0..p-20 (5% steps) as a
+    clip, not a width: a text update in the same row does not make a clip snap back. It lives in its own
+    track under the line, in the flow, so nothing here depends on ignore-parent-flow.
+    On vt_screen: "locked" = no more clicks, "no-close" hides the close button, "no-pager" the pager
+    (one page); style-* is the accent.
+*/
+
+.vote-screen {
+    width: 100%;
+    height: 100%;
+}
+
+/* Card --------------------------------------------------------------------- */
+
+.vote-card {
+    width: 340px;
+    flow-children: down;
+    horizontal-align: right;
+    vertical-align: center;
+    margin-right: 48px;
+    border-radius: 4px;
+    border: 1px solid #ffffff14;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #12171e ), to( #0c1014 ) );
+    box-shadow: #000000cc 0px 14px 36px 0px;
+    overflow: noclip;
+
+    opacity: 0;
+    transform: translateX( 24px );
+    transition-property: opacity, transform;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+}
+
+.vote-screen.show .vote-card {
+    opacity: 1;
+    transform: translateX( 0px );
+}
+
+.vote-card-accent {
+    width: 100%;
+    height: 2px;
+    background-color: #9aa2ac;
+}
+
+.vote-screen.style-neutral  .vote-card-accent { background-color: #9aa2ac; }
+.vote-screen.style-info     .vote-card-accent { background-color: #56a0dd; }
+.vote-screen.style-success  .vote-card-accent { background-color: #9ccf4f; }
+.vote-screen.style-warn     .vote-card-accent { background-color: #f0a531; }
+.vote-screen.style-danger   .vote-card-accent { background-color: #e0432f; }
+.vote-screen.style-purple   .vote-card-accent { background-color: #8847ff; }
+.vote-screen.style-gold     .vote-card-accent { background-color: #e0a24a; }
+
+/* Header ------------------------------------------------------------------- */
+
+.vote-head {
+    flow-children: right;
+    width: 100%;
+    padding: 10px 10px 6px 12px;
+}
+
+.vote-head-copy {
+    flow-children: down;
+    width: fill-parent-flow( 1.0 );
+    vertical-align: center;
+}
+
+.vote-kicker {
+    width: 100%;
+    font-family: Stratum2 Mono;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+    margin-bottom: 1px;
+}
+
+.vote-title {
+    width: 100%;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 18px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: normal;
+}
+
+.vote-close {
+    width: 26px;
+    height: 26px;
+    margin-left: 8px;
+    vertical-align: top;
+    border-radius: 3px;
+    border: 1px solid #ffffff14;
+    background-color: #ffffff0a;
+    transition-property: background-color, border;
+    transition-duration: 0.12s;
+    transition-timing-function: ease-out;
+}
+
+.vote-close:hover { background-color: #e0432f40; border: 1px solid #e0432f99; }
+
+/* Stratum2 Bold has the cross glyph; the default font does not and substitutes a tiny one. */
+.vote-close-label {
+    horizontal-align: center;
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 14px;
+    color: #f2f4f7;
+}
+
+.vote-screen.no-close .vote-close { visibility: collapse; }
+
+/* Choices ------------------------------------------------------------------ */
+
+.vote-choices {
+    flow-children: down;
+    width: 100%;
+    padding: 2px 10px 2px 10px;
+}
+
+.vote-choice {
+    flow-children: down;
+    width: 100%;
+    margin: 3px 0px;
+    padding: 6px 10px 7px 10px;
+    border-radius: 3px;
+    border: 1px solid #ffffff10;
+    background-color: #ffffff08;
+    transition-property: background-color, border;
+    transition-duration: 0.12s;
+}
+
+.vote-choice:hover { background-color: #ffffff14; }
+
+.vote-choice.selected {
+    border: 1px solid #f2f4f7aa;
+    background-color: #ffffff12;
+}
+
+.vote-choice-line {
+    flow-children: right;
+    width: 100%;
+}
+
+.vote-choice-label {
+    width: fill-parent-flow( 1.0 );
+    font-family: Stratum2 Medium Condensed;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.vote-choice-count {
+    margin-right: 8px;
+    font-family: Stratum2;
+    font-size: 12px;
+    color: #61686f;
+}
+
+.vote-choice-pct {
+    width: 42px;
+    text-align: right;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 15px;
+    color: #9aa2ac;
+}
+
+.vote-choice.leading .vote-choice-pct { color: #f2f4f7; }
+
+.vote-choice-sub {
+    width: 100%;
+    font-family: Stratum2;
+    font-size: 11px;
+    color: #9aa2ac;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* The bar: a thin track, and the fill clipped to the share of the votes. */
+.vote-track {
+    width: 100%;
+    height: 3px;
+    margin-top: 5px;
+    border-radius: 2px;
+    background-color: #ffffff12;
+}
+
+.vote-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    background-color: #9aa2ac;
+    clip: rect( 0%, 0%, 100%, 0% );
+    transition-property: clip;
+    transition-duration: 0.35s;
+    transition-timing-function: ease-out;
+}
+
+.vote-choice.style-neutral  .vote-fill { background-color: #9aa2ac; }
+.vote-choice.style-info     .vote-fill { background-color: #56a0dd; }
+.vote-choice.style-success  .vote-fill { background-color: #9ccf4f; }
+.vote-choice.style-warn     .vote-fill { background-color: #f0a531; }
+.vote-choice.style-danger   .vote-fill { background-color: #e0432f; }
+.vote-choice.style-purple   .vote-fill { background-color: #8847ff; }
+.vote-choice.style-gold     .vote-fill { background-color: #e0a24a; }
+
+.vote-fill.p-0  { clip: rect( 0%, 0%, 100%, 0% ); }
+.vote-fill.p-1  { clip: rect( 0%, 5%, 100%, 0% ); }
+.vote-fill.p-2  { clip: rect( 0%, 10%, 100%, 0% ); }
+.vote-fill.p-3  { clip: rect( 0%, 15%, 100%, 0% ); }
+.vote-fill.p-4  { clip: rect( 0%, 20%, 100%, 0% ); }
+.vote-fill.p-5  { clip: rect( 0%, 25%, 100%, 0% ); }
+.vote-fill.p-6  { clip: rect( 0%, 30%, 100%, 0% ); }
+.vote-fill.p-7  { clip: rect( 0%, 35%, 100%, 0% ); }
+.vote-fill.p-8  { clip: rect( 0%, 40%, 100%, 0% ); }
+.vote-fill.p-9  { clip: rect( 0%, 45%, 100%, 0% ); }
+.vote-fill.p-10 { clip: rect( 0%, 50%, 100%, 0% ); }
+.vote-fill.p-11 { clip: rect( 0%, 55%, 100%, 0% ); }
+.vote-fill.p-12 { clip: rect( 0%, 60%, 100%, 0% ); }
+.vote-fill.p-13 { clip: rect( 0%, 65%, 100%, 0% ); }
+.vote-fill.p-14 { clip: rect( 0%, 70%, 100%, 0% ); }
+.vote-fill.p-15 { clip: rect( 0%, 75%, 100%, 0% ); }
+.vote-fill.p-16 { clip: rect( 0%, 80%, 100%, 0% ); }
+.vote-fill.p-17 { clip: rect( 0%, 85%, 100%, 0% ); }
+.vote-fill.p-18 { clip: rect( 0%, 90%, 100%, 0% ); }
+.vote-fill.p-19 { clip: rect( 0%, 95%, 100%, 0% ); }
+.vote-fill.p-20 { clip: rect( 0%, 100%, 100%, 0% ); }
+
+/* Footer ------------------------------------------------------------------- */
+
+.vote-foot {
+    flow-children: right;
+    width: 100%;
+    padding: 4px 12px 10px 12px;
+}
+
+.vote-total {
+    width: fill-parent-flow( 1.0 );
+    vertical-align: center;
+    font-family: Stratum2;
+    font-size: 12px;
+    color: #9aa2ac;
+}
+
+.vote-time {
+    vertical-align: center;
+    margin-left: 10px;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: #f2f4f7;
+}
+
+.vote-pager {
+    flow-children: right;
+    vertical-align: center;
+}
+
+.vote-screen.no-pager .vote-pager { visibility: collapse; }
+
+.vote-step {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    background-color: #ffffff0f;
+    transition-property: background-color, opacity;
+    transition-duration: 0.1s;
+}
+
+.vote-step:hover { background-color: #ffffff1f; }
+.vote-step.disabled { opacity: 0.35; }
+.vote-step.disabled:hover { background-color: #ffffff0f; }
+
+.vote-step-label {
+    horizontal-align: center;
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 15px;
+    color: #f2f4f7;
+}
+
+.vote-page {
+    margin: 0px 8px;
+    vertical-align: center;
+    font-family: Stratum2;
+    font-size: 12px;
+    color: #9aa2ac;
+}
+
+/* Locked: the vote takes no more clicks. */
+.vote-screen.locked .vote-choice { opacity: 0.72; }
+.vote-screen.locked .vote-choice:hover { background-color: #ffffff08; }

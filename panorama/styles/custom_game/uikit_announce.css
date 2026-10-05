@@ -1,0 +1,113 @@
+/*
+    uikit_announce - centred card above the ability bar: kicker, title, description. Fade in; the
+    title slams in only under "animate-title" (AnnounceOptions.AnimateTitle).
+    Contract "announce" (docs/CONTRACTS.md).
+*/
+
+.announce {
+    width: 380px;
+    flow-children: down;
+    horizontal-align: center;
+    vertical-align: bottom;
+    margin-bottom: 140px;
+    padding: 16px 20px 16px 20px;
+    border-radius: 4px;
+    border-left: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-top: 3px solid #9aa2ac;
+    background-color: #12171e;
+    box-shadow: #00000070 0px 4px 12px 0px;
+
+    opacity: 0;
+    transform: translateY( 16px );
+    transition-property: opacity, transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}
+
+.announce.show {
+    opacity: 1;
+    transform: translateY( 0px );
+    sound: "UIPanorama.container_reveal";
+}
+
+.announce-kicker {
+    horizontal-align: center;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 11px;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+}
+
+.announce-title {
+    horizontal-align: center;
+    margin-top: 8px;
+    text-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 24px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: shrink min( 14px ) ellipsis;
+}
+
+/* AnnounceOptions.AnimateTitle: without the class, the title just fades in with the card. */
+.announce.show.animate-title .announce-title {
+    animation-name: announce-slam;
+    animation-duration: 0.55s;
+    animation-delay: 0.1s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+}
+
+.announce-desc {
+    width: 100%;
+    horizontal-align: center;
+    margin-top: 8px;
+    text-align: center;
+    font-family: Stratum2;
+    font-size: 14px;
+    line-height: 19px;
+    color: #9aa2ac;
+    white-space: normal;
+}
+
+/* Name quoted: unquoted fails the whole stylesheet. */
+@keyframes 'announce-slam' {
+    0%   { opacity: 0.0; transform: scale3d( 1.6, 1.6, 1.0 ); brightness: 3.0; }
+    55%  { opacity: 1.0; transform: scale3d( 0.95, 0.95, 1.0 ); brightness: 1.6; }
+    100% { opacity: 1.0; transform: scale3d( 1.0, 1.0, 1.0 ); brightness: 1.0; }
+}
+
+/* Styles (UiStyle): top edge, kicker, title -------------------------------- */
+
+.announce.style-neutral { border-top: 3px solid #9aa2ac; }
+.announce.style-neutral .announce-kicker { color: #9aa2ac; }
+.announce.style-neutral .announce-title  { color: #f2f4f7; }
+
+.announce.style-info { border-top: 3px solid #56a0dd; }
+.announce.style-info .announce-kicker { color: #56a0dd; }
+.announce.style-info .announce-title  { color: #56a0dd; }
+
+.announce.style-success { border-top: 3px solid #9ccf4f; }
+.announce.style-success .announce-kicker { color: #9ccf4f; }
+.announce.style-success .announce-title  { color: #9ccf4f; }
+
+.announce.style-warn { border-top: 3px solid #f0a531; }
+.announce.style-warn .announce-kicker { color: #f0a531; }
+.announce.style-warn .announce-title  { color: #f0a531; }
+
+.announce.style-danger { border-top: 3px solid #e0432f; }
+.announce.style-danger .announce-kicker { color: #e0432f; }
+.announce.style-danger .announce-title  { color: #e0432f; }
+
+.announce.style-purple { border-top: 3px solid #8847ff; }
+.announce.style-purple .announce-kicker { color: #8847ff; }
+.announce.style-purple .announce-title  { color: #8847ff; }
+
+.announce.style-gold { border-top: 3px solid #e0a24a; }
+.announce.style-gold .announce-kicker { color: #e0a24a; }
+.announce.style-gold .announce-title  { color: #e0a24a; }

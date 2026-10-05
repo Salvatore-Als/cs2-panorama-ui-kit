@@ -1,0 +1,186 @@
+/*
+    neon_toast - a custom toast layout, to try the customisation: the same contract as uikit_toast (ids,
+    slots, classes), a different look. Rounded glass card, a glowing outline and dot in the style colour,
+    a footer line (the free text slot "footer"), the progress bar as a glow line along the bottom edge.
+    Placements: top centre, bottom left. Depth 3.
+    Contract "toast" (docs/CONTRACTS.md). dur-* must match ToastLayout.Durations.
+*/
+
+/* Stacks ------------------------------------------------------------------- */
+
+.neon-stack {
+    flow-children: down;
+    width: 400px;
+    overflow: noclip noclip;
+}
+
+.stack-tc { horizontal-align: center; vertical-align: top;    margin-top: 70px; }
+.stack-bl { horizontal-align: left;   vertical-align: bottom; margin: 0px 0px 120px 24px; flow-children: up; }
+
+/* Card --------------------------------------------------------------------- */
+
+.neon {
+    width: 100%;
+    flow-children: down;
+    margin: 7px 0px;
+    border-radius: 14px;
+    border: 1px solid #ffffff33;
+    background-color: gradient( linear, 0% 0%, 100% 100%, from( #0a0e1cf2 ), to( #1a1030f2 ) );
+    overflow: noclip;
+
+    opacity: 0;
+    transition-property: opacity, transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}
+
+/* Resting offset while hidden. "show" brings it to zero; the C# swaps anim-* before dropping "show". */
+.neon.anim-from-left   { transform: translateX( -420px ); }
+.neon.anim-from-right  { transform: translateX( 420px ); }
+.neon.anim-from-top    { transform: translateY( -80px ); }
+.neon.anim-from-bottom { transform: translateY( 80px ); }
+.neon.anim-fade        { transform: translateY( 0px ); }
+
+.neon.show {
+    opacity: 1;
+    transform: translateX( 0px );
+    sound: "UIPanorama.popup_newweapon";
+}
+
+.neon-row {
+    flow-children: right;
+    width: 100%;
+    padding: 14px 18px 14px 16px;
+}
+
+.neon-dot {
+    width: 12px;
+    height: 12px;
+    margin: 4px 14px 0px 0px;
+    border-radius: 6px;
+    background-color: #9aa2ac;
+}
+
+.neon-body {
+    flow-children: down;
+    width: fill-parent-flow( 1.0 );
+}
+
+/* Copy --------------------------------------------------------------------- */
+
+.neon-kicker {
+    width: 100%;
+    font-family: Stratum2 Mono;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+    margin-bottom: 3px;
+}
+
+.neon-title {
+    width: 100%;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 21px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #ffffff;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.neon-desc {
+    width: 100%;
+    margin-top: 2px;
+    font-family: Stratum2;
+    font-size: 14px;
+    color: #c6cbe6;
+    white-space: normal;
+}
+
+.neon-footer {
+    width: 100%;
+    margin-top: 8px;
+    font-family: Stratum2 Mono;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #7f86ad;
+}
+
+/* Progress: a glow line along the bottom edge ------------------------------- */
+
+.neon-track {
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    background-color: #ffffff14;
+    visibility: collapse;
+}
+
+.neon-track.has-progress { visibility: visible; }
+
+.neon-bar {
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    background-color: #9aa2ac;
+    clip: rect( 0%, 100%, 100%, 0% );
+    transition-property: clip;
+    transition-timing-function: linear;
+
+    /* 0s by default so clearing "run" snaps back instead of refilling. The C# drops dur-* first. */
+    transition-duration: 0.0s;
+}
+
+.neon-bar.run { clip: rect( 0%, 0%, 100%, 0% ); }
+
+/* Durations (match ToastLayout.Durations) ---------------------------------- */
+
+.neon-bar.dur-2 { transition-duration: 2.0s; }
+.neon-bar.dur-3 { transition-duration: 3.0s; }
+.neon-bar.dur-4 { transition-duration: 4.0s; }
+.neon-bar.dur-5 { transition-duration: 5.0s; }
+.neon-bar.dur-6 { transition-duration: 6.0s; }
+.neon-bar.dur-8 { transition-duration: 8.0s; }
+.neon-bar.dur-10 { transition-duration: 10.0s; }
+.neon-bar.dur-12 { transition-duration: 12.0s; }
+.neon-bar.dur-15 { transition-duration: 15.0s; }
+.neon-bar.dur-20 { transition-duration: 20.0s; }
+.neon-bar.dur-30 { transition-duration: 30.0s; }
+
+/* Styles (UiStyle): outline glow, dot, kicker and bar -------------------------- */
+
+.neon.style-neutral { border: 1px solid #9aa2ac99; box-shadow: #9aa2ac55 0px 0px 22px 0px; }
+.neon.style-neutral .neon-dot { background-color: #9aa2ac; box-shadow: #9aa2accc 0px 0px 10px 0px; }
+.neon.style-neutral .neon-kicker { color: #9aa2ac; }
+.neon.style-neutral .neon-bar { background-color: #9aa2ac; }
+
+.neon.style-info { border: 1px solid #3fd0ff99; box-shadow: #3fd0ff55 0px 0px 22px 0px; }
+.neon.style-info .neon-dot { background-color: #3fd0ff; box-shadow: #3fd0ffcc 0px 0px 10px 0px; }
+.neon.style-info .neon-kicker { color: #3fd0ff; }
+.neon.style-info .neon-bar { background-color: #3fd0ff; }
+
+.neon.style-success { border: 1px solid #5dffa899; box-shadow: #5dffa855 0px 0px 22px 0px; }
+.neon.style-success .neon-dot { background-color: #5dffa8; box-shadow: #5dffa8cc 0px 0px 10px 0px; }
+.neon.style-success .neon-kicker { color: #5dffa8; }
+.neon.style-success .neon-bar { background-color: #5dffa8; }
+
+.neon.style-warn { border: 1px solid #ffc24799; box-shadow: #ffc24755 0px 0px 22px 0px; }
+.neon.style-warn .neon-dot { background-color: #ffc247; box-shadow: #ffc247cc 0px 0px 10px 0px; }
+.neon.style-warn .neon-kicker { color: #ffc247; }
+.neon.style-warn .neon-bar { background-color: #ffc247; }
+
+.neon.style-danger { border: 1px solid #ff4d6d99; box-shadow: #ff4d6d55 0px 0px 22px 0px; }
+.neon.style-danger .neon-dot { background-color: #ff4d6d; box-shadow: #ff4d6dcc 0px 0px 10px 0px; }
+.neon.style-danger .neon-kicker { color: #ff4d6d; }
+.neon.style-danger .neon-bar { background-color: #ff4d6d; }
+
+.neon.style-purple { border: 1px solid #b06bff99; box-shadow: #b06bff55 0px 0px 22px 0px; }
+.neon.style-purple .neon-dot { background-color: #b06bff; box-shadow: #b06bffcc 0px 0px 10px 0px; }
+.neon.style-purple .neon-kicker { color: #b06bff; }
+.neon.style-purple .neon-bar { background-color: #b06bff; }
+
+.neon.style-gold { border: 1px solid #ffd36b99; box-shadow: #ffd36b55 0px 0px 22px 0px; }
+.neon.style-gold .neon-dot { background-color: #ffd36b; box-shadow: #ffd36bcc 0px 0px 10px 0px; }
+.neon.style-gold .neon-kicker { color: #ffd36b; }
+.neon.style-gold .neon-bar { background-color: #ffd36b; }

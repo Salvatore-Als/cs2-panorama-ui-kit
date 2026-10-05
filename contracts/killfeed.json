@@ -1,0 +1,74 @@
+{
+  "component": "killfeed",
+  "csharp": "KillFeedLayout / IKillFeedService",
+  "summary": "Server-wide feed, newest on top. A pool of rows; entries shift down.",
+  "params": {
+    "rows": {
+      "default": 5,
+      "doc": "Rows in the pool (KillFeedLayout.Rows), row 0 on top."
+    }
+  },
+  "repeat": {
+    "n": "rows"
+  },
+  "panels": [
+    {
+      "id": "kf_{n}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "style-*",
+        "flash-a",
+        "flash-b"
+      ],
+      "doc": "A row. Author it `hidden`. Row 0 alternates `flash-a`/`flash-b` on each push: give both the same entry animation."
+    },
+    {
+      "id": "kf_{n}_attacker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the attacker, `empty` when blank."
+    },
+    {
+      "id": "kf_{n}_tag",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the tag, `empty` when blank."
+    }
+  ],
+  "texts": [
+    {
+      "var": "kf_{n}_victim",
+      "required": true,
+      "doc": "KillFeedEntry.Victim"
+    },
+    {
+      "var": "kf_{n}_attacker",
+      "required": false,
+      "doc": "KillFeedEntry.Attacker"
+    },
+    {
+      "var": "kf_{n}_tag",
+      "required": false,
+      "doc": "KillFeedEntry.Tag"
+    },
+    {
+      "var": "kf_{n}_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "KillFeedEntry.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "flash-a",
+    "flash-b",
+    "empty",
+    "style-neutral",
+    "style-danger"
+  ]
+}

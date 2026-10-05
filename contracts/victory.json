@@ -1,0 +1,122 @@
+{
+  "component": "victory",
+  "csharp": "VictoryLayout / IVictoryService",
+  "summary": "End of round screen: title, chips, restart countdown. Per player.",
+  "params": {
+    "chips": {
+      "default": 4,
+      "doc": "Chips in the pool (VictoryLayout.Chips)."
+    }
+  },
+  "repeat": {
+    "n": "chips"
+  },
+  "panels": [
+    {
+      "id": "v_screen",
+      "required": true,
+      "classes": [
+        "show",
+        "style-*"
+      ],
+      "doc": "The screen. Style = outcome colour.",
+      "once": true
+    },
+    {
+      "id": "v_kicker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the kicker, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "v_subtitle",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the subtitle, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "v_chips",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "doc": "Chip container, `hidden` when there are none.",
+      "once": true
+    },
+    {
+      "id": "v_chip_{n}",
+      "required": false,
+      "classes": [
+        "hidden",
+        "style-*"
+      ],
+      "doc": "A chip. Author it `hidden`."
+    },
+    {
+      "id": "v_restart",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "doc": "Restart line, `hidden` without a countdown.",
+      "once": true
+    }
+  ],
+  "texts": [
+    {
+      "var": "v_title",
+      "required": true,
+      "doc": "VictoryOptions.Title"
+    },
+    {
+      "var": "v_kicker",
+      "required": false,
+      "doc": "VictoryOptions.Kicker"
+    },
+    {
+      "var": "v_subtitle",
+      "required": false,
+      "doc": "VictoryOptions.Subtitle"
+    },
+    {
+      "var": "v_chip_{n}_label",
+      "required": false,
+      "doc": "VictoryChip.Label"
+    },
+    {
+      "var": "v_chip_{n}_name",
+      "required": false,
+      "doc": "VictoryChip.Name"
+    },
+    {
+      "var": "v_restart_label",
+      "required": false,
+      "doc": "VictoryOptions.RestartLabel"
+    },
+    {
+      "var": "v_restart_eta",
+      "required": false,
+      "doc": "Countdown, VictoryOptions.RestartFormat"
+    },
+    {
+      "var": "v_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "VictoryOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "show",
+    "hidden",
+    "empty",
+    "style-neutral",
+    "style-success",
+    "style-danger"
+  ]
+}

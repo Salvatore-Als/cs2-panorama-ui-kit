@@ -1,0 +1,150 @@
+{
+  "component": "roulette",
+  "csharp": "RouletteLayout / IRouletteService",
+  "summary": "Case-opening roulette: a strip of cards slows down on a server-drawn winner. Per player.",
+  "params": {
+    "cells": {
+      "default": 31,
+      "doc": "Cards on the strip (RouletteLayout.Cells)."
+    },
+    "winner": {
+      "default": 24,
+      "doc": "Card the strip stops on (RouletteLayout.WinnerCell). The stylesheet's jit-N offsets are built for it."
+    }
+  },
+  "repeat": {
+    "n": "cells"
+  },
+  "panels": [
+    {
+      "id": "r_screen",
+      "required": true,
+      "classes": [
+        "show",
+        "style-*"
+      ],
+      "doc": "The screen. Style = accent colour.",
+      "once": true
+    },
+    {
+      "id": "r_kicker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the kicker, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "r_strip",
+      "required": true,
+      "classes": [
+        "dur-N",
+        "jit-0",
+        "jit-1",
+        "jit-2",
+        "jit-3",
+        "jit-4",
+        "spin",
+        "settle",
+        "done",
+        "no-sub"
+      ],
+      "doc": "The strip of cards. `dur-N` (N in RouletteLayout.Durations) is the total time, `jit-0`..`jit-4` where in the winner's card it stops, `spin` moves it most of the way at full speed, `settle` (added RouletteLayout.SettleAfterFraction of the time later) slows it onto the winner's card, `done` once it has stopped, `no-sub` when no item has a second line.",
+      "once": true
+    },
+    {
+      "id": "r_cell_{n}",
+      "required": true,
+      "classes": [
+        "style-*",
+        "won"
+      ],
+      "doc": "A card. Style = the item's rarity colour, `won` on the winner's card once the strip has stopped."
+    },
+    {
+      "id": "r_cell_{n}_sub",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Second line of a card, `empty` when the item has none."
+    },
+    {
+      "id": "r_result",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "doc": "Result line, `hidden` until the strip has stopped.",
+      "once": true
+    },
+    {
+      "id": "r_result_sub",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Second line of the result, `empty` when the item has none.",
+      "once": true
+    }
+  ],
+  "texts": [
+    {
+      "var": "r_title",
+      "required": true,
+      "doc": "RouletteOptions.Title"
+    },
+    {
+      "var": "r_kicker",
+      "required": false,
+      "doc": "RouletteOptions.Kicker"
+    },
+    {
+      "var": "r_cell_{n}_name",
+      "required": true,
+      "doc": "RouletteItem.Name"
+    },
+    {
+      "var": "r_cell_{n}_sub",
+      "required": false,
+      "doc": "RouletteItem.Sub"
+    },
+    {
+      "var": "r_result_label",
+      "required": false,
+      "doc": "RouletteOptions.ResultLabel"
+    },
+    {
+      "var": "r_result_name",
+      "required": false,
+      "doc": "Name of the item drawn."
+    },
+    {
+      "var": "r_result_sub",
+      "required": false,
+      "doc": "Sub of the item drawn."
+    },
+    {
+      "var": "r_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "RouletteOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "show",
+    "hidden",
+    "empty",
+    "spin",
+    "settle",
+    "done",
+    "won",
+    "no-sub",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

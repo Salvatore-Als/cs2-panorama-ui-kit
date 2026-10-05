@@ -1,0 +1,163 @@
+{
+  "component": "vote",
+  "csharp": "VoteLayout / IVoteService",
+  "summary": "Screen of a vote: question, choices with live counts, countdown, clicks. Per player. Takes the mouse.",
+  "params": {
+    "choices": {
+      "default": 5,
+      "doc": "Choice buttons per page (VoteLayout.Choices). A longer vote is paged."
+    }
+  },
+  "repeat": {
+    "n": "choices"
+  },
+  "panels": [
+    {
+      "id": "vt_screen",
+      "required": true,
+      "classes": [
+        "show",
+        "locked",
+        "no-close",
+        "no-pager",
+        "style-*"
+      ],
+      "doc": "The screen. Style = accent colour, `locked` once the vote takes no more clicks, `no-close` hides the close button, `no-pager` hides the pager (one page).",
+      "once": true
+    },
+    {
+      "id": "vt_kicker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the kicker, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "vt_close",
+      "required": true,
+      "classes": [],
+      "tag": "Button",
+      "doc": "Close button (click). Hide it under `no-close`.",
+      "once": true
+    },
+    {
+      "id": "vt_prev",
+      "required": true,
+      "classes": [
+        "disabled"
+      ],
+      "tag": "Button",
+      "doc": "Previous page (click), `disabled` on the first page.",
+      "once": true
+    },
+    {
+      "id": "vt_next",
+      "required": true,
+      "classes": [
+        "disabled"
+      ],
+      "tag": "Button",
+      "doc": "Next page (click), `disabled` on the last page.",
+      "once": true
+    },
+    {
+      "id": "vt_choice_{n}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "style-*",
+        "selected",
+        "leading"
+      ],
+      "tag": "Button",
+      "doc": "A choice (click). Author it `hidden`. `selected` = the viewer's pick, `leading` = most votes. Slot n of the current page."
+    },
+    {
+      "id": "vt_choice_{n}_sub",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Second line of a choice, `empty` when blank."
+    },
+    {
+      "id": "vt_choice_{n}_fill",
+      "required": false,
+      "classes": [
+        "p-N"
+      ],
+      "doc": "Bar of a choice: `p-0`..`p-20`, 5 % steps. Use `clip`, not `width`."
+    }
+  ],
+  "texts": [
+    {
+      "var": "vt_title",
+      "required": true,
+      "doc": "VoteOptions.Title"
+    },
+    {
+      "var": "vt_kicker",
+      "required": false,
+      "doc": "VoteOptions.Kicker"
+    },
+    {
+      "var": "vt_time",
+      "required": false,
+      "doc": "Countdown, VoteOptions.TimeFormat"
+    },
+    {
+      "var": "vt_total",
+      "required": false,
+      "doc": "Votes in all, VoteOptions.TotalFormat"
+    },
+    {
+      "var": "vt_page",
+      "required": false,
+      "doc": "Page, \"1 / 2\""
+    },
+    {
+      "var": "vt_choice_{n}_label",
+      "required": true,
+      "doc": "VoteChoice.Label"
+    },
+    {
+      "var": "vt_choice_{n}_sub",
+      "required": false,
+      "doc": "VoteChoice.Sub"
+    },
+    {
+      "var": "vt_choice_{n}_count",
+      "required": false,
+      "doc": "VoteChoice.Votes"
+    },
+    {
+      "var": "vt_choice_{n}_pct",
+      "required": false,
+      "doc": "Share of the votes, as a percentage"
+    },
+    {
+      "var": "vt_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "VoteOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "show",
+    "hidden",
+    "empty",
+    "locked",
+    "no-close",
+    "no-pager",
+    "disabled",
+    "selected",
+    "leading",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

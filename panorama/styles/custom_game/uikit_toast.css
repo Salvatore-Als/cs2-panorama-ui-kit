@@ -1,0 +1,173 @@
+/*
+    uikit_toast - flat #12171e card, hairline, 4px corners, 3px accent on the left. Optional kicker
+    in the style colour, condensed title, muted description.
+
+    Contract "toast" (docs/CONTRACTS.md). dur-* must match ToastLayout.Durations. Bar = clip, not width.
+*/
+
+/* Stacks ------------------------------------------------------------------- */
+
+.toast-stack {
+    flow-children: down;
+    width: 330px;
+    overflow: noclip noclip;
+}
+
+.stack-tl { horizontal-align: left;   vertical-align: top;    margin: 220px 0px 0px 16px; }
+.stack-tc { horizontal-align: center; vertical-align: top;    margin-top: 96px; }
+.stack-tr { horizontal-align: right;  vertical-align: top;    margin: 240px 16px 0px 0px; }  /* below a full kill feed */
+.stack-ml { horizontal-align: left;   vertical-align: center; margin-left: 16px; }
+.stack-mr { horizontal-align: right;  vertical-align: center; margin-right: 16px; }
+.stack-bl { horizontal-align: left;   vertical-align: bottom; margin: 0px 0px 140px 16px; flow-children: up; }
+.stack-bc { horizontal-align: center; vertical-align: bottom; margin-bottom: 170px; flow-children: up; }
+.stack-br { horizontal-align: right;  vertical-align: bottom; margin: 0px 16px 140px 0px; flow-children: up; }
+
+/* Card --------------------------------------------------------------------- */
+
+.toast {
+    width: 100%;
+    flow-children: down;
+    margin: 5px 0px;
+    border-radius: 4px;
+    border-top: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-left: 1px solid #ffffff14;
+    background-color: #12171e;
+    overflow: noclip;
+
+    opacity: 0;
+    transition-property: opacity, transform;
+    transition-duration: 0.24s;
+    transition-timing-function: ease-out;
+}
+
+/* 3px accent as a real panel: mixed border-left widths are dropped in custom_hud_layout. */
+.toast-accent {
+    ignore-parent-flow: true;
+    width: 3px;
+    height: 100%;
+    horizontal-align: left;
+    background-color: #9aa2ac;
+}
+
+/*
+    Resting offset while hidden. "show" brings it to zero; dropping "show" sends it back. The C#
+    swaps anim-* before dropping "show" so a toast can leave a different way than it came.
+*/
+.toast.anim-from-left   { transform: translateX( -360px ); }
+.toast.anim-from-right  { transform: translateX( 360px ); }
+.toast.anim-from-top    { transform: translateY( -60px ); }
+.toast.anim-from-bottom { transform: translateY( 60px ); }
+.toast.anim-fade        { transform: translateY( 0px ); }
+
+.toast.show {
+    opacity: 1;
+    transform: translateX( 0px );
+    sound: "UIPanorama.popup_newweapon";
+}
+
+.toast-body {
+    flow-children: down;
+    width: 100%;
+    padding: 12px 16px 12px 14px;
+}
+
+/* Copy --------------------------------------------------------------------- */
+
+.toast-kicker {
+    width: 100%;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #f0a531;
+    margin-bottom: 2px;
+}
+
+.toast-title {
+    width: 100%;
+    font-family: Stratum2 Medium Condensed;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.toast-desc {
+    width: 100%;
+    font-family: Stratum2;
+    font-size: 14px;
+    color: #9aa2ac;
+    white-space: normal;
+}
+
+/* Progress sits in the card flow so it is not covered by the bottom hairline. */
+.toast-track {
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff12;
+    visibility: collapse;
+}
+
+.toast-track.has-progress { visibility: visible; }
+
+.toast-bar {
+    width: 100%;
+    height: 100%;
+    background-color: #9aa2ac;
+    clip: rect( 0%, 100%, 100%, 0% );
+    transition-property: clip;
+    transition-timing-function: linear;
+
+    /* 0s by default so clearing "run" snaps back instead of refilling. The C# drops dur-* first. */
+    transition-duration: 0.0s;
+}
+
+.toast-bar.run { clip: rect( 0%, 0%, 100%, 0% ); }
+
+/* Durations (match ToastLayout.Durations) ---------------------------- */
+
+.toast-bar.dur-2 { transition-duration: 2.0s; }
+.toast-bar.dur-3 { transition-duration: 3.0s; }
+.toast-bar.dur-4 { transition-duration: 4.0s; }
+.toast-bar.dur-5 { transition-duration: 5.0s; }
+.toast-bar.dur-6 { transition-duration: 6.0s; }
+.toast-bar.dur-8 { transition-duration: 8.0s; }
+.toast-bar.dur-10 { transition-duration: 10.0s; }
+.toast-bar.dur-12 { transition-duration: 12.0s; }
+.toast-bar.dur-15 { transition-duration: 15.0s; }
+.toast-bar.dur-20 { transition-duration: 20.0s; }
+.toast-bar.dur-30 { transition-duration: 30.0s; }
+
+/* Styles (UiStyle): edge, kicker and bar ------------------------------- */
+
+.toast.style-neutral .toast-accent { background-color: #9aa2ac; }
+.toast.style-neutral .toast-kicker { color: #9aa2ac; }
+.toast.style-neutral .toast-bar    { background-color: #9aa2ac; }
+
+.toast.style-info .toast-accent { background-color: #56a0dd; }
+.toast.style-info .toast-kicker { color: #56a0dd; }
+.toast.style-info .toast-bar    { background-color: #56a0dd; }
+
+.toast.style-success .toast-accent { background-color: #9ccf4f; }
+.toast.style-success .toast-kicker { color: #9ccf4f; }
+.toast.style-success .toast-bar    { background-color: #9ccf4f; }
+
+.toast.style-warn .toast-accent { background-color: #f0a531; }
+.toast.style-warn .toast-kicker { color: #f0a531; }
+.toast.style-warn .toast-bar    { background-color: #f0a531; }
+
+.toast.style-danger .toast-accent { background-color: #e0432f; }
+.toast.style-danger .toast-kicker { color: #e0432f; }
+.toast.style-danger .toast-bar    { background-color: #e0432f; }
+
+.toast.style-purple .toast-accent { background-color: #8847ff; }
+.toast.style-purple .toast-kicker { color: #8847ff; }
+.toast.style-purple .toast-bar    { background-color: #8847ff; }
+
+.toast.style-gold .toast-accent { background-color: #e0a24a; }
+.toast.style-gold .toast-kicker { color: #e0a24a; }
+.toast.style-gold .toast-bar    { background-color: #e0a24a; }

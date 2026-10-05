@@ -1,0 +1,191 @@
+/*
+    uikit_match - compact round status, glued to the top edge:
+
+        [  6  ] [  1:45  ] [  6  ]        count + title / timer + line / count + title
+        [  T  ] [  Live  ] [ CT  ]
+          [ 3 ]             [ 5 ]         score tabs, hanging under the sides (m_scores, optional)
+
+    style-* on m_left / m_right colours a side's count, title and score tab (MatchOptions.LeftStyle /
+    RightStyle); on m_bar it colours the centre's bottom edge. "urgent" on m_bar turns the timer red
+    and pulses it. Contract "match" (docs/CONTRACTS.md).
+*/
+
+.match-bar {
+    flow-children: down;
+    width: 460px;
+    horizontal-align: center;
+    vertical-align: top;
+}
+
+/* Row ---------------------------------------------------------------------- */
+
+.match-row {
+    flow-children: right;
+    width: 100%;
+    height: 60px;
+    border-radius: 0px 0px 6px 6px;
+    border-left: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-top: 0px solid #ffffff00;
+    background-color: #12171e;
+}
+
+.match-side {
+    flow-children: down;
+    width: 112px;
+    height: 100%;
+    padding-top: 7px;
+}
+
+.match-value {
+    width: 100%;
+    text-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 28px;
+    color: #f2f4f7;
+}
+
+.match-label {
+    width: 100%;
+    text-align: center;
+    padding-left: 1.8px;
+    margin-top: 0px;
+    font-family: Stratum2 Bold;
+    font-size: 11px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+    white-space: nowrap;
+    text-overflow: shrink min( 8px ) ellipsis;
+}
+
+/* Centre ------------------------------------------------------------------- */
+
+.match-mid {
+    flow-children: down;
+    width: fill-parent-flow( 1.0 );
+    height: 100%;
+    padding-top: 6px;
+    border-left: 1px solid #ffffff10;
+    border-right: 1px solid #ffffff10;
+    border-bottom: 2px solid #ffffff14;
+}
+
+.match-center {
+    width: 100%;
+    text-align: center;
+    font-family: Stratum2 Mono;
+    font-size: 28px;
+    color: #ffffff;
+    transition-property: color;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}
+
+.match-sub {
+    width: 100%;
+    text-align: center;
+    padding-left: 1.6px;
+    margin-top: 1px;
+    font-family: Stratum2 Bold;
+    font-size: 11px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #61686f;
+    white-space: nowrap;
+    text-overflow: shrink min( 8px ) ellipsis;
+}
+
+.match-bar.urgent .match-center {
+    color: #e0432f;
+    animation-name: match-pulse;
+    animation-duration: 0.9s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+/* Name quoted: unquoted fails the whole stylesheet. */
+@keyframes 'match-pulse' {
+    0%   { opacity: 1.0; }
+    50%  { opacity: 0.4; }
+    100% { opacity: 1.0; }
+}
+
+/* Score tabs: one per side, centred under the side block ------------------- */
+
+.match-scores {
+    flow-children: right;
+    width: 100%;
+}
+
+.match-cell {
+    width: 112px;
+    height: 30px;
+}
+
+.match-gap {
+    width: fill-parent-flow( 1.0 );
+    height: 1px;
+}
+
+.match-tab {
+    width: 64px;
+    height: 100%;
+    horizontal-align: center;
+    border-radius: 0px 0px 5px 5px;
+    border-left: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-top: 0px solid #ffffff00;
+    background-color: #12171e;
+}
+
+.match-score {
+    horizontal-align: center;
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 17px;
+    color: #f2f4f7;
+}
+
+/* Styles (UiStyle): a side's count, title and score tab; the centre's bottom edge ---- */
+
+.match-side.style-info .match-value { color: #56a0dd; }
+.match-side.style-info .match-label { color: #56a0dd; }
+.match-tab.style-info { border-left: 1px solid #56a0dd99; border-right: 1px solid #56a0dd99; border-bottom: 1px solid #56a0dd99; }
+.match-tab.style-info .match-score { color: #56a0dd; }
+.match-bar.style-info .match-mid { border-bottom: 2px solid #56a0dd; }
+
+.match-side.style-success .match-value { color: #9ccf4f; }
+.match-side.style-success .match-label { color: #9ccf4f; }
+.match-tab.style-success { border-left: 1px solid #9ccf4f99; border-right: 1px solid #9ccf4f99; border-bottom: 1px solid #9ccf4f99; }
+.match-tab.style-success .match-score { color: #9ccf4f; }
+.match-bar.style-success .match-mid { border-bottom: 2px solid #9ccf4f; }
+
+.match-side.style-warn .match-value { color: #f0a531; }
+.match-side.style-warn .match-label { color: #f0a531; }
+.match-tab.style-warn { border-left: 1px solid #f0a53199; border-right: 1px solid #f0a53199; border-bottom: 1px solid #f0a53199; }
+.match-tab.style-warn .match-score { color: #f0a531; }
+.match-bar.style-warn .match-mid { border-bottom: 2px solid #f0a531; }
+
+.match-side.style-danger .match-value { color: #e0432f; }
+.match-side.style-danger .match-label { color: #e0432f; }
+.match-tab.style-danger { border-left: 1px solid #e0432f99; border-right: 1px solid #e0432f99; border-bottom: 1px solid #e0432f99; }
+.match-tab.style-danger .match-score { color: #e0432f; }
+.match-bar.style-danger .match-mid { border-bottom: 2px solid #e0432f; }
+
+.match-side.style-purple .match-value { color: #8847ff; }
+.match-side.style-purple .match-label { color: #8847ff; }
+.match-tab.style-purple { border-left: 1px solid #8847ff99; border-right: 1px solid #8847ff99; border-bottom: 1px solid #8847ff99; }
+.match-tab.style-purple .match-score { color: #8847ff; }
+.match-bar.style-purple .match-mid { border-bottom: 2px solid #8847ff; }
+
+.match-side.style-gold .match-value { color: #e0a24a; }
+.match-side.style-gold .match-label { color: #e0a24a; }
+.match-tab.style-gold { border-left: 1px solid #e0a24a99; border-right: 1px solid #e0a24a99; border-bottom: 1px solid #e0a24a99; }
+.match-tab.style-gold .match-score { color: #e0a24a; }
+.match-bar.style-gold .match-mid { border-bottom: 2px solid #e0a24a; }
+
+.match-side.style-neutral .match-value { color: #f2f4f7; }
+.match-tab.style-neutral .match-score { color: #f2f4f7; }

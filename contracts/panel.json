@@ -1,0 +1,204 @@
+{
+  "component": "panel",
+  "csharp": "PanelLayout / IPanelService",
+  "summary": "Modal panel: pages in a left menu, stats strip, typed rows with buttons, switches and steppers. Takes the mouse.",
+  "params": {
+    "pages": {
+      "default": 8,
+      "doc": "Menu entries (PanelLayout.Pages)."
+    },
+    "stats": {
+      "default": 4,
+      "doc": "Chips above the rows (PanelLayout.Stats)."
+    },
+    "rows": {
+      "default": 24,
+      "doc": "Rows of the selected page (PanelLayout.Rows)."
+    }
+  },
+  "repeat": {
+    "n": "pages",
+    "s": "stats",
+    "r": "rows"
+  },
+  "panels": [
+    {
+      "id": "p_panel",
+      "required": true,
+      "classes": [
+        "show",
+        "style-*",
+        "no-hint"
+      ],
+      "doc": "Everything under the root. `show` plays the entry; style-* = accent; `no-hint` hides the footer."
+    },
+    {
+      "id": "p_close",
+      "required": true,
+      "classes": [],
+      "tag": "Button",
+      "doc": "Close button (click)."
+    },
+    {
+      "id": "p_page_{n}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "active"
+      ],
+      "tag": "Button",
+      "doc": "Menu entry (click switches page). Author it `hidden`."
+    },
+    {
+      "id": "p_stats",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "doc": "Stat strip, `hidden` when the page has no stat."
+    },
+    {
+      "id": "p_stat_{s}",
+      "required": false,
+      "classes": [
+        "hidden",
+        "style-*",
+        "no-key"
+      ],
+      "doc": "Stat chip. Author it `hidden`. `no-key` when the key is blank."
+    },
+    {
+      "id": "p_row_{r}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "kind-header",
+        "kind-action",
+        "kind-toggle",
+        "kind-info",
+        "kind-stepper",
+        "kind-text",
+        "kind-paragraph",
+        "style-*",
+        "on",
+        "disabled",
+        "selected",
+        "nested",
+        "no-title",
+        "no-desc"
+      ],
+      "doc": "Row of the selected page. `kind-*` decides which parts show. Author it `hidden`."
+    },
+    {
+      "id": "p_row_{r}_btn",
+      "required": false,
+      "classes": [],
+      "tag": "Button",
+      "doc": "Row button (kind-action, click)."
+    },
+    {
+      "id": "p_row_{r}_toggle",
+      "required": false,
+      "classes": [],
+      "tag": "Button",
+      "doc": "Row switch (kind-toggle, click)."
+    },
+    {
+      "id": "p_row_{r}_prev",
+      "required": false,
+      "classes": [],
+      "tag": "Button",
+      "doc": "Stepper ‹ (kind-stepper, click)."
+    },
+    {
+      "id": "p_row_{r}_next",
+      "required": false,
+      "classes": [],
+      "tag": "Button",
+      "doc": "Stepper › (kind-stepper, click)."
+    }
+  ],
+  "texts": [
+    {
+      "var": "p_title",
+      "required": true,
+      "doc": "PanelOptions.Title"
+    },
+    {
+      "var": "p_subtitle",
+      "required": false,
+      "doc": "PanelOptions.Subtitle"
+    },
+    {
+      "var": "p_hint",
+      "required": false,
+      "doc": "PanelOptions.Hint"
+    },
+    {
+      "var": "p_page_{n}_label",
+      "required": true,
+      "doc": "PanelPage.Label"
+    },
+    {
+      "var": "p_stat_{s}_key",
+      "required": false,
+      "doc": "PanelStat.Key"
+    },
+    {
+      "var": "p_stat_{s}_value",
+      "required": false,
+      "doc": "PanelStat.Value"
+    },
+    {
+      "var": "p_row_{r}_title",
+      "required": true,
+      "doc": "PanelRow.Title"
+    },
+    {
+      "var": "p_row_{r}_desc",
+      "required": false,
+      "doc": "PanelRow.Description"
+    },
+    {
+      "var": "p_row_{r}_value",
+      "required": false,
+      "doc": "PanelRow.Value (info value, stepper choice)"
+    },
+    {
+      "var": "p_row_{r}_btn",
+      "required": false,
+      "doc": "PanelRow.Button"
+    },
+    {
+      "var": "p_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "PanelOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "show",
+    "active",
+    "no-hint",
+    "kind-header",
+    "kind-action",
+    "kind-toggle",
+    "kind-info",
+    "kind-stepper",
+    "kind-text",
+    "on",
+    "disabled",
+    "selected",
+    "nested",
+    "no-title",
+    "no-desc",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger",
+    "kind-paragraph",
+    "no-key"
+  ]
+}
