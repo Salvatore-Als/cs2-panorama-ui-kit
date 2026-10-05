@@ -465,7 +465,7 @@ def panel(
 		<Panel class="pn-body" hittest="false">
 			<Panel class="pn-menu" hittest="false">
 {page_block}			</Panel>
-			<Panel class="pn-content" hittest="false">
+			<Panel class="pn-content">
 				<Panel id="p_stats" class="pn-stats" hittest="false">
 {stat_block}				</Panel>
 				<Panel class="pn-rows" hittest="false">
@@ -518,13 +518,12 @@ def menu(
 			<Label id="{item_id}_desc" class="mn-item-desc" hittest="false" text="{{s:{item_id}_desc}}" />
 		</Panel>
 		<Label id="{item_id}_value" class="mn-item-value" hittest="false" text="{{s:{item_id}_value}}" />
-		<Label class="mn-item-caret" hittest="false" text="▾" />
 		<Panel class="mn-item-switch" hittest="false">
 			<Panel class="mn-item-knob" hittest="false" />
 		</Panel>
 		<Label class="mn-item-arrow" hittest="false" text="›" />
 	</Button>
-	<Panel class="mn-drop" hittest="false">
+	<Panel class="mn-drop">
 {drop}	</Panel>
 </Panel>"""
 
@@ -565,7 +564,7 @@ def menu(
         body=body,
         description=(
             f"Menu: header with back / close, breadcrumb, {items} entries per page, pager.\n"
-            f"A select entry opens a dropdown of up to {choices} choices under it.\n"
+            f"A select entry lists (scrollable listbox) up to {choices} choices under it.\n"
             "Takes the mouse. Clicks: mn_close, mn_back, mn_prev, mn_next, "
             "mn_item_<n>, mn_choice_<n>_<c>."
         ),

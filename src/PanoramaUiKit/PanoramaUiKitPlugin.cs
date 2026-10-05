@@ -20,7 +20,7 @@ public sealed class PanoramaUiKitPlugin : BasePlugin, IPluginConfig<UiKitConfig>
 {
     public override string ModuleName => "Panorama UI Kit";
 
-    public override string ModuleVersion => "1.0.0";
+    public override string ModuleVersion => "1.1.0";
 
     public override string ModuleAuthor => "Kriax";
 

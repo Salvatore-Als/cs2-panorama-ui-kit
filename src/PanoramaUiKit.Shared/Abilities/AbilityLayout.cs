@@ -8,7 +8,7 @@ public sealed class AbilityLayout : UiLayout
     public override string Component => "abilities";
 
     /// <summary>Tiles <c>ab_0</c>..<c>ab_{Slots-1}</c> in the layout.</summary>
-    public int Slots { get; init; } = 4;
+    public int Slots { get; init; } = 8;
 
     /// <summary>Highest <c>cd-N</c> class (seconds, every integer from 1). Longer cooldowns are clamped.</summary>
     public int MaxCooldownSeconds { get; init; } = 120;

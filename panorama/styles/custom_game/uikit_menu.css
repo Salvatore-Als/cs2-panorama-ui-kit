@@ -70,7 +70,6 @@
 
 .mn-subtitle {
     margin-top: 1px;
-    font-family: Stratum2;
     font-size: 14px;
     color: #9aa2ac;
 }
@@ -105,9 +104,7 @@
 .mn-path {
     width: 100%;
     padding: 8px 16px 0px 16px;
-    font-family: Stratum2 Mono;
-    font-size: 11px;
-    letter-spacing: 1px;
+    font-size: 13px;
     color: #61686f;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -145,7 +142,6 @@
     width: 28px;
     vertical-align: center;
     text-align: center;
-    font-family: Stratum2 Mono;
     font-size: 13px;
     color: #9aa2ac;
 }
@@ -167,7 +163,6 @@
 
 .mn-item-desc {
     margin-top: 1px;
-    font-family: Stratum2;
     font-size: 13px;
     color: #9aa2ac;
     white-space: normal;
@@ -176,7 +171,6 @@
 .mn-item-value {
     vertical-align: center;
     margin-left: 10px;
-    font-family: Stratum2 Mono;
     font-size: 14px;
     color: #cdd3da;
 }
@@ -199,23 +193,18 @@
 .mn-item-caret {
     vertical-align: center;
     margin-left: 6px;
-    font-family: Stratum2 Bold;
     font-size: 14px;
     color: #9aa2ac;
     visibility: collapse;
 }
 
-.mn-entry.kind-select .mn-item-caret { visibility: visible; }
 
 .mn-entry.kind-select .mn-item-value {
     padding: 3px 10px;
     border-radius: 3px;
     border: 1px solid #ffffff1c;
     background-color: #ffffff0d;
-    font-family: Stratum2 Bold;
     font-size: 13px;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
     color: #f2f4f7;
 }
 
@@ -249,7 +238,7 @@
 .mn-entry.kind-toggle.on .mn-item-switch { background-color: #9ccf4f; }
 .mn-entry.kind-toggle.on .mn-item-knob   { transform: translateX( 22px ); }
 
-/* Dropdown (kind-select + open): the choices under the row, on a darker ground. */
+/* Select (kind-select): a real listbox - the choices are always listed under the row, scrollable. */
 .mn-drop {
     flow-children: down;
     width: 100%;
@@ -258,11 +247,12 @@
     border-radius: 3px;
     border: 1px solid #ffffff1c;
     background-color: #0a0d11;
+    max-height: 148px;
+    overflow: squish scroll;
     visibility: collapse;
 }
 
-.mn-entry.kind-select.open .mn-drop { visibility: visible; }
-.mn-entry.kind-select.open .mn-item-caret { color: #f2f4f7; }
+.mn-entry.kind-select .mn-drop { visibility: visible; }
 
 .mn-choice {
     flow-children: right;
@@ -281,16 +271,12 @@
 .mn-choice-label {
     width: fill-parent-flow( 1.0 );
     vertical-align: center;
-    font-family: Stratum2 Bold;
     font-size: 14px;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
     color: #cdd3da;
 }
 
 .mn-choice-check {
     vertical-align: center;
-    font-family: Stratum2 Bold;
     font-size: 14px;
     color: #9ccf4f;
     visibility: collapse;
@@ -317,9 +303,7 @@
     width: fill-parent-flow( 1.0 );
     vertical-align: center;
     text-align: center;
-    font-family: Stratum2 Mono;
     font-size: 13px;
-    letter-spacing: 1px;
     color: #9aa2ac;
 }
 

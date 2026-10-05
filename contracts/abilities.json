@@ -4,7 +4,7 @@
   "summary": "Per-player ability bar: key, name, cooldown gauge, hold gauge. Tick-friendly.",
   "params": {
     "slots": {
-      "default": 4,
+      "default": 8,
       "doc": "Tiles in the pool (AbilityLayout.Slots)."
     }
   },

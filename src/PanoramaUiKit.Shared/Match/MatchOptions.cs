@@ -51,7 +51,7 @@ public sealed record MatchOptions : UiContent
     /// </summary>
     public bool ShowScore { get; init; } = true;
 
-    /// <summary>Class <c>urgent</c> on <c>m_bar</c>: last seconds, the timer turns red and pulses. <see cref="UiContent.Style"/> colours the centre's bottom edge.</summary>
+    /// <summary>Class <c>urgent</c> on <c>m_bar</c>: last seconds, the timer turns red and pulses.</summary>
     public bool Urgent { get; init; }
 
     /// <summary>Layout file to draw on, by name (<c>Name = "uikit_...")</c>. Required: there is no default.</summary>

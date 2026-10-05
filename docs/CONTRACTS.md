@@ -32,11 +32,11 @@ Per-player ability bar: key, name, cooldown gauge, hold gauge. Tick-friendly.
 
 C#: `AbilityLayout / IAbilityService`
 
-Marker: `<!-- uikit:abilities slots=4 -->`
+Marker: `<!-- uikit:abilities slots=8 -->`
 
 Pool parameters (marker and C# layout descriptor must agree):
 
-- `slots` (default `4`): Tiles in the pool (AbilityLayout.Slots).
+- `slots` (default `8`): Tiles in the pool (AbilityLayout.Slots).
 
 Placeholders: `{n}` = each of `slots`.
 
@@ -127,7 +127,7 @@ Marker: `<!-- uikit:match -->`
 
 | Element | Kind | Required | Kit writes | Meaning |
 |---|---|---|---|---|
-| `id="m_bar"` | panel | yes | `style-*`, `urgent` | The bar. `urgent` for the last seconds; style-* colours the centre's bottom edge. |
+| `id="m_bar"` | panel | yes | `style-*`, `urgent` | The bar. `urgent` for the last seconds; |
 | `id="m_left"` | panel | no | `style-*` | Left block: style-* colours its count and title (MatchOptions.LeftStyle). |
 | `id="m_right"` | panel | no | `style-*` | Right block: style-* colours its count and title (MatchOptions.RightStyle). |
 | `id="m_center_sub"` | panel | no | `empty` | Label under the centre, `empty` when blank. |

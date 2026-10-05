@@ -85,7 +85,6 @@
 
 .pn-subtitle {
     margin-top: 2px;
-    font-family: Stratum2;
     font-size: 15px;
     color: #9aa2ac;
 }
@@ -159,10 +158,7 @@
 
 .pn-page-label {
     vertical-align: center;
-    font-family: Stratum2 Bold;
     font-size: 15px;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
     color: #9aa2ac;
 }
 
@@ -202,10 +198,7 @@
 .pn-stat.no-key .pn-stat-value { margin-top: 0px; }
 
 .pn-stat-key {
-    font-family: Stratum2 Mono;
-    font-size: 10px;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
+    font-size: 13px;
     color: #61686f;
 }
 
@@ -260,7 +253,6 @@
 
 .pn-row-desc {
     margin-top: 1px;
-    font-family: Stratum2;
     font-size: 14px;
     color: #9aa2ac;
     white-space: normal;
@@ -268,7 +260,6 @@
 
 .pn-row-value {
     vertical-align: center;
-    font-family: Stratum2 Mono;
     font-size: 15px;
     color: #cdd3da;
     visibility: collapse;
@@ -294,10 +285,7 @@
 .pn-btn-label {
     horizontal-align: center;
     vertical-align: center;
-    font-family: Stratum2 Bold;
     font-size: 13px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
     color: #f2f4f7;
 }
 
@@ -370,10 +358,7 @@
 .pn-step-value {
     min-width: 150px;
     vertical-align: center;
-    font-family: Stratum2 Bold;
     font-size: 15px;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
     text-align: center;
     color: #f2f4f7;
 }
@@ -403,10 +388,7 @@
 }
 
 .pn-row.kind-header .pn-row-title {
-    font-family: Stratum2 Mono;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 13px;
     color: #9aa2ac;
 }
 
@@ -487,7 +469,6 @@
     border-radius: 4px;
     border: 1px solid #ffffff24;
     background-color: #ffffff0d;
-    font-family: Stratum2 Bold;
     font-size: 14px;
 }
 
@@ -531,9 +512,7 @@
 .pn-panel.no-hint .pn-foot { visibility: collapse; }
 
 .pn-hint {
-    font-family: Stratum2 Mono;
-    font-size: 11px;
-    letter-spacing: 1px;
+    font-size: 13px;
     color: #61686f;
 }
 

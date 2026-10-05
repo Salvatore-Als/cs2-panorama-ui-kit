@@ -72,17 +72,13 @@
 
 .vote-kicker {
     width: 100%;
-    font-family: Stratum2 Mono;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 13px;
     color: #9aa2ac;
     margin-bottom: 1px;
 }
 
 .vote-title {
     width: 100%;
-    font-family: Stratum2 Medium Condensed;
     font-size: 18px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -109,7 +105,6 @@
 .vote-close-label {
     horizontal-align: center;
     vertical-align: center;
-    font-family: Stratum2 Bold;
     font-size: 14px;
     color: #f2f4f7;
 }
@@ -150,10 +145,7 @@
 
 .vote-choice-label {
     width: fill-parent-flow( 1.0 );
-    font-family: Stratum2 Medium Condensed;
     font-size: 15px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
     color: #f2f4f7;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -161,15 +153,13 @@
 
 .vote-choice-count {
     margin-right: 8px;
-    font-family: Stratum2;
-    font-size: 12px;
+    font-size: 13px;
     color: #61686f;
 }
 
 .vote-choice-pct {
     width: 42px;
     text-align: right;
-    font-family: Stratum2 Medium Condensed;
     font-size: 15px;
     color: #9aa2ac;
 }
@@ -178,8 +168,7 @@
 
 .vote-choice-sub {
     width: 100%;
-    font-family: Stratum2;
-    font-size: 11px;
+    font-size: 13px;
     color: #9aa2ac;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -246,17 +235,14 @@
 .vote-total {
     width: fill-parent-flow( 1.0 );
     vertical-align: center;
-    font-family: Stratum2;
-    font-size: 12px;
+    font-size: 13px;
     color: #9aa2ac;
 }
 
 .vote-time {
     vertical-align: center;
     margin-left: 10px;
-    font-family: Stratum2 Medium Condensed;
     font-size: 15px;
-    letter-spacing: 1px;
     color: #f2f4f7;
 }
 
@@ -283,7 +269,6 @@
 .vote-step-label {
     horizontal-align: center;
     vertical-align: center;
-    font-family: Stratum2 Bold;
     font-size: 15px;
     color: #f2f4f7;
 }
@@ -291,8 +276,7 @@
 .vote-page {
     margin: 0px 8px;
     vertical-align: center;
-    font-family: Stratum2;
-    font-size: 12px;
+    font-size: 13px;
     color: #9aa2ac;
 }
 

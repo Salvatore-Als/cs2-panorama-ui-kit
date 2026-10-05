@@ -12,7 +12,7 @@
         "style-*",
         "urgent"
       ],
-      "doc": "The bar. `urgent` for the last seconds; style-* colours the centre's bottom edge."
+      "doc": "The bar. `urgent` for the last seconds."
     },
     {
       "id": "m_left",

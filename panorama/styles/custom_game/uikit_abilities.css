@@ -20,8 +20,8 @@
 
 .ab-slot {
     flow-children: down;
-    width: 220px;
-    padding: 0px 10px;
+    width: 180px;
+    padding: 0px 8px;
 }
 
 .ab-card {
@@ -39,9 +39,7 @@
     horizontal-align: center;
     vertical-align: center;
     text-align: center;
-    font-family: Stratum2 Bold;
     font-size: 15px;
-    letter-spacing: 1px;
 }
 
 .ab-key {
@@ -101,10 +99,7 @@
     width: 100%;
     text-align: center;
     margin-top: 12px;
-    font-family: Stratum2 Medium Condensed;
-    font-size: 12px;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
+    font-size: 13px;
     color: #9aa2ac;
     white-space: nowrap;
     text-overflow: ellipsis;

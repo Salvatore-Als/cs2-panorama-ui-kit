@@ -80,17 +80,13 @@
 
 .roulette-kicker {
     horizontal-align: center;
-    font-family: Stratum2 Mono;
     font-size: 13px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
     color: #9aa2ac;
     margin-bottom: 4px;
 }
 
 .roulette-title {
     horizontal-align: center;
-    font-family: Stratum2 Medium Condensed;
     font-size: 30px;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -170,7 +166,6 @@
     margin-top: 40px;
     padding: 0px 8px;
     text-align: center;
-    font-family: Stratum2 Medium Condensed;
     font-size: 17px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -183,7 +178,6 @@
     width: 100%;
     padding: 0px 8px;
     text-align: center;
-    font-family: Stratum2;
     font-size: 13px;
     color: #9aa2ac;
     white-space: nowrap;
@@ -252,16 +246,12 @@
 
 .roulette-result-label {
     horizontal-align: center;
-    font-family: Stratum2 Mono;
     font-size: 13px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
     color: #9aa2ac;
 }
 
 .roulette-result-name {
     horizontal-align: center;
-    font-family: Stratum2 Medium Condensed;
     font-size: 34px;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -270,7 +260,6 @@
 
 .roulette-result-sub {
     horizontal-align: center;
-    font-family: Stratum2;
     font-size: 15px;
     color: #9aa2ac;
 }

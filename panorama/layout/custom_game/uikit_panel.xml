@@ -62,7 +62,7 @@
 								<Label class="pn-page-label" hittest="false" text="{s:p_page_7_label}" />
 							</Button>
 						</Panel>
-						<Panel class="pn-content" hittest="false">
+						<Panel class="pn-content">
 							<Panel id="p_stats" class="pn-stats" hittest="false">
 								<Panel id="p_stat_0" class="pn-stat hidden" hittest="false">
 									<Label class="pn-stat-key" hittest="false" text="{s:p_stat_0_key}" />

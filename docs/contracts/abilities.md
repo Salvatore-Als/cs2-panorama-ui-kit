@@ -6,11 +6,11 @@ Per-player ability bar: key, name, cooldown gauge, hold gauge. Tick-friendly.
 
 C#: `AbilityLayout / IAbilityService`
 
-Marker: `<!-- uikit:abilities slots=4 -->`
+Marker: `<!-- uikit:abilities slots=8 -->`
 
 Pool parameters (marker and C# layout descriptor must agree):
 
-- `slots` (default `4`): Tiles in the pool (AbilityLayout.Slots).
+- `slots` (default `8`): Tiles in the pool (AbilityLayout.Slots).
 
 Placeholders: `{n}` = each of `slots`.
 

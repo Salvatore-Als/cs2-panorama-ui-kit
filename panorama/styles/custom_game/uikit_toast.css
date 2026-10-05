@@ -64,7 +64,6 @@
 .toast.show {
     opacity: 1;
     transform: translateX( 0px );
-    sound: "UIPanorama.popup_newweapon";
 }
 
 .toast-body {
@@ -77,20 +76,14 @@
 
 .toast-kicker {
     width: 100%;
-    font-family: Stratum2 Medium Condensed;
-    font-size: 11px;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
+    font-size: 13px;
     color: #f0a531;
     margin-bottom: 2px;
 }
 
 .toast-title {
     width: 100%;
-    font-family: Stratum2 Medium Condensed;
     font-size: 16px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
     color: #f2f4f7;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -98,7 +91,6 @@
 
 .toast-desc {
     width: 100%;
-    font-family: Stratum2;
     font-size: 14px;
     color: #9aa2ac;
     white-space: normal;

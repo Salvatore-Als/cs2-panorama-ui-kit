@@ -7,7 +7,7 @@
 .banner {
     horizontal-align: center;
     vertical-align: top;
-    margin-top: 110px;
+    margin-top: 60px;
     width: 980px;
     height: 52px;
     flow-children: right;
@@ -47,10 +47,7 @@
 .banner-kicker {
     vertical-align: center;
     margin-right: 12px;
-    font-family: Stratum2 Medium Condensed;
     font-size: 13px;
-    letter-spacing: 1.6px;
-    text-transform: uppercase;
     color: #9aa2ac;
 }
 
@@ -58,7 +55,6 @@
     max-width: 680px;
     vertical-align: center;
     text-align: center;
-    font-family: Stratum2 Medium Condensed;
     font-size: 18px;
     letter-spacing: 0.6px;
     color: #f2f4f7;
