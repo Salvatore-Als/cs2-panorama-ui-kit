@@ -36,7 +36,7 @@ public sealed partial class DemoPlugin : BasePlugin
 {
     public override string ModuleName => "Panorama UI Kit Demo";
 
-    public override string ModuleVersion => "1.2.0";
+    public override string ModuleVersion => "1.2.1";
 
     public override string ModuleAuthor => "Kriax";
 

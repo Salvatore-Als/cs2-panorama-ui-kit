@@ -31,7 +31,7 @@ else (structure, colours, animation) is yours.
 | [abilities](abilities.md) | Per-player ability bar: key, name, cooldown gauge, hold gauge. Tick-friendly. |
 | [announce](announce.md) | Centred card (reveal, objective, round intro). A new one plays the exit of the previous first. |
 | [banner](banner.md) | One sticky line across the top. A new banner on a visible one rewrites it in place. |
-| [card](card.md) | Static info card pinned to a screen corner (over the radar, or above the HUD). Title, description and lines are all optional. No animation. |
+| [card](card.md) | Static info card pinned to a screen corner (over the radar, or above the HUD) or to the bottom centre. Title, description and lines are all optional. No animation. |
 | [dial](dial.md) | Radial dial: a ring that sweeps like a clock hand. Pushed by value, or timed and run by the client. For cooldowns, charges and channels. |
 | [killfeed](killfeed.md) | Server-wide feed, newest on top. A pool of rows; entries shift down. |
 | [match](match.md) | Compact top bar: a count + title on each side, a timer in the middle, optional score tabs under the sides. Same text for everyone. Tick-friendly. |

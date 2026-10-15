@@ -25,7 +25,7 @@ internal sealed class HudCardChannel : AnchoredChannel<HudCardContent>
 {
     private readonly CardLayout _layout;
 
-    public HudCardChannel(BasePlugin plugin, CardLayout layout) : base(plugin, layout)
+    public HudCardChannel(BasePlugin plugin, CardLayout layout) : base(plugin, layout, layout.Placements.Select(p => p.Code()).ToList())
     {
         _layout = layout;
     }

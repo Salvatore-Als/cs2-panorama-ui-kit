@@ -77,8 +77,12 @@ internal sealed class BoxViewer<TContent> : ViewerState where TContent : BoxCont
 /// </summary>
 internal abstract class AnchoredChannel<TContent> : LayoutChannel<BoxViewer<TContent>> where TContent : BoxContent
 {
-    protected AnchoredChannel(BasePlugin plugin, UiLayout layout) : base(plugin, layout)
+    /// <summary>Placement codes of every box the layout has (<c>tl</c>, <c>b</c>...).</summary>
+    private readonly IReadOnlyList<string> _keys;
+
+    protected AnchoredChannel(BasePlugin plugin, UiLayout layout, IReadOnlyList<string> keys) : base(plugin, layout)
     {
+        _keys = keys;
     }
 
     protected override BoxViewer<TContent> CreateViewer(int slot) => new(NewClient());
@@ -101,7 +105,12 @@ internal abstract class AnchoredChannel<TContent> : LayoutChannel<BoxViewer<TCon
             return UiHandle.Dead;
         }
 
-        BoxViewer<TContent> viewer = Ensure(player, out _);
+        BoxViewer<TContent> viewer = Ensure(player, out bool fresh);
+        if (fresh)
+        {
+            HideOthers(player, viewer, key);
+        }
+
         if (!viewer.Boxes.TryGetValue(key, out Box<TContent>? box))
         {
             box = new Box<TContent> { Key = key, Id = BoxId(key) };
@@ -126,6 +135,23 @@ internal abstract class AnchoredChannel<TContent> : LayoutChannel<BoxViewer<TCon
         }
 
         return handle;
+    }
+
+    /// <summary>
+    /// A layout just opened shows whatever its boxes were left with. A close only takes back the classes this kit
+    /// turned on (PanoramaManager's scrub): the "hidden" written on a retired box goes, and the "hidden" authored
+    /// in the layout and dropped by a show never comes back. So every box but the one being shown is hidden here,
+    /// or the old text of another position comes back on screen, unstyled.
+    /// </summary>
+    private void HideOthers(CCSPlayerController player, BoxViewer<TContent> viewer, string shownKey)
+    {
+        foreach (string key in _keys)
+        {
+            if (key != shownKey)
+            {
+                viewer.Client.Class(player, BoxId(key), "hidden", true);
+            }
+        }
     }
 
     /// <summary>Hides one box for one player. Nothing happens if it is not up.</summary>

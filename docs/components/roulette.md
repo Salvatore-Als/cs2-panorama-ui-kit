@@ -12,8 +12,8 @@ static readonly RouletteLayout Roulettes = new() { Name = "uikit_roulette" };
 
 | Property | Default | Meaning |
 |---|---|---|
-| `Cells` | `31` | Cards on the strip. |
-| `WinnerCell` | `24` | The card the strip stops on. |
+| `Cells` | `61` | Cards on the strip. |
+| `WinnerCell` | `54` | The card the strip stops on. |
 | `Durations` | `1, 2, 3, 4, 5, 6, 8, 10` | Spin durations the stylesheet has a transition for. |
 
 `Cells` and `WinnerCell` must match the layout: the stylesheet scrolls exactly far enough to centre that card.
@@ -50,7 +50,7 @@ The full form, `kit.Roulettes.Spin(player, new RouletteOptions { ... })`, also t
 | Option | Default | Meaning |
 |---|---|---|
 | `Kicker` | none | Small line above the title. |
-| `Seconds` | `4` | Spin duration, which sets its speed. Snaps to the nearest of `Durations`. |
+| `Seconds` | `6` | Spin duration, which sets its speed. Snaps to the nearest of `Durations`. The strip starts flat out and slows down the whole way to the stop. |
 | `HoldSeconds` | `3` | Time the result stays once the strip has stopped. `0` or less keeps it until cleared. |
 | `ResultLabel` | `"You got"` | Label above the result line. |
 | `OnResult` | none | Called once when the strip stops, on the server thread. |

@@ -14,7 +14,7 @@ internal sealed record TargetContent(string Text, TargetSize Size, float Seconds
 /// <summary>Text around the crosshair on one target layout (contract "target"): one box per position.</summary>
 internal sealed class TargetChannel : AnchoredChannel<TargetContent>
 {
-    public TargetChannel(BasePlugin plugin, UiLayout layout) : base(plugin, layout)
+    public TargetChannel(BasePlugin plugin, UiLayout layout, IReadOnlyList<string> keys) : base(plugin, layout, keys)
     {
     }
 

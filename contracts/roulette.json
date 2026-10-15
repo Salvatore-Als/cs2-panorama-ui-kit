@@ -4,11 +4,11 @@
   "summary": "Case-opening roulette: a strip of cards slows down on a server-drawn winner. Per player.",
   "params": {
     "cells": {
-      "default": 31,
+      "default": 61,
       "doc": "Cards on the strip (RouletteLayout.Cells)."
     },
     "winner": {
-      "default": 24,
+      "default": 54,
       "doc": "Card the strip stops on (RouletteLayout.WinnerCell). The stylesheet's jit-N offsets are built for it."
     }
   },
@@ -46,11 +46,10 @@
         "jit-3",
         "jit-4",
         "spin",
-        "settle",
         "done",
         "no-sub"
       ],
-      "doc": "The strip of cards. `dur-N` (N in RouletteLayout.Durations) is the total time, `jit-0`..`jit-4` where in the winner's card it stops, `spin` moves it most of the way at full speed, `settle` (added RouletteLayout.SettleAfterFraction of the time later) slows it onto the winner's card, `done` once it has stopped, `no-sub` when no item has a second line.",
+      "doc": "The strip of cards. `dur-N` (N in RouletteLayout.Durations) is the total time, `jit-0`..`jit-4` where in the winner's card it stops, `spin` moves it onto the winner's card, flat out at first and slowing down to the stop, `done` once it has stopped, `no-sub` when no item has a second line.",
       "once": true
     },
     {
@@ -137,7 +136,6 @@
     "hidden",
     "empty",
     "spin",
-    "settle",
     "done",
     "won",
     "no-sub",

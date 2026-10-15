@@ -1,8 +1,8 @@
 # Card
 
-An info card pinned to a corner of the screen: a title, a description and label / value lines. Every part is optional, so a card can be just a title, just a description, just lines, or any mix. It has the same look as the [announce](announce.md) card, with no animation: it is there as soon as it is shown.
+An info card pinned to a corner of the screen, or to the bottom centre: a title, a description and label / value lines. Every part is optional, so a card can be just a title, just a description, just lines, or any mix. It has the same look as the [announce](announce.md) card, with no animation: it is there as soon as it is shown.
 
-Four corners. The top left one sits where the radar is. The bottom ones sit above the HUD. Per player, one card per corner.
+Four corners and the bottom centre. The top left one sits where the radar is. The bottom ones sit above the HUD. Per player, one card per placement.
 
 Bundled layout: `uikit_card`. Demo command: `css_uikit_demo_card`.
 
@@ -14,7 +14,7 @@ static readonly CardLayout Cards = new() { Name = "uikit_card" };
 
 | Property | Default | Meaning |
 |---|---|---|
-| `Placements` | all 4 | Corners the layout has a card for. Any other corner falls back to the first one. |
+| `Placements` | all 5 | Placements the layout has a card for. Any other one falls back to the first. |
 | `Lines` | `4` | Lines per card. Extra lines are dropped. |
 
 ## Show a card
@@ -52,7 +52,7 @@ IUiHandle handle = kit.Cards.Show(player, new CardOptions
 | `Title` | none | Headline. Collapsed when blank. |
 | `Description` | none | Paragraph that wraps. Collapsed when blank. |
 | `Lines` | none | `CardLine(Label, Value)`: a muted label on the left, a value on the right. Either can be left out. A blank line is skipped. |
-| `Placement` | `TopLeft` | Which corner. |
+| `Placement` | `TopLeft` | `TopLeft`, `TopRight`, `BottomLeft`, `BottomRight` or `BottomCenter`. |
 | `Seconds` | `0` | Time on screen. `0` or less keeps it until it is hidden. |
 
 A card with no title, no description and no line is hidden.

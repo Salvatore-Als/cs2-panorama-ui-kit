@@ -12,10 +12,11 @@ public sealed partial class DemoPlugin
     private const int CardDemoSeconds = 10;
 
     /// <summary>
-    /// One card per corner, each a different mix: full, title only, description only, lines only.
+    /// One card per placement, each a different mix: full, title only, description only, lines only,
+    /// title and description in the bottom centre.
     /// The top left one counts a line up every second: same card, rewritten in place.
     /// </summary>
-    [ConsoleCommand("css_uikit_demo_card", "Four cards, one per corner, each with a different set of parts.")]
+    [ConsoleCommand("css_uikit_demo_card", "Five cards, one per placement, each with a different set of parts.")]
     [CommandHelper(whoCanExecute: CommandUsage.CLIENT_ONLY)]
     public void OnDemoCard(CCSPlayerController? player, CommandInfo command)
     {
@@ -53,6 +54,16 @@ public sealed partial class DemoPlugin
                 new CardLine(null, "Only a value"),
             ],
             Style = UiStyle.Success,
+            Seconds = CardDemoSeconds,
+        });
+
+        kit.Cards.Show(target, new CardOptions
+        {
+            Layout = DemoLayouts.Card,
+            Placement = CardPlacement.BottomCenter,
+            Title = "Bottom centre",
+            Description = "Above the HUD, in the middle of the screen.",
+            Style = UiStyle.Purple,
             Seconds = CardDemoSeconds,
         });
 

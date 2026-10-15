@@ -1,20 +1,22 @@
 /*
-    uikit_roulette - case-opening roulette. Dark veil, one card, a strip of 31 cards under a marker.
-    r_strip moves in two steps so it is at full speed from the first instant (ease-out starts slowly):
-    "spin" runs 80% of the way, linear, in the first 60% of the dur-* time; "settle", added by the
-    server at that moment, runs the last 20% with ease-out, so the strip slows down onto card 24 under
-    the marker. jit-0..4 shift where in that card it stops. "done" dims the other cards, "won" keeps
-    the winner lit. style-* on r_screen is the accent, style-* on a card its rarity colour.
-    Contract "roulette" (docs/CONTRACTS.md).
+    uikit_roulette - case-opening roulette. Dark veil, one panel, a strip of 61 item cards running
+    under a centre marker. Contract "roulette" (docs/CONTRACTS.md).
+
+    Motion. "spin" sends r_strip all the way onto card 54 in ONE transition: flat out from the first
+    frame (dozens of cards a second, a blur), then slowing down the whole way and creeping onto the
+    winner - the case-opening feel. The curve is a cubic-bezier, whose start slope (0.72 / 0.08 = 9x
+    the average speed) is the burst and whose end slope (0) is the soft stop. ease-out is declared
+    before it as the fallback should a client ever reject cubic-bezier. jit-0..4 shift where in the
+    winner's card it stops. "done" steps the other cards back, "won" lifts the winner. style-* on
+    r_screen is the accent (marker, kicker, rule, result), style-* on a card its rarity colour.
 
     The numbers below go together; change one, change the rest:
-        card 140px  x  31 cards = strip 4340px      window 980px (7 cards, marker in the middle)
-        stop offset = 24 x 140 + 70 - 490 = 2940px  (winner card start + half a card - half the window)
-        spin  = 80% of it = 2352px
-        jit-N = that offset -48, -24, 0, +24, +48px (inside the 140px winner card)
-    dur-* must match RouletteLayout.Durations; the 60/40 split of each is RouletteLayout.SettleAfterFraction. The speed is chosen per spin in C#
-    (RouletteOptions.Seconds picks the dur-* class): the distance is fixed, so a shorter duration is a
-    faster strip. Timing is ease-out: Panorama has no cubic-bezier.
+        pitch 140px (card 132px + 4px margin each side)  x  61 cards = strip 8540px
+        window 980px (7 cards, marker in the middle)
+        stop offset = 54 x 140 + 70 - 490 = 7140px  (winner card start + half a pitch - half the window)
+        jit-N = that offset -48, -24, 0, +24, +48px (inside the 132px winner card)
+    dur-* must match RouletteLayout.Durations. The distance is fixed, so a shorter duration is a
+    faster strip; the curve keeps its shape at every duration.
 */
 
 .roulette-screen {
@@ -27,30 +29,29 @@
 .roulette-dim {
     width: 100%;
     height: 100%;
-    background-color: #000000;
+    background-color: gradient( radial, 50% 50%, 0% 0%, 80% 80%, from( #05070acc ), to( #000000f2 ) );
     opacity: 0;
     transition-property: opacity;
     transition-duration: 0.45s;
     transition-timing-function: ease-out;
 }
 
-.roulette-screen.show .roulette-dim { opacity: 0.72; }
+.roulette-screen.show .roulette-dim { opacity: 1; }
 
-/* Card --------------------------------------------------------------------- */
+/* Panel -------------------------------------------------------------------- */
 
 .roulette-card {
     width: 1040px;
     horizontal-align: center;
     vertical-align: center;
     flow-children: down;
-    border-radius: 8px;
-    border-top: 1px solid #ffffff1a;
-    border-right: 1px solid #ffffff1a;
-    border-bottom: 1px solid #ffffff1a;
-    border-left: 1px solid #ffffff1a;
-    background-color: gradient( linear, 0% 0%, 0% 100%, from( #1a212b ), to( #0f141b ) );
-    box-shadow: #000000cc 0px 18px 48px 0px;
-    overflow: noclip;
+    border-radius: 6px;
+    border-top: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-left: 1px solid #ffffff14;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #161c24 ), to( #0d1117 ) );
+    box-shadow: #000000d9 0px 24px 64px 0px;
 
     opacity: 0;
     transform: translateY( 22px );
@@ -67,127 +68,138 @@
 
 .roulette-card-accent {
     width: 100%;
-    height: 4px;
-    border-radius: 8px 8px 0px 0px;
+    height: 3px;
+    border-radius: 6px 6px 0px 0px;
     background-color: #9aa2ac;
 }
 
 .roulette-body {
     flow-children: down;
     width: 100%;
-    padding: 30px 30px 34px 30px;
+    padding: 26px 30px 30px 30px;
 }
 
-/* Copy --------------------------------------------------------------------- */
+/* Header ------------------------------------------------------------------- */
 
 .roulette-kicker {
     horizontal-align: center;
-    font-size: 14px;
+    margin-bottom: 4px;
+    font-size: 13px;
     letter-spacing: 4px;
     text-transform: uppercase;
     color: #9aa2ac;
-    margin-bottom: 6px;
 }
 
 .roulette-title {
     horizontal-align: center;
-    font-size: 34px;
-    letter-spacing: 4px;
+    font-family: Stratum2 Bold;
+    font-size: 32px;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    font-weight: bold;
     color: #f2f4f7;
 }
 
-/* Window and strip --------------------------------------------------------- */
+.roulette-rule {
+    width: 56px;
+    height: 2px;
+    horizontal-align: center;
+    margin-top: 12px;
+    background-color: #9aa2ac;
+}
+
+/* Window ------------------------------------------------------------------- */
 
 .roulette-window {
     width: 980px;
-    height: 156px;
+    height: 172px;
     horizontal-align: center;
-    margin-top: 26px;
-    background-color: #0a0e13;
-    border-radius: 6px;
+    margin-top: 22px;
+    border-radius: 4px;
     border-top: 1px solid #ffffff12;
+    border-right: 1px solid #ffffff12;
     border-bottom: 1px solid #ffffff12;
-    box-shadow: inset #000000 0px 0px 24px 0px;
+    border-left: 1px solid #ffffff12;
+    background-color: #07090d;
+    box-shadow: inset #000000 0px 0px 28px 0px;
     overflow: clip;
 }
 
 .roulette-strip {
     flow-children: right;
-    width: 4340px;
+    width: 8540px;
     height: 100%;
     overflow: noclip;
 
     transform: translateX( 0px );
     transition-property: transform;
     transition-duration: 0.0s;
-    transition-timing-function: linear;
+    transition-timing-function: ease-out;
+    transition-timing-function: cubic-bezier( 0.08, 0.72, 0.18, 1.0 );
 }
 
-.roulette-strip.settle { transition-timing-function: ease-out; }
+.roulette-strip.dur-1  { transition-duration: 1.0s; }
+.roulette-strip.dur-2  { transition-duration: 2.0s; }
+.roulette-strip.dur-3  { transition-duration: 3.0s; }
+.roulette-strip.dur-4  { transition-duration: 4.0s; }
+.roulette-strip.dur-5  { transition-duration: 5.0s; }
+.roulette-strip.dur-6  { transition-duration: 6.0s; }
+.roulette-strip.dur-8  { transition-duration: 8.0s; }
+.roulette-strip.dur-10 { transition-duration: 10.0s; }
 
-.roulette-strip.dur-1  { transition-duration: 0.6s; }
-.roulette-strip.dur-2  { transition-duration: 1.2s; }
-.roulette-strip.dur-3  { transition-duration: 1.8s; }
-.roulette-strip.dur-4  { transition-duration: 2.4s; }
-.roulette-strip.dur-5  { transition-duration: 3.0s; }
-.roulette-strip.dur-6  { transition-duration: 3.6s; }
-.roulette-strip.dur-8  { transition-duration: 4.8s; }
-.roulette-strip.dur-10 { transition-duration: 6.0s; }
+.roulette-strip.spin.jit-0 { transform: translateX( -7092px ); }
+.roulette-strip.spin.jit-1 { transform: translateX( -7116px ); }
+.roulette-strip.spin.jit-2 { transform: translateX( -7140px ); }
+.roulette-strip.spin.jit-3 { transform: translateX( -7164px ); }
+.roulette-strip.spin.jit-4 { transform: translateX( -7188px ); }
 
-.roulette-strip.dur-1.settle  { transition-duration: 0.4s; }
-.roulette-strip.dur-2.settle  { transition-duration: 0.8s; }
-.roulette-strip.dur-3.settle  { transition-duration: 1.2s; }
-.roulette-strip.dur-4.settle  { transition-duration: 1.6s; }
-.roulette-strip.dur-5.settle  { transition-duration: 2.0s; }
-.roulette-strip.dur-6.settle  { transition-duration: 2.4s; }
-.roulette-strip.dur-8.settle  { transition-duration: 3.2s; }
-.roulette-strip.dur-10.settle { transition-duration: 4.0s; }
+/* Item cards --------------------------------------------------------------- */
 
-.roulette-strip.spin { transform: translateX( -2352px ); }
-
-.roulette-strip.spin.settle.jit-0 { transform: translateX( -2892px ); }
-.roulette-strip.spin.settle.jit-1 { transform: translateX( -2916px ); }
-.roulette-strip.spin.settle.jit-2 { transform: translateX( -2940px ); }
-.roulette-strip.spin.settle.jit-3 { transform: translateX( -2964px ); }
-.roulette-strip.spin.settle.jit-4 { transform: translateX( -2988px ); }
-
-/* Cards -------------------------------------------------------------------- */
-
+/* 132px + 4px margin each side = the 140px pitch every offset above is built on. */
 .roulette-cell {
-    width: 140px;
-    height: 156px;
-    flow-children: down;
-    border-left: 1px solid #00000066;
-    border-right: 1px solid #ffffff0d;
-    background-color: gradient( linear, 0% 0%, 0% 100%, from( #1b222d ), to( #121820 ) );
+    width: 132px;
+    height: 148px;
+    margin: 12px 4px 0px 4px;
+    border-radius: 4px;
+    border-top: 1px solid #ffffff0f;
+    border-right: 1px solid #ffffff0a;
+    border-bottom: 1px solid #00000080;
+    border-left: 1px solid #ffffff0a;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #1d242e ), to( #151a22 ) );
+    overflow: clip;
 
     opacity: 1;
-    transition-property: opacity, background-color;
-    transition-duration: 0.4s;
+    saturation: 1;
+    transform: scale3d( 1.0, 1.0, 1.0 );
+    transition-property: opacity, saturation, transform, box-shadow;
+    transition-duration: 0.35s;
     transition-timing-function: ease-out;
+}
+
+.roulette-cell-text {
+    width: 100%;
+    flow-children: down;
+    vertical-align: center;
+    padding: 0px 10px 6px 10px;
 }
 
 .roulette-cell-name {
     width: 100%;
-    margin-top: 58px;
-    padding: 0px 8px;
     text-align: center;
-    font-size: 18px;
-    font-weight: bold;
+    font-family: Stratum2 Bold;
+    font-size: 17px;
     letter-spacing: 1px;
     text-transform: uppercase;
     color: #f2f4f7;
     white-space: nowrap;
-    text-overflow: ellipsis;
+    text-overflow: shrink min( 11px ) ellipsis;
 }
 
 .roulette-cell-sub {
     width: 100%;
-    padding: 0px 8px;
+    margin-top: 3px;
     text-align: center;
-    font-size: 13px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
     color: #9aa2ac;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -195,23 +207,23 @@
 
 .roulette-strip.no-sub .roulette-cell-sub { visibility: collapse; }
 
-/* Rarity colour as a real panel along the bottom edge. */
+/* Rarity band along the bottom edge. */
 .roulette-cell-accent {
     ignore-parent-flow: true;
     width: 100%;
-    height: 6px;
+    height: 4px;
     vertical-align: bottom;
     background-color: #9aa2ac;
 }
 
-/* Rarity glow rising from the bottom edge. */
-.roulette-cell.style-neutral { background-color: gradient( linear, 0% 100%, 0% 0%, from( #9aa2ac40 ), to( #12182000 ) ); }
-.roulette-cell.style-info    { background-color: gradient( linear, 0% 100%, 0% 0%, from( #56a0dd55 ), to( #12182000 ) ); }
-.roulette-cell.style-success { background-color: gradient( linear, 0% 100%, 0% 0%, from( #9ccf4f55 ), to( #12182000 ) ); }
-.roulette-cell.style-warn    { background-color: gradient( linear, 0% 100%, 0% 0%, from( #f0a53155 ), to( #12182000 ) ); }
-.roulette-cell.style-danger  { background-color: gradient( linear, 0% 100%, 0% 0%, from( #e0432f55 ), to( #12182000 ) ); }
-.roulette-cell.style-purple  { background-color: gradient( linear, 0% 100%, 0% 0%, from( #8847ff55 ), to( #12182000 ) ); }
-.roulette-cell.style-gold    { background-color: gradient( linear, 0% 100%, 0% 0%, from( #e0a24a66 ), to( #12182000 ) ); }
+/* Rarity: a glow rising from the band, and the band itself. */
+.roulette-cell.style-neutral { background-color: gradient( linear, 0% 0%, 0% 100%, from( #1d242e ), to( #2a3038 ) ); }
+.roulette-cell.style-info    { background-color: gradient( linear, 0% 0%, 0% 100%, from( #1d242e ), to( #1f3a52 ) ); }
+.roulette-cell.style-success { background-color: gradient( linear, 0% 0%, 0% 100%, from( #1d242e ), to( #2c3f22 ) ); }
+.roulette-cell.style-warn    { background-color: gradient( linear, 0% 0%, 0% 100%, from( #1d242e ), to( #46351c ) ); }
+.roulette-cell.style-danger  { background-color: gradient( linear, 0% 0%, 0% 100%, from( #1d242e ), to( #46221d ) ); }
+.roulette-cell.style-purple  { background-color: gradient( linear, 0% 0%, 0% 100%, from( #1d242e ), to( #33224f ) ); }
+.roulette-cell.style-gold    { background-color: gradient( linear, 0% 0%, 0% 100%, from( #1d242e ), to( #4a3920 ) ); }
 
 .roulette-cell.style-neutral .roulette-cell-accent { background-color: #9aa2ac; }
 .roulette-cell.style-info    .roulette-cell-accent { background-color: #56a0dd; }
@@ -221,51 +233,77 @@
 .roulette-cell.style-purple  .roulette-cell-accent { background-color: #8847ff; }
 .roulette-cell.style-gold    .roulette-cell-accent { background-color: #e0a24a; }
 
-/* Once stopped: everything but the winner steps back. */
-.roulette-strip.done .roulette-cell { opacity: 0.25; }
+/* Stopped: the rest steps back and greys out, the winner lifts and glows in its rarity colour. */
+.roulette-strip.done .roulette-cell {
+    opacity: 0.28;
+    saturation: 0.2;
+}
+
 .roulette-strip.done .roulette-cell.won {
     opacity: 1;
-    box-shadow: #ffffff22 0px 0px 18px 0px;
+    saturation: 1;
+    transform: scale3d( 1.05, 1.05, 1.0 );
+    box-shadow: #ffffff40 0px 0px 18px 0px;
 }
+
+.roulette-strip.done .roulette-cell.won.style-info    { box-shadow: #56a0dd99 0px 0px 22px 2px; }
+.roulette-strip.done .roulette-cell.won.style-success { box-shadow: #9ccf4f99 0px 0px 22px 2px; }
+.roulette-strip.done .roulette-cell.won.style-warn    { box-shadow: #f0a53199 0px 0px 22px 2px; }
+.roulette-strip.done .roulette-cell.won.style-danger  { box-shadow: #e0432f99 0px 0px 22px 2px; }
+.roulette-strip.done .roulette-cell.won.style-purple  { box-shadow: #8847ff99 0px 0px 22px 2px; }
+.roulette-strip.done .roulette-cell.won.style-gold    { box-shadow: #e0a24a99 0px 0px 22px 2px; }
 
 /* Edges and marker --------------------------------------------------------- */
 
 .roulette-fade {
     ignore-parent-flow: true;
-    width: 160px;
+    width: 200px;
     height: 100%;
 }
 
 .roulette-fade-left {
     horizontal-align: left;
-    background-color: gradient( linear, 0% 0%, 100% 0%, from( #0a0e13 ), to( #0a0e1300 ) );
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #07090d ), to( #07090d00 ) );
 }
 
 .roulette-fade-right {
     horizontal-align: right;
-    background-color: gradient( linear, 0% 0%, 100% 0%, from( #0a0e1300 ), to( #0a0e13 ) );
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #07090d00 ), to( #07090d ) );
 }
 
 .roulette-marker {
     ignore-parent-flow: true;
-    width: 4px;
+    width: 2px;
     height: 100%;
     horizontal-align: center;
-    background-color: #e0a24a;
-    box-shadow: #e0a24acc 0px 0px 14px 2px;
+    background-color: #f2f4f7;
+    box-shadow: #f2f4f7aa 0px 0px 10px 1px;
 }
+
+/* A square turned 45deg, half of it clipped by the window edge: a notch pointing at the marker. */
+.roulette-pointer {
+    ignore-parent-flow: true;
+    width: 18px;
+    height: 18px;
+    horizontal-align: center;
+    background-color: #f2f4f7;
+    transform: rotateZ( 45deg );
+}
+
+.roulette-pointer-top    { vertical-align: top;    y: -9px; }
+.roulette-pointer-bottom { vertical-align: bottom; y: 9px; }
 
 /* Result ------------------------------------------------------------------- */
 
 .roulette-result {
     flow-children: down;
     horizontal-align: center;
-    margin-top: 28px;
+    margin-top: 24px;
 }
 
 .roulette-result-label {
     horizontal-align: center;
-    font-size: 14px;
+    font-size: 12px;
     letter-spacing: 4px;
     text-transform: uppercase;
     color: #9aa2ac;
@@ -273,10 +311,11 @@
 
 .roulette-result-name {
     horizontal-align: center;
-    font-size: 44px;
+    margin-top: 2px;
+    font-family: Stratum2 Bold;
+    font-size: 40px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    font-weight: bold;
     color: #f2f4f7;
 }
 
@@ -288,16 +327,47 @@
 
 /* Accent: style-* on r_screen ---------------------------------------------- */
 
-.roulette-screen.style-info    .roulette-card-accent { background-color: #56a0dd; }
-.roulette-screen.style-success .roulette-card-accent { background-color: #9ccf4f; }
-.roulette-screen.style-warn    .roulette-card-accent { background-color: #f0a531; }
-.roulette-screen.style-danger  .roulette-card-accent { background-color: #e0432f; }
-.roulette-screen.style-purple  .roulette-card-accent { background-color: #8847ff; }
-.roulette-screen.style-gold    .roulette-card-accent { background-color: #e0a24a; }
+.roulette-screen.style-info    .roulette-card-accent,
+.roulette-screen.style-info    .roulette-rule,
+.roulette-screen.style-info    .roulette-marker,
+.roulette-screen.style-info    .roulette-pointer { background-color: #56a0dd; }
+.roulette-screen.style-success .roulette-card-accent,
+.roulette-screen.style-success .roulette-rule,
+.roulette-screen.style-success .roulette-marker,
+.roulette-screen.style-success .roulette-pointer { background-color: #9ccf4f; }
+.roulette-screen.style-warn    .roulette-card-accent,
+.roulette-screen.style-warn    .roulette-rule,
+.roulette-screen.style-warn    .roulette-marker,
+.roulette-screen.style-warn    .roulette-pointer { background-color: #f0a531; }
+.roulette-screen.style-danger  .roulette-card-accent,
+.roulette-screen.style-danger  .roulette-rule,
+.roulette-screen.style-danger  .roulette-marker,
+.roulette-screen.style-danger  .roulette-pointer { background-color: #e0432f; }
+.roulette-screen.style-purple  .roulette-card-accent,
+.roulette-screen.style-purple  .roulette-rule,
+.roulette-screen.style-purple  .roulette-marker,
+.roulette-screen.style-purple  .roulette-pointer { background-color: #8847ff; }
+.roulette-screen.style-gold    .roulette-card-accent,
+.roulette-screen.style-gold    .roulette-rule,
+.roulette-screen.style-gold    .roulette-marker,
+.roulette-screen.style-gold    .roulette-pointer { background-color: #e0a24a; }
 
+.roulette-screen.style-info    .roulette-marker { box-shadow: #56a0ddaa 0px 0px 10px 1px; }
+.roulette-screen.style-success .roulette-marker { box-shadow: #9ccf4faa 0px 0px 10px 1px; }
+.roulette-screen.style-warn    .roulette-marker { box-shadow: #f0a531aa 0px 0px 10px 1px; }
+.roulette-screen.style-danger  .roulette-marker { box-shadow: #e0432faa 0px 0px 10px 1px; }
+.roulette-screen.style-purple  .roulette-marker { box-shadow: #8847ffaa 0px 0px 10px 1px; }
+.roulette-screen.style-gold    .roulette-marker { box-shadow: #e0a24aaa 0px 0px 10px 1px; }
+
+.roulette-screen.style-info    .roulette-kicker,
 .roulette-screen.style-info    .roulette-result-name { color: #56a0dd; }
+.roulette-screen.style-success .roulette-kicker,
 .roulette-screen.style-success .roulette-result-name { color: #9ccf4f; }
+.roulette-screen.style-warn    .roulette-kicker,
 .roulette-screen.style-warn    .roulette-result-name { color: #f0a531; }
+.roulette-screen.style-danger  .roulette-kicker,
 .roulette-screen.style-danger  .roulette-result-name { color: #e0432f; }
+.roulette-screen.style-purple  .roulette-kicker,
 .roulette-screen.style-purple  .roulette-result-name { color: #8847ff; }
+.roulette-screen.style-gold    .roulette-kicker,
 .roulette-screen.style-gold    .roulette-result-name { color: #e0a24a; }

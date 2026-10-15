@@ -287,8 +287,10 @@ def roulette(
     def cell(i: int) -> str:
         return f"""\
 <Panel id="r_cell_{i}" class="roulette-cell" hittest="false">
-	<Label class="roulette-cell-name" hittest="false" text="{{s:r_cell_{i}_name}}" />
-	<Label id="r_cell_{i}_sub" class="roulette-cell-sub" hittest="false" text="{{s:r_cell_{i}_sub}}" />
+	<Panel class="roulette-cell-text" hittest="false">
+		<Label class="roulette-cell-name" hittest="false" text="{{s:r_cell_{i}_name}}" />
+		<Label id="r_cell_{i}_sub" class="roulette-cell-sub" hittest="false" text="{{s:r_cell_{i}_sub}}" />
+	</Panel>
 	<Panel class="roulette-cell-accent" hittest="false" />
 </Panel>"""
 
@@ -301,12 +303,15 @@ def roulette(
 		<Panel class="roulette-body" hittest="false">
 			<Label id="r_kicker" class="roulette-kicker" hittest="false" text="{{s:r_kicker}}" />
 			<Label class="roulette-title" hittest="false" text="{{s:r_title}}" />
+			<Panel class="roulette-rule" hittest="false" />
 			<Panel class="roulette-window" hittest="false">
 				<Panel id="r_strip" class="roulette-strip" hittest="false">
 {cell_block}				</Panel>
 				<Panel class="roulette-fade roulette-fade-left" hittest="false" />
 				<Panel class="roulette-fade roulette-fade-right" hittest="false" />
 				<Panel class="roulette-marker" hittest="false" />
+				<Panel class="roulette-pointer roulette-pointer-top" hittest="false" />
+				<Panel class="roulette-pointer roulette-pointer-bottom" hittest="false" />
 			</Panel>
 			<Panel id="r_result" class="roulette-result hidden" hittest="false">
 				<Label class="roulette-result-label" hittest="false" text="{{s:r_result_label}}" />

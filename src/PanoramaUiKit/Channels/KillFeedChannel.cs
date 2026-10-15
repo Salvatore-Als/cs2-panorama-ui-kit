@@ -150,15 +150,6 @@ internal sealed class KillFeedChannel : LayoutChannel<KillFeedChannel.Viewer>
         viewer.Client.Group(player, "kf_0", "flash", flash);
     }
 
-    /// <summary>Reopened after a round restart with classes scrubbed: forget, the next push repaints.</summary>
-    protected override void OnPanelEvent(PanelEvent e)
-    {
-        if (e.Action is PanelAction.Close or PanelAction.Restored)
-        {
-            Forget(e.Player.Slot);
-        }
-    }
-
     public override void Dispose()
     {
         foreach (Entry entry in _entries)

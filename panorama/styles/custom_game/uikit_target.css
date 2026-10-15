@@ -1,7 +1,7 @@
 /*
     uikit_target - one discreet line of text beside the crosshair (screen centre): above, below,
-    left or right. No plate edge, no accent: a faint veil so it reads on any map, the text coloured
-    by style. Four sizes: size-sm, size-md (default), size-lg, size-xl. Contract "target".
+    left or right. Sits on a dark plate so it reads on any map (a bright sky, a white wall), the text
+    coloured by style. Four sizes: size-sm, size-md (default), size-lg, size-xl. Contract "target".
 
     Each label sits in a half-screen zone whose inner edge IS the centre, and keeps a fixed gap from
     it: the label grows away from the crosshair, never over it. Change the gap with the margins.
@@ -17,9 +17,14 @@
 .target-zone-r { width: 50%; height: 100%; horizontal-align: right; vertical-align: center; }
 
 .target {
-    padding: 2px 8px 2px 8px;
+    padding: 3px 10px 3px 10px;
     border-radius: 3px;
-    background-color: #0000004d;
+    border-top: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-left: 1px solid #ffffff14;
+    background-color: #12171ee6;
+    box-shadow: #00000080 0px 2px 8px 0px;
 }
 
 .target-t { horizontal-align: center; vertical-align: bottom; margin-bottom: 36px; }
@@ -34,6 +39,7 @@
     letter-spacing: 0.4px;
     color: #f2f4f7;
     white-space: nowrap;
+    text-shadow: 0px 1px 2px 1.0 #000000cc;
 }
 
 /* Sizes ---------------------------------------------------------------------- */
@@ -43,9 +49,9 @@
 .target.size-lg .target-text { font-size: 18px; letter-spacing: 0.6px; }
 .target.size-xl .target-text { font-size: 24px; letter-spacing: 0.8px; font-family: Stratum2 Bold; }
 
-.target.size-sm { padding: 1px 6px 1px 6px; }
-.target.size-lg { padding: 3px 10px 3px 10px; }
-.target.size-xl { padding: 4px 12px 4px 12px; }
+.target.size-sm { padding: 2px 8px 2px 8px; }
+.target.size-lg { padding: 4px 12px 4px 12px; }
+.target.size-xl { padding: 5px 14px 5px 14px; }
 
 /* Styles (UiStyle): text colour ---------------------------------------------- */
 

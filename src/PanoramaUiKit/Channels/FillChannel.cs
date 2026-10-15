@@ -53,8 +53,8 @@ internal sealed class FillChannel : AnchoredChannel<ProgressContent>
     private readonly IReadOnlyList<int> _durations;
 
     /// <param name="prefix">Slot prefix of the contract: <c>pg</c> for progress, <c>dl</c> for dial.</param>
-    public FillChannel(BasePlugin plugin, UiLayout layout, string prefix, int steps, IReadOnlyList<int> durations)
-        : base(plugin, layout)
+    public FillChannel(BasePlugin plugin, UiLayout layout, IReadOnlyList<string> keys, string prefix, int steps, IReadOnlyList<int> durations)
+        : base(plugin, layout, keys)
     {
         _prefix = prefix;
         _steps = steps;

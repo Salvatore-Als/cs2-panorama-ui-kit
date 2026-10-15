@@ -9,6 +9,7 @@ public static class CardNames
         CardPlacement.TopRight => "tr",
         CardPlacement.BottomLeft => "bl",
         CardPlacement.BottomRight => "br",
+        CardPlacement.BottomCenter => "bc",
         _ => "tl",
     };
 

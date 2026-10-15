@@ -166,9 +166,9 @@ internal sealed class LayoutRegistry : IDisposable
         PanelLayout panel => new PanelChannel(_plugin, panel),
         MenuLayout menu => new MenuChannel(_plugin, menu),
         CardLayout card => new HudCardChannel(_plugin, card),
-        TargetLayout target => new TargetChannel(_plugin, target),
-        ProgressLayout progress => new FillChannel(_plugin, progress, "pg", progress.Steps, progress.Durations),
-        DialLayout dial => new FillChannel(_plugin, dial, "dl", dial.Steps, dial.Durations),
+        TargetLayout target => new TargetChannel(_plugin, target, target.Positions.Select(p => p.Code()).ToList()),
+        ProgressLayout progress => new FillChannel(_plugin, progress, progress.Placements.Select(p => p.Code()).ToList(), "pg", progress.Steps, progress.Durations),
+        DialLayout dial => new FillChannel(_plugin, dial, dial.Placements.Select(p => p.Code()).ToList(), "dl", dial.Steps, dial.Durations),
         _ => throw new ArgumentOutOfRangeException(nameof(layout), layout.GetType().Name, "Unknown layout type"),
     };
 

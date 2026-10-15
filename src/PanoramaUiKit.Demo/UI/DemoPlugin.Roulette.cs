@@ -35,16 +35,16 @@ public sealed partial class DemoPlugin
 
         // The speed of the strip is its duration: the distance it covers is fixed by the layout.
         string mode = command.GetArg(1).ToLowerInvariant();
-        float seconds = 4f;
+        float seconds = 6f;
         float hold = 3f;
         if (mode == "fast")
         {
-            seconds = 2f;
+            seconds = 3f;
             hold = 1f;
         }
         else if (mode == "slow")
         {
-            seconds = 8f;
+            seconds = 10f;
         }
 
         kit.Roulettes.Spin(target, new RouletteOptions

@@ -6,12 +6,12 @@ Case-opening roulette: a strip of cards slows down on a server-drawn winner. Per
 
 C#: `RouletteLayout / IRouletteService`
 
-Marker: `<!-- uikit:roulette cells=31 winner=24 -->`
+Marker: `<!-- uikit:roulette cells=61 winner=54 -->`
 
 Pool parameters (marker and C# layout descriptor must agree):
 
-- `cells` (default `31`): Cards on the strip (RouletteLayout.Cells).
-- `winner` (default `24`): Card the strip stops on (RouletteLayout.WinnerCell). The stylesheet's jit-N offsets are built for it.
+- `cells` (default `61`): Cards on the strip (RouletteLayout.Cells).
+- `winner` (default `54`): Card the strip stops on (RouletteLayout.WinnerCell). The stylesheet's jit-N offsets are built for it.
 
 Placeholders: `{n}` = each of `cells`.
 
@@ -19,7 +19,7 @@ Placeholders: `{n}` = each of `cells`.
 |---|---|---|---|---|
 | `id="r_screen"` | panel | yes | `show`, `style-*` | The screen. Style = accent colour. |
 | `id="r_kicker"` | panel | no | `empty` | Label of the kicker, `empty` when blank. |
-| `id="r_strip"` | panel | yes | `dur-N`, `jit-0`, `jit-1`, `jit-2`, `jit-3`, `jit-4`, `spin`, `settle`, `done`, `no-sub` | The strip of cards. `dur-N` (N in RouletteLayout.Durations) is the total time, `jit-0`..`jit-4` where in the winner's card it stops, `spin` moves it most of the way at full speed, `settle` (added RouletteLayout.SettleAfterFraction of the time later) slows it onto the winner's card, `done` once it has stopped, `no-sub` when no item has a second line. |
+| `id="r_strip"` | panel | yes | `dur-N`, `jit-0`, `jit-1`, `jit-2`, `jit-3`, `jit-4`, `spin`, `done`, `no-sub` | The strip of cards. `dur-N` (N in RouletteLayout.Durations) is the total time, `jit-0`..`jit-4` where in the winner's card it stops, `spin` moves it onto the winner's card, flat out at first and slowing down to the stop, `done` once it has stopped, `no-sub` when no item has a second line. |
 | `id="r_cell_{n}"` | panel | yes | `style-*`, `won` | A card. Style = the item's rarity colour, `won` on the winner's card once the strip has stopped. |
 | `id="r_cell_{n}_sub"` | panel | no | `empty` | Second line of a card, `empty` when the item has none. |
 | `id="r_result"` | panel | no | `hidden` | Result line, `hidden` until the strip has stopped. |
@@ -33,4 +33,4 @@ Placeholders: `{n}` = each of `cells`.
 | `text="{s:r_result_sub}"` | Label text | no | string | Sub of the item drawn. |
 | `text="{s:r_<key>}"` | Label text | no | string | RouletteOptions.Texts[key] |
 
-Stylesheet should define: `.show`, `.hidden`, `.empty`, `.spin`, `.settle`, `.done`, `.won`, `.no-sub`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+Stylesheet should define: `.show`, `.hidden`, `.empty`, `.spin`, `.done`, `.won`, `.no-sub`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.

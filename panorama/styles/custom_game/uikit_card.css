@@ -1,10 +1,10 @@
 /*
-    uikit_card - info card pinned to a screen corner: title, description and label / value lines, all
+    uikit_card - info card pinned to a screen corner or bottom centre: title, description and label / value lines, all
     optional. Same flat #12171e plate as the announce card, but no transition: it is there when
     "hidden" goes. Contract "card" (docs/CONTRACTS.md).
 
     Corners: tl sits where the radar is, tr under the top edge (the kill feed lives there too),
-    bl / br sit above the HUD. Move them with the margins below.
+    bl / br sit above the HUD, bc above the HUD in the middle. Move them with the margins below.
 */
 
 .card {
@@ -24,6 +24,7 @@
 .card-tr { horizontal-align: right; vertical-align: top;    margin: 12px 12px 0px 0px; }
 .card-bl { horizontal-align: left;  vertical-align: bottom; margin: 0px 0px 140px 12px; }
 .card-br { horizontal-align: right; vertical-align: bottom; margin: 0px 12px 140px 0px; }
+.card-bc { horizontal-align: center; vertical-align: bottom; margin: 0px 0px 140px 0px; }
 
 /* Copy: every line collapses on its own ("empty"), so any part can be left out. */
 

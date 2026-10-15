@@ -13,10 +13,9 @@ namespace PanoramaUiKit.Channels;
 /// 1. the cards are written a few at a time (a strip is dozens of writes, spread over several
 ///    updates), the screen is shown once they are in;
 /// 2. after <see cref="RouletteLayout.SpinDelaySeconds"/> "spin" is added: the stylesheet moves the
-///    strip most of the way at full speed at once (an ease-out would start slowly), then "settle",
-///    added <see cref="RouletteLayout.SettleAfterFraction"/> of the way through the "dur-N" time,
-///    slows it onto the winner's card (plus one of a few "jit-N" offsets, so it does not stop dead
-///    centre every time);
+///    strip onto the winner's card in one transition over the "dur-N" time, flat out at first and
+///    slowing down all the way to the stop (plus one of a few "jit-N" offsets, so it does not stop
+///    dead centre every time);
 /// 3. when the strip has stopped "done" and "won" mark the winner, the result line is shown, and the
 ///    callback runs. The result stays <see cref="RouletteOptions.HoldSeconds"/>, then the screen leaves.
 ///
@@ -223,17 +222,8 @@ internal sealed class RouletteChannel : LayoutChannel<RouletteChannel.Viewer>
             }
 
             viewer.Client.Class(player, StripId, "spin", true);
-            After(viewer, seconds * _layout.SettleAfterFraction, () => Settle(player, viewer));
             After(viewer, seconds + StopMarginSeconds, () => Stop(player, viewer, options));
         });
-    }
-
-    private void Settle(CCSPlayerController player, Viewer viewer)
-    {
-        if (IsCurrent(player, viewer))
-        {
-            viewer.Client.Class(player, StripId, "settle", true);
-        }
     }
 
     private void Stop(CCSPlayerController player, Viewer viewer, RouletteOptions options)

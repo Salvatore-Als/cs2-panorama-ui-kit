@@ -3,7 +3,7 @@ using PanoramaUiKit.Shared.Common;
 namespace PanoramaUiKit.Shared.Cards;
 
 /// <summary>
-/// A card layout: one card per corner, each with a title, a description and <see cref="Lines"/>
+/// A card layout: one card per placement (four corners and the bottom centre), each with a title, a description and <see cref="Lines"/>
 /// label / value lines. Contract "card" (docs/CONTRACTS.md). Declare it once, reuse the instance.
 /// </summary>
 public sealed class CardLayout : UiLayout
@@ -19,7 +19,7 @@ public sealed class CardLayout : UiLayout
 
     public override string Component => "card";
 
-    /// <summary>Corners the layout has a card for. A card asking for another uses the first one.</summary>
+    /// <summary>Placements the layout has a card for. A card asking for another uses the first one.</summary>
     public IReadOnlyList<CardPlacement> Placements { get; init; } = AllPlacements;
 
     /// <summary>Lines per card. Extra lines in <see cref="CardOptions.Lines"/> are dropped.</summary>

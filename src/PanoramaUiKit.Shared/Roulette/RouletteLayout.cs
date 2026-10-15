@@ -20,19 +20,13 @@ public sealed class RouletteLayout : UiLayout
     public override string Component => "roulette";
 
     /// <summary>Cards <c>r_cell_0</c>..<c>r_cell_{Cells-1}</c> on the strip.</summary>
-    public int Cells { get; init; } = 31;
+    public int Cells { get; init; } = 61;
 
     /// <summary>The card the strip stops on. Always the winner; the other cards are filler.</summary>
-    public int WinnerCell { get; init; } = 24;
+    public int WinnerCell { get; init; } = 54;
 
     /// <summary><c>dur-N</c> classes the strip knows. <see cref="RouletteOptions.Seconds"/> snaps to the nearest.</summary>
     public IReadOnlyList<int> Durations { get; init; } = DefaultDurations;
-
-    /// <summary>
-    /// Share of the duration the strip runs at full speed (<c>spin</c>) before <c>settle</c> slows it onto the
-    /// winner's card. The stylesheet's <c>dur-N</c> transitions are split the same way.
-    /// </summary>
-    public float SettleAfterFraction { get; init; } = 0.6f;
 
     /// <summary>Wait after <c>show</c> before the strip starts: the card's entry transition plus a beat.</summary>
     public float SpinDelaySeconds { get; init; } = 0.5f;

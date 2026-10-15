@@ -24,7 +24,7 @@ public sealed record RouletteOptions : UiContent
     /// as fast as 6. Snaps to the nearest of <see cref="RouletteLayout.Durations"/> (1, 2, 3, 4, 5, 6, 8, 10
     /// by default), the durations the stylesheet has a transition for.
     /// </summary>
-    public float Seconds { get; init; } = 4f;
+    public float Seconds { get; init; } = 6f;
 
     /// <summary>
     /// How long the result stays on screen once the strip has stopped. Zero or less keeps it until

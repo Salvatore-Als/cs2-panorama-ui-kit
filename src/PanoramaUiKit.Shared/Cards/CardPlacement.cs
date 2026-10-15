@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace PanoramaUiKit.Shared.Cards;
 
-/// <summary>The corner a card is pinned to. Top left is where the radar sits.</summary>
+/// <summary>Where a card is pinned: a corner, or the bottom centre. Top left is where the radar sits.</summary>
 [JsonConverter(typeof(JsonStringEnumConverter<CardPlacement>))]
 public enum CardPlacement
 {
@@ -10,4 +10,7 @@ public enum CardPlacement
     TopRight,
     BottomLeft,
     BottomRight,
+
+    /// <summary>Above the HUD, in the middle of the screen.</summary>
+    BottomCenter,
 }
