@@ -1,0 +1,56 @@
+{
+  "component": "target",
+  "csharp": "TargetLayout / ITargetService",
+  "summary": "Discreet one-line text next to the crosshair: above, below, left or right of it, in four sizes.",
+  "params": {
+    "positions": {
+      "default": [
+        "t",
+        "b",
+        "l",
+        "r"
+      ],
+      "doc": "Position codes the layout has a label for: t above, b below, l left, r right (TargetLayout.Positions)."
+    }
+  },
+  "repeat": {
+    "p": "positions"
+  },
+  "panels": [
+    {
+      "id": "tg_{p}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "style-*",
+        "size-*"
+      ],
+      "doc": "The label. Author it with class `hidden`. The layout keeps it beside the screen centre. `size-sm`, `size-md`, `size-lg`, `size-xl` set the text size."
+    }
+  ],
+  "texts": [
+    {
+      "var": "tg_{p}_text",
+      "required": true,
+      "doc": "TargetOptions.Text"
+    },
+    {
+      "var": "tg_{p}_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "TargetOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger",
+    "size-sm",
+    "size-md",
+    "size-lg",
+    "size-xl"
+  ]
+}

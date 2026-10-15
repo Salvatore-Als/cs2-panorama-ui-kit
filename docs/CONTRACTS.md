@@ -91,6 +91,63 @@ Marker: `<!-- uikit:banner -->`
 
 Stylesheet should define: `.hidden`, `.show`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
 
+## card
+
+Static info card pinned to a screen corner (over the radar, or above the HUD). Title, description and lines are all optional. No animation.
+
+C#: `CardLayout / ICardService`
+
+Marker: `<!-- uikit:card placements=tl,tr,bl,br lines=4 -->`
+
+Pool parameters (marker and C# layout descriptor must agree):
+
+- `placements` (default `tl,tr,bl,br`): Corner codes the layout has a card for (CardLayout.Placements).
+- `lines` (default `4`): Label / value lines per card (CardLayout.Lines).
+
+Placeholders: `{p}` = each of `placements`, `{n}` = each of `lines`.
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="c_{p}"` | panel | yes | `hidden`, `style-*` | The card. Author it with class `hidden`: it appears when the class is dropped, with no transition. |
+| `id="c_{p}_title"` | panel | no | `empty` | Label of the title, `empty` when blank. |
+| `id="c_{p}_desc"` | panel | no | `empty` | Label of the description, `empty` when blank. |
+| `id="c_{p}_line_{n}"` | panel | yes | `hidden` | One line. Author it with class `hidden`; unused lines stay hidden. |
+| `id="c_{p}_line_{n}_label"` | panel | no | `empty` | Label of the line's left text, `empty` when blank. |
+| `id="c_{p}_line_{n}_value"` | panel | no | `empty` | Label of the line's right text, `empty` when blank. |
+| `text="{s:c_{p}_title}"` | Label text | no | string | CardOptions.Title |
+| `text="{s:c_{p}_desc}"` | Label text | no | string | CardOptions.Description |
+| `text="{s:c_{p}_line_{n}_label}"` | Label text | no | string | CardLine.Label |
+| `text="{s:c_{p}_line_{n}_value}"` | Label text | no | string | CardLine.Value |
+| `text="{s:c_{p}_<key>}"` | Label text | no | string | CardOptions.Texts[key] |
+
+Stylesheet should define: `.hidden`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+
+## dial
+
+Radial dial: a ring that sweeps like a clock hand. Pushed by value, or timed and run by the client. For cooldowns, charges and channels.
+
+C#: `DialLayout / IDialService`
+
+Marker: `<!-- uikit:dial placements=c,b,bl,br -->`
+
+Pool parameters (marker and C# layout descriptor must agree):
+
+- `placements` (default `c,b,bl,br`): Dial codes the layout has: c around the crosshair, b above the HUD at the bottom centre, bl and br above the HUD in the bottom corners (DialLayout.Placements).
+
+Placeholders: `{p}` = each of `placements`.
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="dl_{p}"` | panel | yes | `hidden`, `style-*`, `size-*` | The dial. Author it with class `hidden`. `size-sm`, `size-md`, `size-lg`, `size-xl` set the ring size. |
+| `id="dl_{p}_label"` | panel | no | `empty` | Label under the ring. `empty` when blank. |
+| `id="dl_{p}_value"` | panel | no | `empty` | Label in the middle of the ring. `empty` when blank. |
+| `id="dl_{p}_fill"` | panel | yes | `step-*`, `timed`, `up`, `dur-*`, `run` | The swept ring, drawn with `clip: radial()`. `step-N` is the pushed value (N of DialLayout.Steps). `timed` runs on its own: `dur-N` is the seconds, `up` fills instead of draining, `run` starts it. |
+| `text="{s:dl_{p}_label}"` | Label text | no | string | DialOptions.Label |
+| `text="{s:dl_{p}_value}"` | Label text | no | string | DialOptions.ValueText, or the percentage under ShowPercent |
+| `text="{s:dl_{p}_<key>}"` | Label text | no | string | DialOptions.Texts[key] |
+
+Stylesheet should define: `.hidden`, `.timed`, `.up`, `.run`, `.step-0`, `.step-18`, `.step-36`, `.dur-1`, `.dur-5`, `.size-sm`, `.size-md`, `.size-lg`, `.size-xl`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+
 ## killfeed
 
 Server-wide feed, newest on top. A pool of rows; entries shift down.
@@ -127,7 +184,7 @@ Marker: `<!-- uikit:match -->`
 
 | Element | Kind | Required | Kit writes | Meaning |
 |---|---|---|---|---|
-| `id="m_bar"` | panel | yes | `style-*`, `urgent` | The bar. `urgent` for the last seconds; |
+| `id="m_bar"` | panel | yes | `style-*`, `urgent` | The bar. `urgent` for the last seconds. |
 | `id="m_left"` | panel | no | `style-*` | Left block: style-* colours its count and title (MatchOptions.LeftStyle). |
 | `id="m_right"` | panel | no | `style-*` | Right block: style-* colours its count and title (MatchOptions.RightStyle). |
 | `id="m_center_sub"` | panel | no | `empty` | Label under the centre, `empty` when blank. |
@@ -229,6 +286,32 @@ Placeholders: `{n}` = each of `pages`, `{s}` = each of `stats`, `{r}` = each of 
 
 Stylesheet should define: `.hidden`, `.show`, `.active`, `.no-hint`, `.kind-header`, `.kind-action`, `.kind-toggle`, `.kind-info`, `.kind-stepper`, `.kind-text`, `.on`, `.disabled`, `.selected`, `.nested`, `.no-title`, `.no-desc`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`, `.kind-paragraph`, `.no-key`.
 
+## progress
+
+Progress bar with an optional label and value. Follows a value you push, or runs on its own for a duration.
+
+C#: `ProgressLayout / IProgressService`
+
+Marker: `<!-- uikit:progress placements=t,c,b -->`
+
+Pool parameters (marker and C# layout descriptor must agree):
+
+- `placements` (default `t,c,b`): Bar codes the layout has: t top of the screen, c under the crosshair, b above the HUD (ProgressLayout.Placements).
+
+Placeholders: `{p}` = each of `placements`.
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="pg_{p}"` | panel | yes | `hidden`, `style-*` | The bar. Author it with class `hidden`. |
+| `id="pg_{p}_label"` | panel | no | `empty` | Label above the bar, left. `empty` when blank. |
+| `id="pg_{p}_value"` | panel | no | `empty` | Label above the bar, right. `empty` when blank. |
+| `id="pg_{p}_fill"` | panel | yes | `step-*`, `timed`, `up`, `dur-*`, `run` | The fill, drawn with `clip`. `step-N` is the pushed value (N of ProgressLayout.Steps). `timed` runs on its own: `dur-N` is the seconds, `up` fills instead of draining, `run` starts it. |
+| `text="{s:pg_{p}_label}"` | Label text | no | string | ProgressOptions.Label |
+| `text="{s:pg_{p}_value}"` | Label text | no | string | ProgressOptions.ValueText, or the percentage under ShowPercent |
+| `text="{s:pg_{p}_<key>}"` | Label text | no | string | ProgressOptions.Texts[key] |
+
+Stylesheet should define: `.hidden`, `.timed`, `.up`, `.run`, `.step-0`, `.step-25`, `.step-50`, `.dur-1`, `.dur-5`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+
 ## roulette
 
 Case-opening roulette: a strip of cards slows down on a server-drawn winner. Per player.
@@ -263,6 +346,28 @@ Placeholders: `{n}` = each of `cells`.
 | `text="{s:r_<key>}"` | Label text | no | string | RouletteOptions.Texts[key] |
 
 Stylesheet should define: `.show`, `.hidden`, `.empty`, `.spin`, `.settle`, `.done`, `.won`, `.no-sub`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+
+## target
+
+Discreet one-line text next to the crosshair: above, below, left or right of it, in four sizes.
+
+C#: `TargetLayout / ITargetService`
+
+Marker: `<!-- uikit:target positions=t,b,l,r -->`
+
+Pool parameters (marker and C# layout descriptor must agree):
+
+- `positions` (default `t,b,l,r`): Position codes the layout has a label for: t above, b below, l left, r right (TargetLayout.Positions).
+
+Placeholders: `{p}` = each of `positions`.
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="tg_{p}"` | panel | yes | `hidden`, `style-*`, `size-*` | The label. Author it with class `hidden`. The layout keeps it beside the screen centre. `size-sm`, `size-md`, `size-lg`, `size-xl` set the text size. |
+| `text="{s:tg_{p}_text}"` | Label text | yes | string | TargetOptions.Text |
+| `text="{s:tg_{p}_<key>}"` | Label text | no | string | TargetOptions.Texts[key] |
+
+Stylesheet should define: `.hidden`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`, `.size-sm`, `.size-md`, `.size-lg`, `.size-xl`.
 
 ## toast
 

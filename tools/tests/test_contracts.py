@@ -18,6 +18,10 @@ def test_every_component_has_a_contract(contracts: ContractSet) -> None:
         "vote",
         "panel",
         "menu",
+        "card",
+        "target",
+        "progress",
+        "dial",
     }
 
 

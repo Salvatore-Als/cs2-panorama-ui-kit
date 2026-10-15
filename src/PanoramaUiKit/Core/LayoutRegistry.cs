@@ -5,12 +5,16 @@ using PanoramaUiKit.Channels.Base;
 using PanoramaUiKit.Shared.Abilities;
 using PanoramaUiKit.Shared.Announcements;
 using PanoramaUiKit.Shared.Banners;
+using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Dials;
 using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Panels;
+using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
 using PanoramaUiKit.Shared.Votes;
@@ -161,6 +165,10 @@ internal sealed class LayoutRegistry : IDisposable
         VoteLayout vote => new VoteChannel(_plugin, vote),
         PanelLayout panel => new PanelChannel(_plugin, panel),
         MenuLayout menu => new MenuChannel(_plugin, menu),
+        CardLayout card => new HudCardChannel(_plugin, card),
+        TargetLayout target => new TargetChannel(_plugin, target),
+        ProgressLayout progress => new FillChannel(_plugin, progress, "pg", progress.Steps, progress.Durations),
+        DialLayout dial => new FillChannel(_plugin, dial, "dl", dial.Steps, dial.Durations),
         _ => throw new ArgumentOutOfRangeException(nameof(layout), layout.GetType().Name, "Unknown layout type"),
     };
 
@@ -189,6 +197,15 @@ internal sealed class LayoutRegistry : IDisposable
             PanelLayout { Stats: < 0 } => "Stats cannot be negative",
             MenuLayout { Items: < 1 } => "Items must be at least 1",
             MenuLayout { Choices: < 1 } => "Choices must be at least 1",
+            CardLayout { Placements.Count: 0 } => "no Placements",
+            CardLayout { Lines: < 0 } => "Lines cannot be negative",
+            TargetLayout { Positions.Count: 0 } => "no Positions",
+            ProgressLayout { Placements.Count: 0 } => "no Placements",
+            ProgressLayout { Steps: < 1 } => "Steps must be at least 1",
+            ProgressLayout { Durations.Count: 0 } => "no Durations",
+            DialLayout { Placements.Count: 0 } => "no Placements",
+            DialLayout { Steps: < 1 } => "Steps must be at least 1",
+            DialLayout { Durations.Count: 0 } => "no Durations",
             _ => null,
         };
     }

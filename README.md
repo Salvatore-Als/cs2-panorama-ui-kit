@@ -39,6 +39,10 @@ python3 -m uikit check-all
 | [Vote](docs/components/vote.md)              | Question, choices with live counts, countdown    |
 | [Panel](docs/components/panel.md)            | Modal with pages and typed rows                  |
 | [Menu](docs/components/menu.md)              | Paginated menu with sub-menus                    |
+| [Card](docs/components/card.md)              | Info card in a screen corner, every part optional |
+| [Target](docs/components/target.md)          | Text next to the crosshair                       |
+| [Progress bar](docs/components/progress.md)  | Bar pushed by value, or timed and run by the client |
+| [Dial](docs/components/dial.md)              | Radial ring for cooldowns and charges            |
 
 
 Concepts shared by every component: [docs/components](docs/components/README.md#common-concepts).
@@ -79,6 +83,10 @@ The demo plugin is a consumer: it references only `PanoramaUiKit.Shared` ([cspro
 | Vote           | [DemoPlugin.Vote.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Vote.cs)           | `css_uikit_demo_vote`      |
 | Panel          | [DemoPlugin.Panel.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Panel.cs)         | `css_uikit_demo_panel`     |
 | Menu           | [DemoPlugin.Menu.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Menu.cs)           | `css_uikit_demo_menu`      |
+| Card           | [DemoPlugin.Card.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Card.cs)           | `css_uikit_demo_card`      |
+| Target         | [DemoPlugin.Target.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Target.cs)       | `css_uikit_demo_target`    |
+| Progress bar   | [DemoPlugin.Progress.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Progress.cs)   | `css_uikit_demo_progress`  |
+| Dial           | [DemoPlugin.Dial.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Dial.cs)           | `css_uikit_demo_dial`      |
 
 
 
@@ -89,7 +97,7 @@ The demo plugin is a consumer: it references only `PanoramaUiKit.Shared` ([cspro
 - [ ] Improve the ability bar design.
 - [ ] Support images where they are useful: panel, menu, kill feed, and others.
 - [ ] Support sounds where they are useful: a panel click, a button click, and others.
-- [ ] Add more components: a progress bar, a compass, and anything else that would be useful.
+- [ ] Add more components: a compass, and anything else that would be useful.
 - [ ] Add one image per component on the repo to show the result, or a video.
 - [ ] Add Claude skills for creating and working with UI kit layouts.
 
