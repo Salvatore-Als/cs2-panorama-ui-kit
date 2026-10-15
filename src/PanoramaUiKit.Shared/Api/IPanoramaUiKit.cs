@@ -1,12 +1,16 @@
 using CounterStrikeSharp.API.Core;
 using PanoramaUiKit.Shared.Abilities;
 using PanoramaUiKit.Shared.Announcements;
+using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Dials;
 using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Panels;
+using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Banners;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
@@ -77,6 +81,17 @@ public interface IPanoramaUiKit
     /// <summary>Menus and sub-menus with back and pagination. Takes the mouse.</summary>
     IMenuService Menus { get; }
 
+    /// <summary>Info cards pinned to a screen corner (over the radar, above the HUD). Title, description, lines. Per player.</summary>
+    ICardService Cards { get; }
+
+    /// <summary>Text next to the crosshair: above, below, left or right. Per player.</summary>
+    ITargetService Targets { get; }
+
+    /// <summary>Progress bars: pushed by value, or timed and run by the client. Per player.</summary>
+    IProgressService ProgressBars { get; }
+
+    /// <summary>Radial dials (cooldown, charge, channel): pushed by value, or timed and run by the client. Per player.</summary>
+    IDialService Dials { get; }
 
     /// <summary>
     /// Spawns the layout entity now instead of on first use. Call it for every layout your plugin

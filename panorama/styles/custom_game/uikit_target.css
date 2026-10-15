@@ -1,0 +1,64 @@
+/*
+    uikit_target - one discreet line of text beside the crosshair (screen centre): above, below,
+    left or right. No plate edge, no accent: a faint veil so it reads on any map, the text coloured
+    by style. Four sizes: size-sm, size-md (default), size-lg, size-xl. Contract "target".
+
+    Each label sits in a half-screen zone whose inner edge IS the centre, and keeps a fixed gap from
+    it: the label grows away from the crosshair, never over it. Change the gap with the margins.
+*/
+
+.target-zone {
+    ignore-parent-flow: true;
+}
+
+.target-zone-t { width: 100%; height: 50%; horizontal-align: center; vertical-align: top; }
+.target-zone-b { width: 100%; height: 50%; horizontal-align: center; vertical-align: bottom; }
+.target-zone-l { width: 50%; height: 100%; horizontal-align: left; vertical-align: center; }
+.target-zone-r { width: 50%; height: 100%; horizontal-align: right; vertical-align: center; }
+
+.target {
+    padding: 2px 8px 2px 8px;
+    border-radius: 3px;
+    background-color: #0000004d;
+}
+
+.target-t { horizontal-align: center; vertical-align: bottom; margin-bottom: 36px; }
+.target-b { horizontal-align: center; vertical-align: top;    margin-top: 36px; }
+.target-l { horizontal-align: right;  vertical-align: center; margin-right: 36px; }
+.target-r { horizontal-align: left;   vertical-align: center; margin-left: 36px; }
+
+.target-text {
+    horizontal-align: center;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 0.4px;
+    color: #f2f4f7;
+    white-space: nowrap;
+}
+
+/* Sizes ---------------------------------------------------------------------- */
+
+.target.size-sm .target-text { font-size: 12px; }
+.target.size-md .target-text { font-size: 14px; }
+.target.size-lg .target-text { font-size: 18px; letter-spacing: 0.6px; }
+.target.size-xl .target-text { font-size: 24px; letter-spacing: 0.8px; font-family: Stratum2 Bold; }
+
+.target.size-sm { padding: 1px 6px 1px 6px; }
+.target.size-lg { padding: 3px 10px 3px 10px; }
+.target.size-xl { padding: 4px 12px 4px 12px; }
+
+/* Styles (UiStyle): text colour ---------------------------------------------- */
+
+.target.style-neutral .target-text { color: #f2f4f7; }
+
+.target.style-info .target-text { color: #56a0dd; }
+
+.target.style-success .target-text { color: #9ccf4f; }
+
+.target.style-warn .target-text { color: #f0a531; }
+
+.target.style-danger .target-text { color: #e0432f; }
+
+.target.style-purple .target-text { color: #8847ff; }
+
+.target.style-gold .target-text { color: #e0a24a; }

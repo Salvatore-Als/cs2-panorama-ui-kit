@@ -1,0 +1,91 @@
+{
+  "component": "progress",
+  "csharp": "ProgressLayout / IProgressService",
+  "summary": "Progress bar with an optional label and value. Follows a value you push, or runs on its own for a duration.",
+  "params": {
+    "placements": {
+      "default": [
+        "t",
+        "c",
+        "b"
+      ],
+      "doc": "Bar codes the layout has: t top of the screen, c under the crosshair, b above the HUD (ProgressLayout.Placements)."
+    }
+  },
+  "repeat": {
+    "p": "placements"
+  },
+  "panels": [
+    {
+      "id": "pg_{p}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "style-*"
+      ],
+      "doc": "The bar. Author it with class `hidden`."
+    },
+    {
+      "id": "pg_{p}_label",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label above the bar, left. `empty` when blank."
+    },
+    {
+      "id": "pg_{p}_value",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label above the bar, right. `empty` when blank."
+    },
+    {
+      "id": "pg_{p}_fill",
+      "required": true,
+      "classes": [
+        "step-*",
+        "timed",
+        "up",
+        "dur-*",
+        "run"
+      ],
+      "doc": "The fill, drawn with `clip`. `step-N` is the pushed value (N of ProgressLayout.Steps). `timed` runs on its own: `dur-N` is the seconds, `up` fills instead of draining, `run` starts it."
+    }
+  ],
+  "texts": [
+    {
+      "var": "pg_{p}_label",
+      "required": false,
+      "doc": "ProgressOptions.Label"
+    },
+    {
+      "var": "pg_{p}_value",
+      "required": false,
+      "doc": "ProgressOptions.ValueText, or the percentage under ShowPercent"
+    },
+    {
+      "var": "pg_{p}_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "ProgressOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "timed",
+    "up",
+    "run",
+    "step-0",
+    "step-25",
+    "step-50",
+    "dur-1",
+    "dur-5",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

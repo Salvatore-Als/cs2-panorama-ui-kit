@@ -5,12 +5,16 @@ using PanoramaUiKit.Shared.Abilities;
 using PanoramaUiKit.Shared.Announcements;
 using PanoramaUiKit.Shared.Api;
 using PanoramaUiKit.Shared.Banners;
+using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Dials;
 using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Panels;
+using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
 using PanoramaUiKit.Shared.Votes;
@@ -37,6 +41,10 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
         Votes = new VoteService(registry);
         Panels = new PanelService(registry);
         Menus = new MenuService(registry);
+        Cards = new CardService(registry);
+        Targets = new TargetService(registry);
+        ProgressBars = new ProgressService(registry);
+        Dials = new DialService(registry);
     }
 
     public int Version => IPanoramaUiKit.ApiVersion;
@@ -62,6 +70,14 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
     public IPanelService Panels { get; }
 
     public IMenuService Menus { get; }
+
+    public ICardService Cards { get; }
+
+    public ITargetService Targets { get; }
+
+    public IProgressService ProgressBars { get; }
+
+    public IDialService Dials { get; }
 
     public IEnumerable<LayoutChannel> Channels => _registry.Channels;
 

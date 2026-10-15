@@ -1,0 +1,95 @@
+/*
+    uikit_card - info card pinned to a screen corner: title, description and label / value lines, all
+    optional. Same flat #12171e plate as the announce card, but no transition: it is there when
+    "hidden" goes. Contract "card" (docs/CONTRACTS.md).
+
+    Corners: tl sits where the radar is, tr under the top edge (the kill feed lives there too),
+    bl / br sit above the HUD. Move them with the margins below.
+*/
+
+.card {
+    width: 260px;
+    flow-children: down;
+    padding: 12px 14px 12px 14px;
+    border-radius: 4px;
+    border-left: 1px solid #ffffff14;
+    border-right: 1px solid #ffffff14;
+    border-bottom: 1px solid #ffffff14;
+    border-top: 3px solid #9aa2ac;
+    background-color: #12171e;
+    box-shadow: #00000070 0px 4px 12px 0px;
+}
+
+.card-tl { horizontal-align: left;  vertical-align: top;    margin: 12px 0px 0px 12px; }
+.card-tr { horizontal-align: right; vertical-align: top;    margin: 12px 12px 0px 0px; }
+.card-bl { horizontal-align: left;  vertical-align: bottom; margin: 0px 0px 140px 12px; }
+.card-br { horizontal-align: right; vertical-align: bottom; margin: 0px 12px 140px 0px; }
+
+/* Copy: every line collapses on its own ("empty"), so any part can be left out. */
+
+.card-title {
+    width: 100%;
+    margin: 2px 0px;
+    font-family: Stratum2 Bold;
+    font-size: 18px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: shrink min( 12px ) ellipsis;
+}
+
+.card-desc {
+    width: 100%;
+    margin: 2px 0px;
+    font-size: 14px;
+    line-height: 19px;
+    color: #9aa2ac;
+    white-space: normal;
+}
+
+.card-line {
+    width: 100%;
+    flow-children: right;
+    margin: 2px 0px;
+    padding: 3px 0px 0px 0px;
+    border-top: 1px solid #ffffff0d;
+}
+
+.card-line-label {
+    width: fill-parent-flow( 1.0 );
+    font-size: 14px;
+    color: #9aa2ac;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.card-line-value {
+    margin-left: 12px;
+    font-size: 14px;
+    color: #f2f4f7;
+    white-space: nowrap;
+}
+
+/* Styles (UiStyle): top edge and title ------------------------------------- */
+
+.card.style-neutral { border-top: 3px solid #9aa2ac; }
+.card.style-neutral .card-title { color: #f2f4f7; }
+
+.card.style-info { border-top: 3px solid #56a0dd; }
+.card.style-info .card-title { color: #56a0dd; }
+
+.card.style-success { border-top: 3px solid #9ccf4f; }
+.card.style-success .card-title { color: #9ccf4f; }
+
+.card.style-warn { border-top: 3px solid #f0a531; }
+.card.style-warn .card-title { color: #f0a531; }
+
+.card.style-danger { border-top: 3px solid #e0432f; }
+.card.style-danger .card-title { color: #e0432f; }
+
+.card.style-purple { border-top: 3px solid #8847ff; }
+.card.style-purple .card-title { color: #8847ff; }
+
+.card.style-gold { border-top: 3px solid #e0a24a; }
+.card.style-gold .card-title { color: #e0a24a; }

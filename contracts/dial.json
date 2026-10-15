@@ -1,0 +1,97 @@
+{
+  "component": "dial",
+  "csharp": "DialLayout / IDialService",
+  "summary": "Radial dial: a ring that sweeps like a clock hand. Pushed by value, or timed and run by the client. For cooldowns, charges and channels.",
+  "params": {
+    "placements": {
+      "default": [
+        "c",
+        "b",
+        "bl",
+        "br"
+      ],
+      "doc": "Dial codes the layout has: c around the crosshair, b above the HUD at the bottom centre, bl and br above the HUD in the bottom corners (DialLayout.Placements)."
+    }
+  },
+  "repeat": {
+    "p": "placements"
+  },
+  "panels": [
+    {
+      "id": "dl_{p}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "style-*",
+        "size-*"
+      ],
+      "doc": "The dial. Author it with class `hidden`. `size-sm`, `size-md`, `size-lg`, `size-xl` set the ring size."
+    },
+    {
+      "id": "dl_{p}_label",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label under the ring. `empty` when blank."
+    },
+    {
+      "id": "dl_{p}_value",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label in the middle of the ring. `empty` when blank."
+    },
+    {
+      "id": "dl_{p}_fill",
+      "required": true,
+      "classes": [
+        "step-*",
+        "timed",
+        "up",
+        "dur-*",
+        "run"
+      ],
+      "doc": "The swept ring, drawn with `clip: radial()`. `step-N` is the pushed value (N of DialLayout.Steps). `timed` runs on its own: `dur-N` is the seconds, `up` fills instead of draining, `run` starts it."
+    }
+  ],
+  "texts": [
+    {
+      "var": "dl_{p}_label",
+      "required": false,
+      "doc": "DialOptions.Label"
+    },
+    {
+      "var": "dl_{p}_value",
+      "required": false,
+      "doc": "DialOptions.ValueText, or the percentage under ShowPercent"
+    },
+    {
+      "var": "dl_{p}_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "DialOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "timed",
+    "up",
+    "run",
+    "step-0",
+    "step-18",
+    "step-36",
+    "dur-1",
+    "dur-5",
+    "size-sm",
+    "size-md",
+    "size-lg",
+    "size-xl",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

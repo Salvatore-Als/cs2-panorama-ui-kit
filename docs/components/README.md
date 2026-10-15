@@ -13,6 +13,10 @@
 | [Vote](vote.md) | Question, choices with live counts, countdown | Per player |
 | [Panel](panel.md) | Modal with pages and typed rows | Per player |
 | [Menu](menu.md) | Paginated menu with sub-menus | Per player |
+| [Card](card.md) | Info card in a screen corner: title, description, lines | Per player or everyone |
+| [Target](target.md) | Text next to the crosshair | Per player or everyone |
+| [Progress bar](progress.md) | Bar pushed by value, or timed and run by the client | Per player or everyone |
+| [Dial](dial.md) | Radial ring for cooldowns and charges, pushed or timed | Per player or everyone |
 
 Open `previews/uikit_<component>.preview.html` in a browser for a rough look at each bundled layout.
 

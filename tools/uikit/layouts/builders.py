@@ -571,6 +571,139 @@ def menu(
     )
 
 
+def card(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    placements = _codes(params, "placements")
+    lines = _count(params, "lines")
+
+    def line(place: str, i: int) -> str:
+        line_id = f"c_{place}_line_{i}"
+        return f"""\
+<Panel id="{line_id}" class="card-line hidden" hittest="false">
+	<Label id="{line_id}_label" class="card-line-label" hittest="false" text="{{s:{line_id}_label}}" />
+	<Label id="{line_id}_value" class="card-line-value" hittest="false" text="{{s:{line_id}_value}}" />
+</Panel>"""
+
+    def one(place: str) -> str:
+        rows = indent("\n".join(line(place, i) for i in range(lines)), 1)
+        return (
+            f'<Panel id="c_{place}" class="card card-{place} hidden" hittest="false">\n'
+            f'\t<Label id="c_{place}_title" class="card-title" hittest="false" text="{{s:c_{place}_title}}" />\n'
+            f'\t<Label id="c_{place}_desc" class="card-desc" hittest="false" text="{{s:c_{place}_desc}}" />\n'
+            + rows
+            + "</Panel>"
+        )
+
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body="\n".join(one(place) for place in placements),
+        description=(
+            f"Card: {len(placements)} corner(s) x title / description / {lines} line(s). Every part is optional.\n"
+            "No animation: the card is there when `hidden` goes."
+        ),
+    )
+
+
+def target(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    positions = _codes(params, "positions")
+
+    def one(place: str) -> str:
+        return f"""\
+<Panel class="target-zone target-zone-{place}" hittest="false">
+	<Panel id="tg_{place}" class="target target-{place} size-md hidden" hittest="false">
+		<Label class="target-text" hittest="false" text="{{s:tg_{place}_text}}" />
+	</Panel>
+</Panel>"""
+
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body="\n".join(one(place) for place in positions),
+        description=(
+            f"Target: {len(positions)} one-line label(s) around the crosshair (screen centre).\n"
+            "Each sits in a half-screen zone whose inner edge is the centre. size-sm/md/lg/xl set the text size."
+        ),
+    )
+
+
+def progress(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    placements = _codes(params, "placements")
+
+    def one(place: str) -> str:
+        return f"""\
+<Panel class="progress-zone progress-zone-{place}" hittest="false">
+	<Panel id="pg_{place}" class="progress progress-{place} hidden" hittest="false">
+		<Panel class="progress-head" hittest="false">
+			<Label id="pg_{place}_label" class="progress-label" hittest="false" text="{{s:pg_{place}_label}}" />
+			<Label id="pg_{place}_value" class="progress-value" hittest="false" text="{{s:pg_{place}_value}}" />
+		</Panel>
+		<Panel class="progress-track" hittest="false">
+			<Panel id="pg_{place}_fill" class="progress-fill" hittest="false" />
+		</Panel>
+	</Panel>
+</Panel>"""
+
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body="\n".join(one(place) for place in placements),
+        description=(
+            f"Progress: {len(placements)} bar(s), each a label / value row over a track.\n"
+            "The fill is a clip: step-N for a pushed value, timed + dur-N + run for a bar that runs alone."
+        ),
+    )
+
+
+def dial(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    placements = _codes(params, "placements")
+
+    def one(place: str) -> str:
+        return f"""\
+<Panel id="dl_{place}" class="dial dial-{place} size-md hidden" hittest="false">
+	<Panel class="dial-body" hittest="false">
+		<Panel class="dial-track" hittest="false" />
+		<Panel id="dl_{place}_fill" class="dial-fill" hittest="false" />
+		<Label id="dl_{place}_value" class="dial-value" hittest="false" text="{{s:dl_{place}_value}}" />
+	</Panel>
+	<Label id="dl_{place}_label" class="dial-label" hittest="false" text="{{s:dl_{place}_label}}" />
+</Panel>"""
+
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body="\n".join(one(place) for place in placements),
+        description=(
+            f"Dial: {len(placements)} ring(s), a value in the middle and a label under.\n"
+            "The fill is a radial clip: step-N for a pushed value, timed + dur-N + run for a ring that runs alone.\n"
+            "size-sm/md/lg/xl set the ring size."
+        ),
+    )
+
+
 BUILDERS: dict[str, Builder] = {
     "toast": toast,
     "banner": banner,
@@ -583,4 +716,8 @@ BUILDERS: dict[str, Builder] = {
     "vote": vote,
     "panel": panel,
     "menu": menu,
+    "card": card,
+    "target": target,
+    "progress": progress,
+    "dial": dial,
 }
