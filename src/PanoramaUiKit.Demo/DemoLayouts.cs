@@ -1,12 +1,16 @@
 using PanoramaUiKit.Shared.Abilities;
 using PanoramaUiKit.Shared.Announcements;
 using PanoramaUiKit.Shared.Banners;
+using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Dials;
 using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Panels;
+using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
 using PanoramaUiKit.Shared.Votes;
@@ -54,9 +58,17 @@ internal static class DemoLayouts
 
     public static readonly MenuLayout Menu = new() { Name = "uikit_menu" };
 
+    public static readonly CardLayout Card = new() { Name = "uikit_card" };
+
+    public static readonly TargetLayout Target = new() { Name = "uikit_target" };
+
+    public static readonly ProgressLayout Progress = new() { Name = "uikit_progress" };
+
+    public static readonly DialLayout Dial = new() { Name = "uikit_dial" };
+
     /// <summary>Every layout the demo draws on, to spawn them at load.</summary>
     public static IEnumerable<UiLayout> All =>
     [
-        Toast, NeonToast, Banner, Announce, Abilities, Match, KillFeed, Victory, Roulette, Vote, Panel, Menu,
+        Toast, NeonToast, Banner, Announce, Abilities, Match, KillFeed, Victory, Roulette, Vote, Panel, Menu, Card, Target, Progress, Dial,
     ];
 }

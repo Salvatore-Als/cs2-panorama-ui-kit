@@ -1,0 +1,162 @@
+/*
+    uikit_progress - label / value row over a track. The fill is a clip, never a width: writing a text
+    slot in the same panel restarts a width transition from full, a clip does not.
+
+    Contract "progress" (docs/CONTRACTS.md). Two ways to drive the fill:
+      step-N   a value pushed by the server. N of 50, so the resolution is 2%. Eases between steps.
+      timed    runs by itself, no server writes: dur-N is its seconds, "up" fills (otherwise it drains),
+               "run" starts it. dur-* must match ProgressLayout.Durations, step-* ProgressLayout.Steps.
+
+    Placements: t under the top edge, c under the crosshair, b above the HUD.
+*/
+
+.progress-zone {
+    ignore-parent-flow: true;
+    width: 100%;
+}
+
+.progress-zone-t { height: 100%; vertical-align: top; }
+.progress-zone-c { height: 50%;  vertical-align: bottom; }
+.progress-zone-b { height: 100%; vertical-align: bottom; }
+
+.progress {
+    width: 280px;
+    flow-children: down;
+    horizontal-align: center;
+    padding: 8px 12px 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #ffffff14;
+    background-color: #12171e;
+    box-shadow: #00000070 0px 4px 12px 0px;
+}
+
+.progress-t { vertical-align: top;    margin-top: 72px; }
+.progress-c { vertical-align: top;    margin-top: 64px; }
+.progress-b { vertical-align: bottom; margin-bottom: 200px; }
+
+.progress-head {
+    width: 100%;
+    flow-children: right;
+}
+
+.progress-label {
+    width: fill-parent-flow( 1.0 );
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #9aa2ac;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.progress-value {
+    margin: 0px 0px 5px 12px;
+    font-family: Stratum2 Bold;
+    font-size: 14px;
+    color: #f2f4f7;
+    white-space: nowrap;
+}
+
+.progress-track {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #ffffff1a;
+    overflow: clip;
+}
+
+.progress-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+    background-color: #9aa2ac;
+    clip: rect( 0%, 100%, 100%, 0% );
+    transition-property: clip;
+    transition-duration: 0.18s;
+    transition-timing-function: linear;
+}
+
+/* Timed: runs alone. 0s until a dur-N lands, so the first frame cannot slide. ------------------ */
+
+.progress-fill.timed { transition-duration: 0.0s; }
+.progress-fill.timed.run { clip: rect( 0%, 0%, 100%, 0% ); }
+.progress-fill.timed.up { clip: rect( 0%, 0%, 100%, 0% ); }
+.progress-fill.timed.up.run { clip: rect( 0%, 100%, 100%, 0% ); }
+
+.progress-fill.timed.dur-1 { transition-duration: 1.0s; }
+.progress-fill.timed.dur-2 { transition-duration: 2.0s; }
+.progress-fill.timed.dur-3 { transition-duration: 3.0s; }
+.progress-fill.timed.dur-4 { transition-duration: 4.0s; }
+.progress-fill.timed.dur-5 { transition-duration: 5.0s; }
+.progress-fill.timed.dur-6 { transition-duration: 6.0s; }
+.progress-fill.timed.dur-8 { transition-duration: 8.0s; }
+.progress-fill.timed.dur-10 { transition-duration: 10.0s; }
+.progress-fill.timed.dur-12 { transition-duration: 12.0s; }
+.progress-fill.timed.dur-15 { transition-duration: 15.0s; }
+.progress-fill.timed.dur-20 { transition-duration: 20.0s; }
+.progress-fill.timed.dur-30 { transition-duration: 30.0s; }
+.progress-fill.timed.dur-45 { transition-duration: 45.0s; }
+.progress-fill.timed.dur-60 { transition-duration: 60.0s; }
+
+/* Pushed value (50 steps) ---------------------------------------------------- */
+
+.progress-fill.step-0 { clip: rect( 0%, 0%, 100%, 0% ); }
+.progress-fill.step-1 { clip: rect( 0%, 2%, 100%, 0% ); }
+.progress-fill.step-2 { clip: rect( 0%, 4%, 100%, 0% ); }
+.progress-fill.step-3 { clip: rect( 0%, 6%, 100%, 0% ); }
+.progress-fill.step-4 { clip: rect( 0%, 8%, 100%, 0% ); }
+.progress-fill.step-5 { clip: rect( 0%, 10%, 100%, 0% ); }
+.progress-fill.step-6 { clip: rect( 0%, 12%, 100%, 0% ); }
+.progress-fill.step-7 { clip: rect( 0%, 14%, 100%, 0% ); }
+.progress-fill.step-8 { clip: rect( 0%, 16%, 100%, 0% ); }
+.progress-fill.step-9 { clip: rect( 0%, 18%, 100%, 0% ); }
+.progress-fill.step-10 { clip: rect( 0%, 20%, 100%, 0% ); }
+.progress-fill.step-11 { clip: rect( 0%, 22%, 100%, 0% ); }
+.progress-fill.step-12 { clip: rect( 0%, 24%, 100%, 0% ); }
+.progress-fill.step-13 { clip: rect( 0%, 26%, 100%, 0% ); }
+.progress-fill.step-14 { clip: rect( 0%, 28%, 100%, 0% ); }
+.progress-fill.step-15 { clip: rect( 0%, 30%, 100%, 0% ); }
+.progress-fill.step-16 { clip: rect( 0%, 32%, 100%, 0% ); }
+.progress-fill.step-17 { clip: rect( 0%, 34%, 100%, 0% ); }
+.progress-fill.step-18 { clip: rect( 0%, 36%, 100%, 0% ); }
+.progress-fill.step-19 { clip: rect( 0%, 38%, 100%, 0% ); }
+.progress-fill.step-20 { clip: rect( 0%, 40%, 100%, 0% ); }
+.progress-fill.step-21 { clip: rect( 0%, 42%, 100%, 0% ); }
+.progress-fill.step-22 { clip: rect( 0%, 44%, 100%, 0% ); }
+.progress-fill.step-23 { clip: rect( 0%, 46%, 100%, 0% ); }
+.progress-fill.step-24 { clip: rect( 0%, 48%, 100%, 0% ); }
+.progress-fill.step-25 { clip: rect( 0%, 50%, 100%, 0% ); }
+.progress-fill.step-26 { clip: rect( 0%, 52%, 100%, 0% ); }
+.progress-fill.step-27 { clip: rect( 0%, 54%, 100%, 0% ); }
+.progress-fill.step-28 { clip: rect( 0%, 56%, 100%, 0% ); }
+.progress-fill.step-29 { clip: rect( 0%, 58%, 100%, 0% ); }
+.progress-fill.step-30 { clip: rect( 0%, 60%, 100%, 0% ); }
+.progress-fill.step-31 { clip: rect( 0%, 62%, 100%, 0% ); }
+.progress-fill.step-32 { clip: rect( 0%, 64%, 100%, 0% ); }
+.progress-fill.step-33 { clip: rect( 0%, 66%, 100%, 0% ); }
+.progress-fill.step-34 { clip: rect( 0%, 68%, 100%, 0% ); }
+.progress-fill.step-35 { clip: rect( 0%, 70%, 100%, 0% ); }
+.progress-fill.step-36 { clip: rect( 0%, 72%, 100%, 0% ); }
+.progress-fill.step-37 { clip: rect( 0%, 74%, 100%, 0% ); }
+.progress-fill.step-38 { clip: rect( 0%, 76%, 100%, 0% ); }
+.progress-fill.step-39 { clip: rect( 0%, 78%, 100%, 0% ); }
+.progress-fill.step-40 { clip: rect( 0%, 80%, 100%, 0% ); }
+.progress-fill.step-41 { clip: rect( 0%, 82%, 100%, 0% ); }
+.progress-fill.step-42 { clip: rect( 0%, 84%, 100%, 0% ); }
+.progress-fill.step-43 { clip: rect( 0%, 86%, 100%, 0% ); }
+.progress-fill.step-44 { clip: rect( 0%, 88%, 100%, 0% ); }
+.progress-fill.step-45 { clip: rect( 0%, 90%, 100%, 0% ); }
+.progress-fill.step-46 { clip: rect( 0%, 92%, 100%, 0% ); }
+.progress-fill.step-47 { clip: rect( 0%, 94%, 100%, 0% ); }
+.progress-fill.step-48 { clip: rect( 0%, 96%, 100%, 0% ); }
+.progress-fill.step-49 { clip: rect( 0%, 98%, 100%, 0% ); }
+.progress-fill.step-50 { clip: rect( 0%, 100%, 100%, 0% ); }
+
+/* Styles (UiStyle): fill ----------------------------------------------------- */
+
+.progress.style-neutral .progress-fill { background-color: #9aa2ac; }
+.progress.style-info .progress-fill { background-color: #56a0dd; }
+.progress.style-success .progress-fill { background-color: #9ccf4f; }
+.progress.style-warn .progress-fill { background-color: #f0a531; }
+.progress.style-danger .progress-fill { background-color: #e0432f; }
+.progress.style-purple .progress-fill { background-color: #8847ff; }
+.progress.style-gold .progress-fill { background-color: #e0a24a; }

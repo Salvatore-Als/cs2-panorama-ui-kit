@@ -1,8 +1,12 @@
 using CounterStrikeSharp.API.Core;
 using PanoramaUiKit.Shared.Announcements;
 using PanoramaUiKit.Shared.Banners;
+using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Dials;
+using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 
 namespace PanoramaUiKit.Shared.Api;
@@ -17,6 +21,10 @@ namespace PanoramaUiKit.Shared.Api;
 /// kit.Banner(Banners, "Banner text", UiStyle.Warn, seconds: 5);
 /// kit.Announce(player, Announces, "Announce title", "Announce description", UiStyle.Danger, kicker: "Kicker");
 /// kit.Roulette(player, Roulettes, "Title", items, result => Give(result.Player, result.Item));
+/// kit.Card(player, Cards, CardPlacement.TopLeft, "Title", "Description", new CardLine("Label", "Value"));
+/// kit.Target(player, Targets, "Press E to open", TargetPosition.Below);
+/// kit.Progress(player, Bars, "Defusing", seconds: 5);
+/// kit.Dial(player, Dials, "Dash", seconds: 8);
 /// </code>
 /// </summary>
 public static class PanoramaUiKitExtensions
@@ -85,6 +93,78 @@ public static class PanoramaUiKitExtensions
             Items = items,
             Seconds = seconds,
             OnResult = onResult,
+        });
+    }
+
+    /// <summary>Card pinned to a corner. Title, description and lines are all optional.</summary>
+    public static IUiHandle Card(this IPanoramaUiKit kit, CCSPlayerController player, CardLayout layout,
+                                 CardPlacement placement, string? title = null, string? description = null,
+                                 params CardLine[] lines)
+    {
+        return kit.Cards.Show(player, new CardOptions
+        {
+            Layout = layout,
+            Placement = placement,
+            Title = title,
+            Description = description,
+            Lines = lines,
+        });
+    }
+
+    /// <summary>Text next to the crosshair.</summary>
+    public static IUiHandle Target(this IPanoramaUiKit kit, CCSPlayerController player, TargetLayout layout, string text,
+                                   TargetPosition position = TargetPosition.Below, TargetSize size = TargetSize.Medium,
+                                   string style = UiStyle.Neutral, float seconds = 0f)
+    {
+        return kit.Targets.Show(player, new TargetOptions
+        {
+            Layout = layout,
+            Text = text,
+            Size = size,
+            Position = position,
+            Style = style,
+            Seconds = seconds,
+        });
+    }
+
+    /// <summary>
+    /// A bar that runs by itself for <paramref name="seconds"/> (a defuse, a cast). For a bar you move
+    /// yourself, use <c>kit.ProgressBars.Show</c> with a <c>Value</c>.
+    /// </summary>
+    public static IUiHandle Progress(this IPanoramaUiKit kit, CCSPlayerController player, ProgressLayout layout,
+                                     string? label, float seconds,
+                                     ProgressPlacement placement = ProgressPlacement.Crosshair,
+                                     ProgressDirection direction = ProgressDirection.Fill, string style = UiStyle.Info)
+    {
+        return kit.ProgressBars.Show(player, new ProgressOptions
+        {
+            Layout = layout,
+            Label = label,
+            Seconds = seconds,
+            Placement = placement,
+            Direction = direction,
+            Style = style,
+        });
+    }
+
+    /// <summary>
+    /// A ring that the client sweeps by itself for <paramref name="seconds"/>: a cooldown (drain, the default)
+    /// or a charge (fill). For a ring you move yourself, use <c>kit.Dials.Show</c> with a <c>Value</c>.
+    /// </summary>
+    public static IUiHandle Dial(this IPanoramaUiKit kit, CCSPlayerController player, DialLayout layout, string? label,
+                                 float seconds, DialPlacement placement = DialPlacement.Crosshair,
+                                 ProgressDirection direction = ProgressDirection.Drain, DialSize size = DialSize.Medium,
+                                 string style = UiStyle.Info)
+    {
+        return kit.Dials.Show(player, new DialOptions
+        {
+            Layout = layout,
+            Label = label,
+            Seconds = seconds,
+            Placement = placement,
+            Direction = direction,
+            Size = size,
+            Style = style,
         });
     }
 }

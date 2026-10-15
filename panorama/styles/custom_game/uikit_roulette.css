@@ -43,12 +43,13 @@
     horizontal-align: center;
     vertical-align: center;
     flow-children: down;
-    border-radius: 4px;
-    border-top: 1px solid #ffffff14;
-    border-right: 1px solid #ffffff14;
-    border-bottom: 1px solid #ffffff14;
-    border-left: 1px solid #ffffff14;
-    background-color: #12171e;
+    border-radius: 8px;
+    border-top: 1px solid #ffffff1a;
+    border-right: 1px solid #ffffff1a;
+    border-bottom: 1px solid #ffffff1a;
+    border-left: 1px solid #ffffff1a;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #1a212b ), to( #0f141b ) );
+    box-shadow: #000000cc 0px 18px 48px 0px;
     overflow: noclip;
 
     opacity: 0;
@@ -66,30 +67,34 @@
 
 .roulette-card-accent {
     width: 100%;
-    height: 3px;
+    height: 4px;
+    border-radius: 8px 8px 0px 0px;
     background-color: #9aa2ac;
 }
 
 .roulette-body {
     flow-children: down;
     width: 100%;
-    padding: 28px 30px 30px 30px;
+    padding: 30px 30px 34px 30px;
 }
 
 /* Copy --------------------------------------------------------------------- */
 
 .roulette-kicker {
     horizontal-align: center;
-    font-size: 13px;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
     color: #9aa2ac;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .roulette-title {
     horizontal-align: center;
-    font-size: 30px;
-    letter-spacing: 2px;
+    font-size: 34px;
+    letter-spacing: 4px;
     text-transform: uppercase;
+    font-weight: bold;
     color: #f2f4f7;
 }
 
@@ -97,11 +102,14 @@
 
 .roulette-window {
     width: 980px;
-    height: 124px;
+    height: 156px;
     horizontal-align: center;
-    margin-top: 20px;
-    background-color: #0d1117;
-    border-radius: 3px;
+    margin-top: 26px;
+    background-color: #0a0e13;
+    border-radius: 6px;
+    border-top: 1px solid #ffffff12;
+    border-bottom: 1px solid #ffffff12;
+    box-shadow: inset #000000 0px 0px 24px 0px;
     overflow: clip;
 }
 
@@ -149,11 +157,11 @@
 
 .roulette-cell {
     width: 140px;
-    height: 124px;
+    height: 156px;
     flow-children: down;
-    border-left: 1px solid #ffffff10;
-    border-right: 1px solid #ffffff10;
-    background-color: #161c25;
+    border-left: 1px solid #00000066;
+    border-right: 1px solid #ffffff0d;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #1b222d ), to( #121820 ) );
 
     opacity: 1;
     transition-property: opacity, background-color;
@@ -163,10 +171,11 @@
 
 .roulette-cell-name {
     width: 100%;
-    margin-top: 40px;
+    margin-top: 58px;
     padding: 0px 8px;
     text-align: center;
-    font-size: 17px;
+    font-size: 18px;
+    font-weight: bold;
     letter-spacing: 1px;
     text-transform: uppercase;
     color: #f2f4f7;
@@ -190,10 +199,19 @@
 .roulette-cell-accent {
     ignore-parent-flow: true;
     width: 100%;
-    height: 4px;
+    height: 6px;
     vertical-align: bottom;
     background-color: #9aa2ac;
 }
+
+/* Rarity glow rising from the bottom edge. */
+.roulette-cell.style-neutral { background-color: gradient( linear, 0% 100%, 0% 0%, from( #9aa2ac40 ), to( #12182000 ) ); }
+.roulette-cell.style-info    { background-color: gradient( linear, 0% 100%, 0% 0%, from( #56a0dd55 ), to( #12182000 ) ); }
+.roulette-cell.style-success { background-color: gradient( linear, 0% 100%, 0% 0%, from( #9ccf4f55 ), to( #12182000 ) ); }
+.roulette-cell.style-warn    { background-color: gradient( linear, 0% 100%, 0% 0%, from( #f0a53155 ), to( #12182000 ) ); }
+.roulette-cell.style-danger  { background-color: gradient( linear, 0% 100%, 0% 0%, from( #e0432f55 ), to( #12182000 ) ); }
+.roulette-cell.style-purple  { background-color: gradient( linear, 0% 100%, 0% 0%, from( #8847ff55 ), to( #12182000 ) ); }
+.roulette-cell.style-gold    { background-color: gradient( linear, 0% 100%, 0% 0%, from( #e0a24a66 ), to( #12182000 ) ); }
 
 .roulette-cell.style-neutral .roulette-cell-accent { background-color: #9aa2ac; }
 .roulette-cell.style-info    .roulette-cell-accent { background-color: #56a0dd; }
@@ -204,36 +222,37 @@
 .roulette-cell.style-gold    .roulette-cell-accent { background-color: #e0a24a; }
 
 /* Once stopped: everything but the winner steps back. */
-.roulette-strip.done .roulette-cell { opacity: 0.3; }
+.roulette-strip.done .roulette-cell { opacity: 0.25; }
 .roulette-strip.done .roulette-cell.won {
     opacity: 1;
-    background-color: #1f2733;
+    box-shadow: #ffffff22 0px 0px 18px 0px;
 }
 
 /* Edges and marker --------------------------------------------------------- */
 
 .roulette-fade {
     ignore-parent-flow: true;
-    width: 110px;
+    width: 160px;
     height: 100%;
 }
 
 .roulette-fade-left {
     horizontal-align: left;
-    background-color: gradient( linear, 0% 0%, 100% 0%, from( #0d1117 ), to( #0d111700 ) );
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #0a0e13 ), to( #0a0e1300 ) );
 }
 
 .roulette-fade-right {
     horizontal-align: right;
-    background-color: gradient( linear, 0% 0%, 100% 0%, from( #0d111700 ), to( #0d1117 ) );
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #0a0e1300 ), to( #0a0e13 ) );
 }
 
 .roulette-marker {
     ignore-parent-flow: true;
-    width: 3px;
+    width: 4px;
     height: 100%;
     horizontal-align: center;
     background-color: #e0a24a;
+    box-shadow: #e0a24acc 0px 0px 14px 2px;
 }
 
 /* Result ------------------------------------------------------------------- */
@@ -241,20 +260,23 @@
 .roulette-result {
     flow-children: down;
     horizontal-align: center;
-    margin-top: 22px;
+    margin-top: 28px;
 }
 
 .roulette-result-label {
     horizontal-align: center;
-    font-size: 13px;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
     color: #9aa2ac;
 }
 
 .roulette-result-name {
     horizontal-align: center;
-    font-size: 34px;
-    letter-spacing: 2px;
+    font-size: 44px;
+    letter-spacing: 3px;
     text-transform: uppercase;
+    font-weight: bold;
     color: #f2f4f7;
 }
 

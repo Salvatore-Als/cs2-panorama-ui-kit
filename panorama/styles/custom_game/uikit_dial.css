@@ -1,0 +1,181 @@
+/*
+    uikit_dial - a ring that sweeps like a clock hand, value in the middle, label under. The fill is a
+    radial clip, never a width. Contract "dial" (docs/CONTRACTS.md).
+
+    UNVERIFIED IN GAME: clip: radial() is in Valve's property docs but nothing here had run it. Two
+    things to check on first load: the sector starts at 12 o'clock and sweeps clockwise, and a
+    transition between two radial values eases. If the start is elsewhere, change the 0deg start angle.
+
+    Two ways to drive the fill, same as the progress bar:
+      step-N   a value pushed by the server. N of 36, so 10 degrees a step. Eases between steps.
+      timed    runs by itself: dur-N is its seconds, "up" fills (otherwise it drains), "run" starts it.
+               dur-* must match DialLayout.Durations, step-* DialLayout.Steps.
+
+    Placements: c centred on the crosshair, b above the HUD at the bottom centre, bl / br above the HUD
+    in the corners. Sizes: size-sm, size-md (default), size-lg, size-xl.
+*/
+
+.dial {
+    flow-children: down;
+}
+
+.dial-c  { horizontal-align: center; vertical-align: center; }
+.dial-b  { horizontal-align: center; vertical-align: bottom; margin-bottom: 270px; }
+.dial-bl { horizontal-align: left;   vertical-align: bottom; margin: 0px 0px 160px 24px; }
+.dial-br { horizontal-align: right;  vertical-align: bottom; margin: 0px 24px 160px 0px; }
+
+/* Ring: track and fill are the same square, one over the other. ---------------------------- */
+
+.dial-body {
+    width: 64px;
+    height: 64px;
+    horizontal-align: center;
+}
+
+.dial-track {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 5px solid #ffffff1a;
+    background-color: #12171e99;
+}
+
+.dial-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 5px solid #9aa2ac;
+    clip: radial( 50% 50%, 0deg, 360deg );
+    transition-property: clip;
+    transition-duration: 0.18s;
+    transition-timing-function: linear;
+}
+
+.dial-value {
+    horizontal-align: center;
+    vertical-align: center;
+    text-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 20px;
+    color: #f2f4f7;
+    white-space: nowrap;
+}
+
+.dial-label {
+    horizontal-align: center;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #9aa2ac;
+    white-space: nowrap;
+}
+
+/* Around the crosshair the label would shift the ring off the centre: it hangs below instead. */
+.dial-c .dial-label {
+    ignore-parent-flow: true;
+    vertical-align: bottom;
+    y: 24px;
+    margin-top: 0px;
+}
+
+/* Sizes ---------------------------------------------------------------------- */
+
+.dial.size-sm .dial-body { width: 40px;  height: 40px; }
+.dial.size-md .dial-body { width: 64px;  height: 64px; }
+.dial.size-lg .dial-body { width: 88px;  height: 88px; }
+.dial.size-xl .dial-body { width: 120px; height: 120px; }
+
+.dial.size-sm .dial-value { font-size: 13px; }
+.dial.size-md .dial-value { font-size: 20px; }
+.dial.size-lg .dial-value { font-size: 28px; }
+.dial.size-xl .dial-value { font-size: 38px; }
+
+.dial.size-sm .dial-fill, .dial.size-sm .dial-track { border: 4px solid #ffffff1a; }
+.dial.size-xl .dial-fill, .dial.size-xl .dial-track { border: 7px solid #ffffff1a; }
+
+/* Timed: runs alone. 0s until a dur-N lands, so the first frame cannot sweep. ---------------- */
+
+.dial-fill.timed { transition-duration: 0.0s; }
+.dial-fill.timed.run { clip: radial( 50% 50%, 0deg, 0deg ); }
+.dial-fill.timed.up { clip: radial( 50% 50%, 0deg, 0deg ); }
+.dial-fill.timed.up.run { clip: radial( 50% 50%, 0deg, 360deg ); }
+
+.dial-fill.timed.dur-1 { transition-duration: 1.0s; }
+.dial-fill.timed.dur-2 { transition-duration: 2.0s; }
+.dial-fill.timed.dur-3 { transition-duration: 3.0s; }
+.dial-fill.timed.dur-4 { transition-duration: 4.0s; }
+.dial-fill.timed.dur-5 { transition-duration: 5.0s; }
+.dial-fill.timed.dur-6 { transition-duration: 6.0s; }
+.dial-fill.timed.dur-8 { transition-duration: 8.0s; }
+.dial-fill.timed.dur-10 { transition-duration: 10.0s; }
+.dial-fill.timed.dur-12 { transition-duration: 12.0s; }
+.dial-fill.timed.dur-15 { transition-duration: 15.0s; }
+.dial-fill.timed.dur-20 { transition-duration: 20.0s; }
+.dial-fill.timed.dur-30 { transition-duration: 30.0s; }
+.dial-fill.timed.dur-45 { transition-duration: 45.0s; }
+.dial-fill.timed.dur-60 { transition-duration: 60.0s; }
+
+/* Pushed value (36 steps) ---------------------------------------------------- */
+
+.dial-fill.step-0 { clip: radial( 50% 50%, 0deg, 0deg ); }
+.dial-fill.step-1 { clip: radial( 50% 50%, 0deg, 10deg ); }
+.dial-fill.step-2 { clip: radial( 50% 50%, 0deg, 20deg ); }
+.dial-fill.step-3 { clip: radial( 50% 50%, 0deg, 30deg ); }
+.dial-fill.step-4 { clip: radial( 50% 50%, 0deg, 40deg ); }
+.dial-fill.step-5 { clip: radial( 50% 50%, 0deg, 50deg ); }
+.dial-fill.step-6 { clip: radial( 50% 50%, 0deg, 60deg ); }
+.dial-fill.step-7 { clip: radial( 50% 50%, 0deg, 70deg ); }
+.dial-fill.step-8 { clip: radial( 50% 50%, 0deg, 80deg ); }
+.dial-fill.step-9 { clip: radial( 50% 50%, 0deg, 90deg ); }
+.dial-fill.step-10 { clip: radial( 50% 50%, 0deg, 100deg ); }
+.dial-fill.step-11 { clip: radial( 50% 50%, 0deg, 110deg ); }
+.dial-fill.step-12 { clip: radial( 50% 50%, 0deg, 120deg ); }
+.dial-fill.step-13 { clip: radial( 50% 50%, 0deg, 130deg ); }
+.dial-fill.step-14 { clip: radial( 50% 50%, 0deg, 140deg ); }
+.dial-fill.step-15 { clip: radial( 50% 50%, 0deg, 150deg ); }
+.dial-fill.step-16 { clip: radial( 50% 50%, 0deg, 160deg ); }
+.dial-fill.step-17 { clip: radial( 50% 50%, 0deg, 170deg ); }
+.dial-fill.step-18 { clip: radial( 50% 50%, 0deg, 180deg ); }
+.dial-fill.step-19 { clip: radial( 50% 50%, 0deg, 190deg ); }
+.dial-fill.step-20 { clip: radial( 50% 50%, 0deg, 200deg ); }
+.dial-fill.step-21 { clip: radial( 50% 50%, 0deg, 210deg ); }
+.dial-fill.step-22 { clip: radial( 50% 50%, 0deg, 220deg ); }
+.dial-fill.step-23 { clip: radial( 50% 50%, 0deg, 230deg ); }
+.dial-fill.step-24 { clip: radial( 50% 50%, 0deg, 240deg ); }
+.dial-fill.step-25 { clip: radial( 50% 50%, 0deg, 250deg ); }
+.dial-fill.step-26 { clip: radial( 50% 50%, 0deg, 260deg ); }
+.dial-fill.step-27 { clip: radial( 50% 50%, 0deg, 270deg ); }
+.dial-fill.step-28 { clip: radial( 50% 50%, 0deg, 280deg ); }
+.dial-fill.step-29 { clip: radial( 50% 50%, 0deg, 290deg ); }
+.dial-fill.step-30 { clip: radial( 50% 50%, 0deg, 300deg ); }
+.dial-fill.step-31 { clip: radial( 50% 50%, 0deg, 310deg ); }
+.dial-fill.step-32 { clip: radial( 50% 50%, 0deg, 320deg ); }
+.dial-fill.step-33 { clip: radial( 50% 50%, 0deg, 330deg ); }
+.dial-fill.step-34 { clip: radial( 50% 50%, 0deg, 340deg ); }
+.dial-fill.step-35 { clip: radial( 50% 50%, 0deg, 350deg ); }
+.dial-fill.step-36 { clip: radial( 50% 50%, 0deg, 360deg ); }
+
+/* Styles (UiStyle): ring colour ---------------------------------------------- */
+
+.dial.style-neutral .dial-fill { border: 5px solid #9aa2ac; }
+.dial.style-info .dial-fill { border: 5px solid #56a0dd; }
+.dial.style-success .dial-fill { border: 5px solid #9ccf4f; }
+.dial.style-warn .dial-fill { border: 5px solid #f0a531; }
+.dial.style-danger .dial-fill { border: 5px solid #e0432f; }
+.dial.style-purple .dial-fill { border: 5px solid #8847ff; }
+.dial.style-gold .dial-fill { border: 5px solid #e0a24a; }
+
+/* Sizes that change the ring width must also restate it for the style colour. */
+.dial.size-sm.style-neutral .dial-fill { border: 4px solid #9aa2ac; }
+.dial.size-xl.style-neutral .dial-fill { border: 7px solid #9aa2ac; }
+.dial.size-sm.style-info .dial-fill { border: 4px solid #56a0dd; }
+.dial.size-xl.style-info .dial-fill { border: 7px solid #56a0dd; }
+.dial.size-sm.style-success .dial-fill { border: 4px solid #9ccf4f; }
+.dial.size-xl.style-success .dial-fill { border: 7px solid #9ccf4f; }
+.dial.size-sm.style-warn .dial-fill { border: 4px solid #f0a531; }
+.dial.size-xl.style-warn .dial-fill { border: 7px solid #f0a531; }
+.dial.size-sm.style-danger .dial-fill { border: 4px solid #e0432f; }
+.dial.size-xl.style-danger .dial-fill { border: 7px solid #e0432f; }
+.dial.size-sm.style-purple .dial-fill { border: 4px solid #8847ff; }
+.dial.size-xl.style-purple .dial-fill { border: 7px solid #8847ff; }
+.dial.size-sm.style-gold .dial-fill { border: 4px solid #e0a24a; }
+.dial.size-xl.style-gold .dial-fill { border: 7px solid #e0a24a; }
