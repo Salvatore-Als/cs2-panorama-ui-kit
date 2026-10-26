@@ -709,6 +709,25 @@ def dial(
     )
 
 
+def screamer(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    body = '<Panel id="sc_image" class="screamer hidden" hittest="false" />'
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body=body,
+        description=(
+            "Screamer: one full-screen picture.\n"
+            "scare-<name> on sc_image sets the picture; the kit plays the sound from the server."
+        ),
+    )
+
+
 BUILDERS: dict[str, Builder] = {
     "toast": toast,
     "banner": banner,
@@ -725,4 +744,5 @@ BUILDERS: dict[str, Builder] = {
     "target": target,
     "progress": progress,
     "dial": dial,
+    "screamer": screamer,
 }

@@ -97,7 +97,7 @@ fi
 
 if [[ $PREVIEWS -eq 1 ]]; then
     step "Previews"
-    for layout in panorama/layout/custom_game/uikit_*.xml; do
+    for layout in workshop/panorama/layout/custom_game/uikit_*.xml; do
         python3 .claude/skills/cs2-panorama-hud/scripts/preview.py "$layout" 3 | sed 's|^|    |'
     done
 fi

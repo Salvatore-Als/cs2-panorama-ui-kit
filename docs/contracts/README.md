@@ -39,6 +39,7 @@ else (structure, colours, animation) is yours.
 | [panel](panel.md) | Modal panel: pages in a left menu, stats strip, typed rows with buttons, switches and steppers. Takes the mouse. |
 | [progress](progress.md) | Progress bar with an optional label and value. Follows a value you push, or runs on its own for a duration. |
 | [roulette](roulette.md) | Case-opening roulette: a strip of cards slows down on a server-drawn winner. Per player. |
+| [screamer](screamer.md) | Full-screen picture with its sound, for one player at a time. The picture is one class of the stylesheet; the kit plays the sound on the player's client. |
 | [target](target.md) | Discreet one-line text next to the crosshair: above, below, left or right of it, in four sizes. |
 | [toast](toast.md) | Stacked, auto-dismissing notifications. A fixed pool of cards per placement. |
 | [victory](victory.md) | End of round screen: title, chips, restart countdown. Per player. |

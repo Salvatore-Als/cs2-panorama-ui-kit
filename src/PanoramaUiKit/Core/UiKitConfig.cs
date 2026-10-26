@@ -16,4 +16,10 @@ public sealed class UiKitConfig : BasePluginConfig
 
     /// <summary>Permission for css_uikit_status and css_uikit_clear.</summary>
     public string AdminPermission { get; set; } = "@css/root";
+
+    /// <summary>
+    /// Precache the bundled screamer sound and pictures on every map, so the sound plays with the picture.
+    /// Needs the kit addon mounted; turn off on a server that never shows a screamer.
+    /// </summary>
+    public bool PrecacheScreamers { get; set; } = true;
 }

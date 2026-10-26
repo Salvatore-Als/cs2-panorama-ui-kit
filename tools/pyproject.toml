@@ -5,18 +5,20 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "uikit"
 version = "1.0.0"
-description = "Panorama UI Kit tooling: layout contracts, checker, generator and docs."
+description = "Panorama UI Kit tooling: layout contracts, checker, generator, docs, and the screamer content tool."
 requires-python = ">=3.10"
 dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=8"]
+screamer = ["Pillow>=10"]
 
 [project.scripts]
 uikit = "uikit.cli:main"
+screamer = "screamer.__main__:main"
 
 [tool.setuptools.packages.find]
-include = ["uikit*"]
+include = ["uikit*", "screamer*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

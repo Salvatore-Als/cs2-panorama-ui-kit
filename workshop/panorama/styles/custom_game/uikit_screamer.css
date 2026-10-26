@@ -1,0 +1,42 @@
+/*
+    uikit_screamer - one full-screen picture with its sound, for one player at a time. Contract "screamer".
+
+    A screamer is ONE class, scare-<name>, put on #sc_image by the kit (ScreamerOptions.Name): its
+    background-image is the picture, stretched to the screen (1920x1080, letterboxed on black).
+
+    No CSS `sound` here: a stylesheet sound is loaded on use and starts after the picture. The kit plays
+    ScreamerOptions.Sound (sounds/jumpscare.vsnd by default, shipped with this addon) on the player's
+    client in the same tick, and precaches it and the pictures on every map (PrecacheScreamers).
+    The pictures ship with this addon too, written by tools/screamer, per name:
+      panorama/images/custom_game/uikit/screamer/<name>.png + <name>_png.vtex   -> <name>_png.vtex_c
+    A missing picture draws nothing: the screamer still opens, plays its sound and closes.
+
+    Adding another: one more rule below with its picture, then ScreamerOptions.Name = "<name>".
+*/
+
+/* No background-color: the picture is opaque and already letterboxed on black. */
+.screamer {
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+}
+
+/* Screamers (ScreamerNames) ------------------------------------------------ */
+
+.screamer.scare-momo {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/screamer/momo_png.vtex" );
+}
+
+.screamer.scare-babadook {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/screamer/babadook_png.vtex" );
+}
+
+.screamer.scare-jeff {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/screamer/jeff_png.vtex" );
+}
+
+.screamer.scare-shadow {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/screamer/shadow_png.vtex" );
+}

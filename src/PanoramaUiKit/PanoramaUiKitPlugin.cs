@@ -7,6 +7,7 @@ using PanoramaManager;
 using PanoramaUiKit.Channels.Base;
 using PanoramaUiKit.Core;
 using PanoramaUiKit.Internal;
+using PanoramaUiKit.Services;
 using PanoramaUiKit.Shared.Api;
 using PanoramaUiKit.Shared.Common;
 
@@ -61,6 +62,18 @@ public sealed class PanoramaUiKitPlugin : BasePlugin, IPluginConfig<UiKitConfig>
             _kit?.ClearEveryone();
             registry.CoolAll();
             _warming = false;
+        });
+        RegisterListener<Listeners.OnServerPrecacheResources>(manifest =>
+        {
+            if (!Config.PrecacheScreamers)
+            {
+                return;
+            }
+
+            foreach (string resource in ScreamerService.Resources())
+            {
+                manifest.AddResource(resource);
+            }
         });
     }
 

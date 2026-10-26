@@ -14,6 +14,7 @@ using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
@@ -45,6 +46,7 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
         Targets = new TargetService(registry);
         ProgressBars = new ProgressService(registry);
         Dials = new DialService(registry);
+        Screamers = new ScreamerService(registry);
     }
 
     public int Version => IPanoramaUiKit.ApiVersion;
@@ -78,6 +80,8 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
     public IProgressService ProgressBars { get; }
 
     public IDialService Dials { get; }
+
+    public IScreamerService Screamers { get; }
 
     public IEnumerable<LayoutChannel> Channels => _registry.Channels;
 

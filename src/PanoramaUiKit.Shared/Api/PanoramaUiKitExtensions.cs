@@ -6,6 +6,7 @@ using PanoramaUiKit.Shared.Common;
 using PanoramaUiKit.Shared.Dials;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 
@@ -25,6 +26,7 @@ namespace PanoramaUiKit.Shared.Api;
 /// kit.Target(player, Targets, "Press E to open", TargetPosition.Below);
 /// kit.Progress(player, Bars, "Defusing", seconds: 5);
 /// kit.Dial(player, Dials, "Dash", seconds: 8);
+/// kit.Screamer(player, Screamers, ScreamerNames.Momo);
 /// </code>
 /// </summary>
 public static class PanoramaUiKitExtensions
@@ -165,6 +167,29 @@ public static class PanoramaUiKitExtensions
             Direction = direction,
             Size = size,
             Style = style,
+        });
+    }
+
+    /// <summary>Full-screen picture and its sound (<see cref="ScreamerNames"/>), for <paramref name="seconds"/>.</summary>
+    public static IUiHandle Screamer(this IPanoramaUiKit kit, CCSPlayerController player, ScreamerLayout layout, string name,
+                                     float seconds = 0.6f)
+    {
+        return kit.Screamer(player, layout, name, seconds, playSound: true);
+    }
+
+    /// <summary>
+    /// Same, choosing the sound. A separate overload so plugins built against the one above keep binding to it.
+    /// </summary>
+    public static IUiHandle Screamer(this IPanoramaUiKit kit, CCSPlayerController player, ScreamerLayout layout, string name,
+                                     float seconds, bool playSound, string? sound = ScreamerNames.Sound)
+    {
+        return kit.Screamers.Show(player, new ScreamerOptions
+        {
+            Layout = layout,
+            Name = name,
+            Seconds = seconds,
+            PlaySound = playSound,
+            Sound = sound,
         });
     }
 }

@@ -347,6 +347,20 @@ Placeholders: `{n}` = each of `cells`.
 
 Stylesheet should define: `.show`, `.hidden`, `.empty`, `.spin`, `.done`, `.won`, `.no-sub`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
 
+## screamer
+
+Full-screen picture with its sound, for one player at a time. The picture is one class of the stylesheet; the kit plays the sound on the player's client.
+
+C#: `ScreamerLayout / IScreamerService`
+
+Marker: `<!-- uikit:screamer -->`
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="sc_image"` | panel | yes | `hidden`, `scare-*` | The picture. Author it with class `hidden`. `scare-<name>` sets its `background-image` and plays its `sound`: one rule per screamer in the stylesheet (ScreamerOptions.Name). |
+
+Stylesheet should define: `.hidden`, `.screamer`.
+
 ## target
 
 Discreet one-line text next to the crosshair: above, below, left or right of it, in four sizes.
