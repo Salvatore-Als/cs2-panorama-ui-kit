@@ -28,6 +28,7 @@ namespace PanoramaUiKit.Demo;
 ///   UI/DemoPlugin.Target.cs     css_uikit_demo_target [above|below|left|right]
 ///   UI/DemoPlugin.Progress.cs   css_uikit_demo_progress
 ///   UI/DemoPlugin.Dial.cs       css_uikit_demo_dial
+///   UI/DemoPlugin.Screamer.cs   css_uikit_demo_screamer [name] [seconds]
 ///
 /// Every demo names the layout file it draws on (DemoLayouts.cs): there is no default.
 /// This file holds what they share: the capability, and the helpers to resolve it and to loop.
@@ -36,7 +37,7 @@ public sealed partial class DemoPlugin : BasePlugin
 {
     public override string ModuleName => "Panorama UI Kit Demo";
 
-    public override string ModuleVersion => "1.2.1";
+    public override string ModuleVersion => "1.3.0";
 
     public override string ModuleAuthor => "Kriax";
 

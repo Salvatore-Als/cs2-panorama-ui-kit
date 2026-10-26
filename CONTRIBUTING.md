@@ -29,7 +29,7 @@ The layout still has to follow its component's contract: the same panel ids, the
 A component is more than a layout. The pull request needs:
 
 - a contract in `contracts/<name>.json`
-- the layout and the stylesheet under `panorama/`
+- the layout and the stylesheet under `workshop/panorama/`
 - the C# API in `PanoramaUiKit.Shared`, implemented by the plugin
 - a demo command in `PanoramaUiKit.Demo`, and the layout named in `DemoLayouts.cs`
 - the generated contract page (`python3 -m uikit docs`) and a page in `docs/components/`

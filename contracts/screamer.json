@@ -1,0 +1,23 @@
+{
+  "component": "screamer",
+  "csharp": "ScreamerLayout / IScreamerService",
+  "summary": "Full-screen picture with its sound, for one player at a time. The picture is one class of the stylesheet; the kit plays the sound on the player's client.",
+  "params": {},
+  "repeat": {},
+  "panels": [
+    {
+      "id": "sc_image",
+      "required": true,
+      "classes": [
+        "hidden",
+        "scare-*"
+      ],
+      "doc": "The picture. Author it with class `hidden`. `scare-<name>` sets its `background-image` and plays its `sound`: one rule per screamer in the stylesheet (ScreamerOptions.Name)."
+    }
+  ],
+  "texts": [],
+  "css": [
+    "hidden",
+    "screamer"
+  ]
+}

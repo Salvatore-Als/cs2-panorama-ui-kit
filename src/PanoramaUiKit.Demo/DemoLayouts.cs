@@ -10,6 +10,7 @@ using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
@@ -66,9 +67,11 @@ internal static class DemoLayouts
 
     public static readonly DialLayout Dial = new() { Name = "uikit_dial" };
 
+    public static readonly ScreamerLayout Screamer = new() { Name = "uikit_screamer" };
+
     /// <summary>Every layout the demo draws on, to spawn them at load.</summary>
     public static IEnumerable<UiLayout> All =>
     [
-        Toast, NeonToast, Banner, Announce, Abilities, Match, KillFeed, Victory, Roulette, Vote, Panel, Menu, Card, Target, Progress, Dial,
+        Toast, NeonToast, Banner, Announce, Abilities, Match, KillFeed, Victory, Roulette, Vote, Panel, Menu, Card, Target, Progress, Dial, Screamer,
     ];
 }

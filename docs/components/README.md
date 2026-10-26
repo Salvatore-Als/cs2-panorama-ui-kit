@@ -17,6 +17,7 @@
 | [Target](target.md) | Text next to the crosshair | Per player or everyone |
 | [Progress bar](progress.md) | Bar pushed by value, or timed and run by the client | Per player or everyone |
 | [Dial](dial.md) | Radial ring for cooldowns and charges, pushed or timed | Per player or everyone |
+| [Screamer](screamer.md) | Full-screen picture with its sound | Per player |
 
 Open `previews/uikit_<component>.preview.html` in a browser for a rough look at each bundled layout.
 

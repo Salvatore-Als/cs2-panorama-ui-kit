@@ -10,6 +10,7 @@ using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Banners;
 using PanoramaUiKit.Shared.Toasts;
@@ -92,6 +93,9 @@ public interface IPanoramaUiKit
 
     /// <summary>Radial dials (cooldown, charge, channel): pushed by value, or timed and run by the client. Per player.</summary>
     IDialService Dials { get; }
+
+    /// <summary>Full-screen picture with its sound, the picture from one stylesheet class, the sound played by the kit. Per player.</summary>
+    IScreamerService Screamers { get; }
 
     /// <summary>
     /// Spawns the layout entity now instead of on first use. Call it for every layout your plugin

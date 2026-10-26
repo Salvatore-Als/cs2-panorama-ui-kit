@@ -1,6 +1,6 @@
 # Panorama UI Kit
 
-**Version 1.2.1.** I built this out of necessity: I needed UI for my own projects. It turned out to be practical enough to share.
+**Version 1.3.0.** I built this out of necessity: I needed UI for my own projects. It turned out to be practical enough to share.
 
 Shared Panorama HUD components for [CounterStrikeSharp](https://docs.cssharp.dev/) plugins. Built with [PanoramaManager](https://github.com/Next-il/PanoramaManager).
 
@@ -17,11 +17,11 @@ Each contract, generated from `contracts/*.json`: [docs/contracts](docs/contract
 A layout names its contract in a comment, for example `<!-- uikit:toast placements=tc,bl depth=3 -->`. From `tools/`:
 
 ```bash
-python3 -m uikit check ../panorama/layout/custom_game/neon_toast.xml
+python3 -m uikit check ../workshop/panorama/layout/custom_game/neon_toast.xml
 python3 -m uikit check-all
 ```
 
-`check` validates one file. `check-all` validates every layout under `panorama/layout/custom_game` that carries a marker. `./build.sh` runs `check-all` before compiling. A missing id or a wrong `{s:...}` slot fails the check.
+`check` validates one file. `check-all` validates every layout under `workshop/panorama/layout/custom_game` that carries a marker. `./build.sh` runs `check-all` before compiling. A missing id or a wrong `{s:...}` slot fails the check.
 
 ## Components
 
@@ -43,6 +43,7 @@ python3 -m uikit check-all
 | [Target](docs/components/target.md)          | Text next to the crosshair                       |
 | [Progress bar](docs/components/progress.md)  | Bar pushed by value, or timed and run by the client |
 | [Dial](docs/components/dial.md)              | Radial ring for cooldowns and charges            |
+| [Screamer](docs/components/screamer.md)      | Full-screen picture with its sound               |
 
 
 Concepts shared by every component: [docs/components](docs/components/README.md#common-concepts).
@@ -61,7 +62,7 @@ Copy the content of `dist/` onto `addons/counterstrikesharp/`:
 
 A Workshop addon with the default UI kit already exists: [Panorama UI Kit](https://steamcommunity.com/sharedfiles/filedetails/?id=3813908138). It is waiting for Steam validation. Once it is public, mount it on the server to use the bundled `uikit_*` layouts.
 
-To ship your own look, compile the `panorama/` folder into a Workshop addon. Keep the paths `panorama/layout/custom_game` and `panorama/styles/custom_game`.
+To ship your own look, compile the `workshop/` folder into a Workshop addon: it is the addon content root (`panorama/`, `sounds/`, `soundevents/`). Keep the paths `panorama/layout/custom_game` and `panorama/styles/custom_game`.
 
 Requires CounterStrikeSharp 1.0.376 or newer, and [PanoramaManager](https://github.com/Next-il/PanoramaManager). The kit plugin depends on it and ships `PanoramaManager.dll` next to itself. A plugin that only calls the kit references `PanoramaUiKit.Shared`, not PanoramaManager.
 
@@ -87,6 +88,7 @@ The demo plugin is a consumer: it references only `PanoramaUiKit.Shared` ([cspro
 | Target         | [DemoPlugin.Target.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Target.cs)       | `css_uikit_demo_target`    |
 | Progress bar   | [DemoPlugin.Progress.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Progress.cs)   | `css_uikit_demo_progress`  |
 | Dial           | [DemoPlugin.Dial.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Dial.cs)           | `css_uikit_demo_dial`      |
+| Screamer       | [DemoPlugin.Screamer.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Screamer.cs)   | `css_uikit_demo_screamer`  |
 
 
 

@@ -6,7 +6,7 @@ from pathlib import Path
 
 REPO_ROOT: Path = Path(__file__).resolve().parents[2]
 CONTRACTS_DIR: Path = REPO_ROOT / "contracts"
-PANORAMA_DIR: Path = REPO_ROOT / "panorama"
+PANORAMA_DIR: Path = REPO_ROOT / "workshop" / "panorama"
 LAYOUTS_DIR: Path = PANORAMA_DIR / "layout" / "custom_game"
 STYLES_DIR: Path = PANORAMA_DIR / "styles" / "custom_game"
 CONTRACTS_DOC: Path = REPO_ROOT / "docs" / "CONTRACTS.md"

@@ -14,6 +14,7 @@ using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
+using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
@@ -169,6 +170,7 @@ internal sealed class LayoutRegistry : IDisposable
         TargetLayout target => new TargetChannel(_plugin, target, target.Positions.Select(p => p.Code()).ToList()),
         ProgressLayout progress => new FillChannel(_plugin, progress, progress.Placements.Select(p => p.Code()).ToList(), "pg", progress.Steps, progress.Durations),
         DialLayout dial => new FillChannel(_plugin, dial, dial.Placements.Select(p => p.Code()).ToList(), "dl", dial.Steps, dial.Durations),
+        ScreamerLayout screamer => new ScreamerChannel(_plugin, screamer),
         _ => throw new ArgumentOutOfRangeException(nameof(layout), layout.GetType().Name, "Unknown layout type"),
     };
 
