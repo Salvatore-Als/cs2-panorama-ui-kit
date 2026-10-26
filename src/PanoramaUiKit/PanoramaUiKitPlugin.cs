@@ -21,7 +21,7 @@ public sealed class PanoramaUiKitPlugin : BasePlugin, IPluginConfig<UiKitConfig>
 {
     public override string ModuleName => "Panorama UI Kit";
 
-    public override string ModuleVersion => "1.2.1";
+    public override string ModuleVersion => "1.3.0";
 
     public override string ModuleAuthor => "Kriax";
 

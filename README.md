@@ -1,6 +1,6 @@
 # Panorama UI Kit
 
-**Version 1.2.1.** I built this out of necessity: I needed UI for my own projects. It turned out to be practical enough to share.
+**Version 1.3.0.** I built this out of necessity: I needed UI for my own projects. It turned out to be practical enough to share.
 
 Shared Panorama HUD components for [CounterStrikeSharp](https://docs.cssharp.dev/) plugins. Built with [PanoramaManager](https://github.com/Next-il/PanoramaManager).
 
