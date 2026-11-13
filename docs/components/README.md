@@ -18,6 +18,12 @@
 | [Progress bar](progress.md) | Bar pushed by value, or timed and run by the client | Per player or everyone |
 | [Dial](dial.md) | Radial ring for cooldowns and charges, pushed or timed | Per player or everyone |
 | [Screamer](screamer.md) | Full-screen picture with its sound | Per player |
+| [Compass](compass.md) | Heading strip at the top that follows the view, with pins | Per player |
+| [Inventory](inventory.md) | Row of item tiles: icon, count, key hint, selection | Per player |
+| [Zone](zone.md) | Safe zone status under the compass, countdown, bar and alerts | Per player or everyone |
+| [Comms](comms.md) | Radio transmission, villain face as a glitching hologram | Per player or everyone |
+| [Recap](recap.md) | End of match screen: placement, name and stat tiles with icons | Per player |
+| [Minimap](minimap.md) | Map in a corner: zones (red / white), the player's arrow, markers, optional zoom on the player | Zones and marks for everyone, map per player |
 
 Open `previews/uikit_<component>.preview.html` in a browser for a rough look at each bundled layout.
 

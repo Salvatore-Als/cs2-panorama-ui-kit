@@ -10,6 +10,9 @@ public sealed record BannerOptions : UiContent
     /// <summary>Small label beside or above the text. Slot <c>{s:b_kicker}</c>. Blank collapses it.</summary>
     public string? Kicker { get; init; }
 
+    /// <summary><c>at-*</c> on <c>b_card</c>. See <see cref="BannerPlacement"/>.</summary>
+    public BannerPlacement Placement { get; init; } = BannerPlacement.UnderHud;
+
     /// <summary>Seconds on screen. Zero or less stays until hidden.</summary>
     public float Seconds { get; init; }
 

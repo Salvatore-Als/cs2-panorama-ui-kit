@@ -32,15 +32,21 @@ else (structure, colours, animation) is yours.
 | [announce](announce.md) | Centred card (reveal, objective, round intro). A new one plays the exit of the previous first. |
 | [banner](banner.md) | One sticky line across the top. A new banner on a visible one rewrites it in place. |
 | [card](card.md) | Static info card pinned to a screen corner (over the radar, or above the HUD) or to the bottom centre. Title, description and lines are all optional. No animation. |
+| [comms](comms.md) | Incoming radio transmission: a face as a glitching hologram, a name and a line of text. The face is one class of the stylesheet. Per player. |
+| [compass](compass.md) | Horizontal compass strip at the top of the screen, with pins on it. The kit follows the player's view and writes the heading as one class; pins sit at their bearing relative to it. |
 | [dial](dial.md) | Radial dial: a ring that sweeps like a clock hand. Pushed by value, or timed and run by the client. For cooldowns, charges and channels. |
+| [inventory](inventory.md) | Row of item tiles, per player: icon, count, key hint, one tile selected. A count that changes pulses its tile. |
 | [killfeed](killfeed.md) | Server-wide feed, newest on top. A pool of rows; entries shift down. |
-| [match](match.md) | Compact top bar: a count + title on each side, a timer in the middle, optional score tabs under the sides. Same text for everyone. Tick-friendly. |
+| [match](match.md) | Compact top bar: a count + title on each side, a timer in the middle, optional score tabs under the sides, optional band across the top. Same text for everyone. Tick-friendly. |
 | [menu](menu.md) | Menus and sub-menus: entries paginated by the pool size, back button on sub-menus, pager at the bottom. Takes the mouse. |
+| [minimap](minimap.md) | Map in a corner: the map picture, the current zone (red) and the next one (white), and markers. Zones and global marks are the same for everyone; the map, the player's arrow and personal marks are per player. Positions are a class ladder on a grid; an optional zoom follows the player. |
 | [panel](panel.md) | Modal panel: pages in a left menu, stats strip, typed rows with buttons, switches and steppers. Takes the mouse. |
 | [progress](progress.md) | Progress bar with an optional label and value. Follows a value you push, or runs on its own for a duration. |
+| [recap](recap.md) | End of match screen for one player: placement, headline, and a strip at the bottom with the player's name and stat tiles (icon, value, label). Per player. Optionally a few player rows (a duo, a squad) instead of the single player. |
 | [roulette](roulette.md) | Case-opening roulette: a strip of cards slows down on a server-drawn winner. Per player. |
 | [screamer](screamer.md) | Full-screen picture with its sound, for one player at a time. The picture is one class of the stylesheet; the kit plays the sound on the player's client. |
 | [target](target.md) | Discreet one-line text next to the crosshair: above, below, left or right of it, in four sizes. |
 | [toast](toast.md) | Stacked, auto-dismissing notifications. A fixed pool of cards per placement. |
 | [victory](victory.md) | End of round screen: title, chips, restart countdown. Per player. |
 | [vote](vote.md) | Screen of a vote: question, choices with live counts, countdown, clicks. Per player. Takes the mouse. |
+| [zone](zone.md) | Safe zone: a status widget under the compass (phase, countdown ticked by the kit, a bar drained by the client) and an alert when the zone moves. Per player. |

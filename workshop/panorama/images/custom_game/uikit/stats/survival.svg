@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+	<path fill="#ffffff" fill-rule="evenodd" d="M9 37 a23 23 0 1 0 46 0 a23 23 0 1 0 -46 0 Z M14.5 37 a17.5 17.5 0 1 0 35.0 0 a17.5 17.5 0 1 0 -35.0 0 Z" />
+	<rect fill="#ffffff" x="26" y="3" width="12" height="5" />
+	<rect fill="#ffffff" x="29.5" y="8" width="5" height="6" />
+	<polygon fill="#ffffff" points="47,16 52,11 57,16 52,21" />
+	<rect fill="#ffffff" x="30.5" y="23" width="3" height="15" />
+	<polygon fill="#ffffff" points="31,35.5 43,41.5 41.5,44.5 29.5,38.5" />
+	<circle fill="#ffffff" cx="32" cy="37" r="3" />
+</svg>

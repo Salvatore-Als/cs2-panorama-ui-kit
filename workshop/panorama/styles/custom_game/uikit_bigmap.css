@@ -1,0 +1,685 @@
+/*
+    uikit_bigmap - the big map, in the centre of the screen: where you are, the zones, everyone tracked.
+    Contract "minimap" (docs/CONTRACTS.md), like uikit_minimap: same ids, same classes, same API - open it with
+    IMinimapService.Show on a MinimapLayout named "uikit_bigmap", close it with Hide.
+
+    GENERATED from uikit_minimap.css by tools/bigmap_css.py: 768px map, 12px cells, bigger markers,
+    a dark veil over the screen. at-* and size-* are accepted and ignored: it is always centred.
+    Everything else (pictures, zoom, ladders, zones) works as described in uikit_minimap.css.
+*/
+
+/* Frame: centred, over a veil. ------------------------------------------------- */
+
+.minimap {
+    flow-children: down;
+    horizontal-align: center;
+    vertical-align: center;
+    overflow: noclip;
+}
+
+.minimap.at-tr, .minimap.at-tl, .minimap.at-bl, .minimap.at-br { horizontal-align: center; vertical-align: center; margin: 0px; }
+.minimap.size-sm, .minimap.size-md, .minimap.size-lg { ui-scale: 100%; }
+
+/*
+    The veil: a panel in the frame, out of its flow, bigger than any screen and centred on the frame (which is
+    centred on the screen). Not a box-shadow with a huge spread: that makes the frame's layer enormous, and the
+    map stopped redrawing what moves on it.
+*/
+.minimap-veil {
+    visibility: visible;
+    ignore-parent-flow: true;
+    width: 4000px;
+    height: 2400px;
+    horizontal-align: center;
+    vertical-align: center;
+    background-color: #05080cb3;
+}
+
+.minimap-box {
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #ffffff26;
+    background-color: #12171ef2;
+    box-shadow: #00000099 0px 8px 30px 0px;
+}
+
+.minimap.style-info .minimap-box { border: 1px solid #56a0dd99; }
+.minimap.style-success .minimap-box { border: 1px solid #9ccf4f99; }
+.minimap.style-warn .minimap-box { border: 1px solid #f0a53199; }
+.minimap.style-danger .minimap-box { border: 1px solid #e0432f99; }
+.minimap.style-purple .minimap-box { border: 1px solid #8847ff99; }
+.minimap.style-gold .minimap-box { border: 1px solid #e0a24a99; }
+
+.minimap-map {
+    width: 768px;
+    height: 768px;
+    border-radius: 4px;
+    overflow: clip;
+    background-color: #1b222b;
+}
+
+/* The picture: same size as the viewport, inside the zoom and the pans. */
+.minimap-world {
+    width: 768px;
+    height: 768px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: 0% 0%;
+}
+
+/* Zoom and pans ---------------------------------------------------------------- */
+
+.mm-zoom, .mm-pan, .mm-pan-y {
+    width: 768px;
+    height: 768px;
+    overflow: noclip;
+}
+
+.mm-zoom {
+    transform-origin: 50% 50%;
+    transform: scale3d( 1.0, 1.0, 1.0 );
+    transition-property: transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}
+
+/* Same glide as the markers, so the player's arrow stays in the centre while both move. */
+.mm-pan, .mm-pan-y {
+    transition-property: transform;
+    transition-duration: 0.06s;
+    transition-timing-function: linear;
+}
+
+.minimap-title {
+    horizontal-align: center;
+    margin-top: 8px;
+    font-family: Stratum2 Bold;
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    text-shadow: 0px 1px 2px 1.0 #000000cc;
+}
+
+.minimap-title.empty { visibility: collapse; }
+
+/* Maps ----------------------------------------------------------------------- */
+
+/* Dust II ships with this addon (1024px, for the zoom): the test map. The others use the game's radar. */
+.minimap-map.map-de_dust2 .minimap-world { background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/maps/de_dust2_png.vtex" ); }
+.minimap-map.map-de_mirage .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/de_mirage_radar_psd.vtex" ); }
+.minimap-map.map-de_inferno .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/de_inferno_radar_psd.vtex" ); }
+.minimap-map.map-de_nuke .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/de_nuke_radar_psd.vtex" ); }
+.minimap-map.map-de_overpass .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/de_overpass_radar_psd.vtex" ); }
+.minimap-map.map-de_vertigo .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/de_vertigo_radar_psd.vtex" ); }
+.minimap-map.map-de_ancient .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/de_ancient_radar_psd.vtex" ); }
+.minimap-map.map-de_anubis .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/de_anubis_radar_psd.vtex" ); }
+.minimap-map.map-de_train .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/de_train_radar_psd.vtex" ); }
+.minimap-map.map-cs_office .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/cs_office_radar_psd.vtex" ); }
+.minimap-map.map-cs_italy .minimap-world { background-image: url( "s2r://panorama/images/overheadmaps/cs_italy_radar_psd.vtex" ); }
+.minimap-map.map-slot-1 .minimap-world { background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/maps/slot_1_png.vtex" ); }
+.minimap-map.map-slot-2 .minimap-world { background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/maps/slot_2_png.vtex" ); }
+.minimap-map.map-slot-3 .minimap-world { background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/maps/slot_3_png.vtex" ); }
+.minimap-map.map-slot-4 .minimap-world { background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/maps/slot_4_png.vtex" ); }
+.minimap-map.map-slot-5 .minimap-world { background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/maps/slot_5_png.vtex" ); }
+.minimap-map.map-slot-6 .minimap-world { background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/maps/slot_6_png.vtex" ); }
+.minimap-map.map-slot-7 .minimap-world { background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/maps/slot_7_png.vtex" ); }
+.minimap-map.map-slot-8 .minimap-world { background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/maps/slot_8_png.vtex" ); }
+
+/* Zones ---------------------------------------------------------------------- */
+
+/* Same box as a marker, so the x-/y- ladder is shared; the ring is centred on it. */
+.mm-zone, .mm-zone-y {
+    width: 32px;
+    height: 32px;
+    overflow: noclip;
+    transition-property: transform;
+    transition-duration: 0.0s;
+    transition-timing-function: linear;
+}
+
+.mm-ring {
+    width: 1536px;
+    height: 1536px;
+    x: -752px;
+    y: -752px;
+    border-radius: 50%;
+    transform: scale3d( 0.0, 0.0, 1.0 );
+    transition-property: transform;
+    transition-duration: 0.0s;
+    transition-timing-function: linear;
+}
+
+/* Current: the safe zone, red. Borders scale with the ring: thick at full size so a small zone keeps one. */
+.mm-zone-cur .mm-ring {
+    border: 24px solid #e0432f;
+    background-color: #e0432f1c;
+}
+
+/* Next: white, no fill. */
+.mm-zone-next .mm-ring {
+    border: 18px solid #f2f4f7cc;
+}
+
+/* Markers -------------------------------------------------------------------- */
+
+.mm-mark, .mm-mark-y {
+    width: 32px;
+    height: 32px;
+    overflow: noclip;
+    transition-property: transform;
+    transition-duration: 0.06s;
+    transition-timing-function: linear;
+}
+
+.mm-mark-icon {
+    width: 20px;
+    height: 20px;
+    horizontal-align: center;
+    vertical-align: center;
+    background-image: url( "s2r://panorama/images/custom_game/uikit/compass/dot.vsvg" );
+    background-size: contains;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    wash-color: #f2f4f7;
+}
+
+/*
+    Halo: a ring drawn by CSS alone, under the icon. Only the player's own marker has one: "you are here" even
+    at a glance, and even if the arrow picture is missing.
+*/
+.mm-mark-halo {
+    width: 31px;
+    height: 31px;
+    horizontal-align: center;
+    vertical-align: center;
+    border-radius: 50%;
+    visibility: collapse;
+}
+
+.mm-mark.kind-self .mm-mark-halo {
+    visibility: visible;
+    border: 2px solid #ffd75e;
+    background-color: #ffd75e33;
+    animation-name: mm-halo;
+    animation-duration: 1.6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes 'mm-halo' {
+    0%   { transform: scale3d( 0.8, 0.8, 1.0 ); opacity: 1.0; }
+    50%  { transform: scale3d( 1.25, 1.25, 1.0 ); opacity: 0.45; }
+    100% { transform: scale3d( 0.8, 0.8, 1.0 ); opacity: 1.0; }
+}
+
+.mm-mark-label {
+    horizontal-align: center;
+    y: 30px;
+    font-family: Stratum2 Bold;
+    font-size: 15px;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-shadow: 0px 1px 2px 1.0 #000000;
+}
+
+.mm-mark-label.empty { visibility: collapse; }
+
+/* Kinds: picture, colour, stacking (markers are siblings, so z-index orders them). */
+.mm-mark.kind-self { z-index: 60; }
+.mm-mark.kind-self .mm-mark-icon { width: 25px; height: 25px; background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/arrow.vsvg" ); wash-color: #ffd75e; }
+.mm-mark.kind-mate { z-index: 50; }
+.mm-mark.kind-mate .mm-mark-icon { width: 22px; height: 22px; background-image: url( "s2r://panorama/images/custom_game/uikit/minimap/arrow.vsvg" ); wash-color: #4fd1e0; }
+.mm-mark.kind-mate .mm-mark-label { color: #4fd1e0; }
+.mm-mark.kind-ping { z-index: 40; }
+.mm-mark.kind-ping .mm-mark-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/compass/flag.vsvg" ); wash-color: #f0a531; }
+.mm-mark.kind-npc-boss { z-index: 30; }
+.mm-mark.kind-npc-boss .mm-mark-icon { width: 28px; height: 28px; background-image: url( "s2r://panorama/images/custom_game/uikit/compass/skull.vsvg" ); wash-color: #ff2a2a; }
+.mm-mark.kind-cluster { z-index: 25; }
+.mm-mark.kind-cluster .mm-mark-icon { width: 22px; height: 22px; wash-color: #e0432f; }
+.mm-mark.kind-npc { z-index: 20; }
+.mm-mark.kind-npc .mm-mark-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/compass/skull.vsvg" ); wash-color: #e0432f; }
+.mm-mark.kind-loot { z-index: 10; }
+.mm-mark.kind-loot .mm-mark-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/compass/crate.vsvg" ); wash-color: #e0a24a; }
+.mm-mark.kind-dot { z-index: 5; }
+
+/* Styles (UiStyle): a colour over the kind's. After the kinds, so it wins. */
+.mm-mark.style-neutral .mm-mark-icon { wash-color: #f2f4f7; }
+.mm-mark.style-info .mm-mark-icon { wash-color: #56a0dd; }
+.mm-mark.style-success .mm-mark-icon { wash-color: #9ccf4f; }
+.mm-mark.style-warn .mm-mark-icon { wash-color: #f0a531; }
+.mm-mark.style-danger .mm-mark-icon { wash-color: #e0432f; }
+.mm-mark.style-purple .mm-mark-icon { wash-color: #8847ff; }
+.mm-mark.style-gold .mm-mark-icon { wash-color: #e0a24a; }
+
+/* States: after the styles. */
+.mm-mark.state-dead { opacity: 0.35; }
+.mm-mark.state-downed .mm-mark-icon { wash-color: #e0432f; }
+.mm-mark.state-downed, .mm-mark.state-alerted {
+    animation-name: mm-pulse;
+    animation-duration: 0.9s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes 'mm-pulse' {
+    0%   { opacity: 1.0; }
+    50%  { opacity: 0.35; }
+    100% { opacity: 1.0; }
+}
+
+/* Grid: x-N / y-N, the centre of cell N minus half the box. -------------------- */
+.x-0 { transform: translateX( -10px ); }
+.x-1 { transform: translateX( 2px ); }
+.x-2 { transform: translateX( 14px ); }
+.x-3 { transform: translateX( 26px ); }
+.x-4 { transform: translateX( 38px ); }
+.x-5 { transform: translateX( 50px ); }
+.x-6 { transform: translateX( 62px ); }
+.x-7 { transform: translateX( 74px ); }
+.x-8 { transform: translateX( 86px ); }
+.x-9 { transform: translateX( 98px ); }
+.x-10 { transform: translateX( 110px ); }
+.x-11 { transform: translateX( 122px ); }
+.x-12 { transform: translateX( 134px ); }
+.x-13 { transform: translateX( 146px ); }
+.x-14 { transform: translateX( 158px ); }
+.x-15 { transform: translateX( 170px ); }
+.x-16 { transform: translateX( 182px ); }
+.x-17 { transform: translateX( 194px ); }
+.x-18 { transform: translateX( 206px ); }
+.x-19 { transform: translateX( 218px ); }
+.x-20 { transform: translateX( 230px ); }
+.x-21 { transform: translateX( 242px ); }
+.x-22 { transform: translateX( 254px ); }
+.x-23 { transform: translateX( 266px ); }
+.x-24 { transform: translateX( 278px ); }
+.x-25 { transform: translateX( 290px ); }
+.x-26 { transform: translateX( 302px ); }
+.x-27 { transform: translateX( 314px ); }
+.x-28 { transform: translateX( 326px ); }
+.x-29 { transform: translateX( 338px ); }
+.x-30 { transform: translateX( 350px ); }
+.x-31 { transform: translateX( 362px ); }
+.x-32 { transform: translateX( 374px ); }
+.x-33 { transform: translateX( 386px ); }
+.x-34 { transform: translateX( 398px ); }
+.x-35 { transform: translateX( 410px ); }
+.x-36 { transform: translateX( 422px ); }
+.x-37 { transform: translateX( 434px ); }
+.x-38 { transform: translateX( 446px ); }
+.x-39 { transform: translateX( 458px ); }
+.x-40 { transform: translateX( 470px ); }
+.x-41 { transform: translateX( 482px ); }
+.x-42 { transform: translateX( 494px ); }
+.x-43 { transform: translateX( 506px ); }
+.x-44 { transform: translateX( 518px ); }
+.x-45 { transform: translateX( 530px ); }
+.x-46 { transform: translateX( 542px ); }
+.x-47 { transform: translateX( 554px ); }
+.x-48 { transform: translateX( 566px ); }
+.x-49 { transform: translateX( 578px ); }
+.x-50 { transform: translateX( 590px ); }
+.x-51 { transform: translateX( 602px ); }
+.x-52 { transform: translateX( 614px ); }
+.x-53 { transform: translateX( 626px ); }
+.x-54 { transform: translateX( 638px ); }
+.x-55 { transform: translateX( 650px ); }
+.x-56 { transform: translateX( 662px ); }
+.x-57 { transform: translateX( 674px ); }
+.x-58 { transform: translateX( 686px ); }
+.x-59 { transform: translateX( 698px ); }
+.x-60 { transform: translateX( 710px ); }
+.x-61 { transform: translateX( 722px ); }
+.x-62 { transform: translateX( 734px ); }
+.x-63 { transform: translateX( 746px ); }
+.y-0 { transform: translateY( -10px ); }
+.y-1 { transform: translateY( 2px ); }
+.y-2 { transform: translateY( 14px ); }
+.y-3 { transform: translateY( 26px ); }
+.y-4 { transform: translateY( 38px ); }
+.y-5 { transform: translateY( 50px ); }
+.y-6 { transform: translateY( 62px ); }
+.y-7 { transform: translateY( 74px ); }
+.y-8 { transform: translateY( 86px ); }
+.y-9 { transform: translateY( 98px ); }
+.y-10 { transform: translateY( 110px ); }
+.y-11 { transform: translateY( 122px ); }
+.y-12 { transform: translateY( 134px ); }
+.y-13 { transform: translateY( 146px ); }
+.y-14 { transform: translateY( 158px ); }
+.y-15 { transform: translateY( 170px ); }
+.y-16 { transform: translateY( 182px ); }
+.y-17 { transform: translateY( 194px ); }
+.y-18 { transform: translateY( 206px ); }
+.y-19 { transform: translateY( 218px ); }
+.y-20 { transform: translateY( 230px ); }
+.y-21 { transform: translateY( 242px ); }
+.y-22 { transform: translateY( 254px ); }
+.y-23 { transform: translateY( 266px ); }
+.y-24 { transform: translateY( 278px ); }
+.y-25 { transform: translateY( 290px ); }
+.y-26 { transform: translateY( 302px ); }
+.y-27 { transform: translateY( 314px ); }
+.y-28 { transform: translateY( 326px ); }
+.y-29 { transform: translateY( 338px ); }
+.y-30 { transform: translateY( 350px ); }
+.y-31 { transform: translateY( 362px ); }
+.y-32 { transform: translateY( 374px ); }
+.y-33 { transform: translateY( 386px ); }
+.y-34 { transform: translateY( 398px ); }
+.y-35 { transform: translateY( 410px ); }
+.y-36 { transform: translateY( 422px ); }
+.y-37 { transform: translateY( 434px ); }
+.y-38 { transform: translateY( 446px ); }
+.y-39 { transform: translateY( 458px ); }
+.y-40 { transform: translateY( 470px ); }
+.y-41 { transform: translateY( 482px ); }
+.y-42 { transform: translateY( 494px ); }
+.y-43 { transform: translateY( 506px ); }
+.y-44 { transform: translateY( 518px ); }
+.y-45 { transform: translateY( 530px ); }
+.y-46 { transform: translateY( 542px ); }
+.y-47 { transform: translateY( 554px ); }
+.y-48 { transform: translateY( 566px ); }
+.y-49 { transform: translateY( 578px ); }
+.y-50 { transform: translateY( 590px ); }
+.y-51 { transform: translateY( 602px ); }
+.y-52 { transform: translateY( 614px ); }
+.y-53 { transform: translateY( 626px ); }
+.y-54 { transform: translateY( 638px ); }
+.y-55 { transform: translateY( 650px ); }
+.y-56 { transform: translateY( 662px ); }
+.y-57 { transform: translateY( 674px ); }
+.y-58 { transform: translateY( 686px ); }
+.y-59 { transform: translateY( 698px ); }
+.y-60 { transform: translateY( 710px ); }
+.y-61 { transform: translateY( 722px ); }
+.y-62 { transform: translateY( 734px ); }
+.y-63 { transform: translateY( 746px ); }
+
+/* Radius: r-N scales the ring to N/64. ----------------------------------------- */
+.mm-ring.r-0 { transform: scale3d( 0, 0, 1.0 ); }
+.mm-ring.r-1 { transform: scale3d( 0.0156, 0.0156, 1.0 ); }
+.mm-ring.r-2 { transform: scale3d( 0.0312, 0.0312, 1.0 ); }
+.mm-ring.r-3 { transform: scale3d( 0.0469, 0.0469, 1.0 ); }
+.mm-ring.r-4 { transform: scale3d( 0.0625, 0.0625, 1.0 ); }
+.mm-ring.r-5 { transform: scale3d( 0.0781, 0.0781, 1.0 ); }
+.mm-ring.r-6 { transform: scale3d( 0.0938, 0.0938, 1.0 ); }
+.mm-ring.r-7 { transform: scale3d( 0.1094, 0.1094, 1.0 ); }
+.mm-ring.r-8 { transform: scale3d( 0.125, 0.125, 1.0 ); }
+.mm-ring.r-9 { transform: scale3d( 0.1406, 0.1406, 1.0 ); }
+.mm-ring.r-10 { transform: scale3d( 0.1562, 0.1562, 1.0 ); }
+.mm-ring.r-11 { transform: scale3d( 0.1719, 0.1719, 1.0 ); }
+.mm-ring.r-12 { transform: scale3d( 0.1875, 0.1875, 1.0 ); }
+.mm-ring.r-13 { transform: scale3d( 0.2031, 0.2031, 1.0 ); }
+.mm-ring.r-14 { transform: scale3d( 0.2188, 0.2188, 1.0 ); }
+.mm-ring.r-15 { transform: scale3d( 0.2344, 0.2344, 1.0 ); }
+.mm-ring.r-16 { transform: scale3d( 0.25, 0.25, 1.0 ); }
+.mm-ring.r-17 { transform: scale3d( 0.2656, 0.2656, 1.0 ); }
+.mm-ring.r-18 { transform: scale3d( 0.2812, 0.2812, 1.0 ); }
+.mm-ring.r-19 { transform: scale3d( 0.2969, 0.2969, 1.0 ); }
+.mm-ring.r-20 { transform: scale3d( 0.3125, 0.3125, 1.0 ); }
+.mm-ring.r-21 { transform: scale3d( 0.3281, 0.3281, 1.0 ); }
+.mm-ring.r-22 { transform: scale3d( 0.3438, 0.3438, 1.0 ); }
+.mm-ring.r-23 { transform: scale3d( 0.3594, 0.3594, 1.0 ); }
+.mm-ring.r-24 { transform: scale3d( 0.375, 0.375, 1.0 ); }
+.mm-ring.r-25 { transform: scale3d( 0.3906, 0.3906, 1.0 ); }
+.mm-ring.r-26 { transform: scale3d( 0.4062, 0.4062, 1.0 ); }
+.mm-ring.r-27 { transform: scale3d( 0.4219, 0.4219, 1.0 ); }
+.mm-ring.r-28 { transform: scale3d( 0.4375, 0.4375, 1.0 ); }
+.mm-ring.r-29 { transform: scale3d( 0.4531, 0.4531, 1.0 ); }
+.mm-ring.r-30 { transform: scale3d( 0.4688, 0.4688, 1.0 ); }
+.mm-ring.r-31 { transform: scale3d( 0.4844, 0.4844, 1.0 ); }
+.mm-ring.r-32 { transform: scale3d( 0.5, 0.5, 1.0 ); }
+.mm-ring.r-33 { transform: scale3d( 0.5156, 0.5156, 1.0 ); }
+.mm-ring.r-34 { transform: scale3d( 0.5312, 0.5312, 1.0 ); }
+.mm-ring.r-35 { transform: scale3d( 0.5469, 0.5469, 1.0 ); }
+.mm-ring.r-36 { transform: scale3d( 0.5625, 0.5625, 1.0 ); }
+.mm-ring.r-37 { transform: scale3d( 0.5781, 0.5781, 1.0 ); }
+.mm-ring.r-38 { transform: scale3d( 0.5938, 0.5938, 1.0 ); }
+.mm-ring.r-39 { transform: scale3d( 0.6094, 0.6094, 1.0 ); }
+.mm-ring.r-40 { transform: scale3d( 0.625, 0.625, 1.0 ); }
+.mm-ring.r-41 { transform: scale3d( 0.6406, 0.6406, 1.0 ); }
+.mm-ring.r-42 { transform: scale3d( 0.6562, 0.6562, 1.0 ); }
+.mm-ring.r-43 { transform: scale3d( 0.6719, 0.6719, 1.0 ); }
+.mm-ring.r-44 { transform: scale3d( 0.6875, 0.6875, 1.0 ); }
+.mm-ring.r-45 { transform: scale3d( 0.7031, 0.7031, 1.0 ); }
+.mm-ring.r-46 { transform: scale3d( 0.7188, 0.7188, 1.0 ); }
+.mm-ring.r-47 { transform: scale3d( 0.7344, 0.7344, 1.0 ); }
+.mm-ring.r-48 { transform: scale3d( 0.75, 0.75, 1.0 ); }
+.mm-ring.r-49 { transform: scale3d( 0.7656, 0.7656, 1.0 ); }
+.mm-ring.r-50 { transform: scale3d( 0.7812, 0.7812, 1.0 ); }
+.mm-ring.r-51 { transform: scale3d( 0.7969, 0.7969, 1.0 ); }
+.mm-ring.r-52 { transform: scale3d( 0.8125, 0.8125, 1.0 ); }
+.mm-ring.r-53 { transform: scale3d( 0.8281, 0.8281, 1.0 ); }
+.mm-ring.r-54 { transform: scale3d( 0.8438, 0.8438, 1.0 ); }
+.mm-ring.r-55 { transform: scale3d( 0.8594, 0.8594, 1.0 ); }
+.mm-ring.r-56 { transform: scale3d( 0.875, 0.875, 1.0 ); }
+.mm-ring.r-57 { transform: scale3d( 0.8906, 0.8906, 1.0 ); }
+.mm-ring.r-58 { transform: scale3d( 0.9062, 0.9062, 1.0 ); }
+.mm-ring.r-59 { transform: scale3d( 0.9219, 0.9219, 1.0 ); }
+.mm-ring.r-60 { transform: scale3d( 0.9375, 0.9375, 1.0 ); }
+.mm-ring.r-61 { transform: scale3d( 0.9531, 0.9531, 1.0 ); }
+.mm-ring.r-62 { transform: scale3d( 0.9688, 0.9688, 1.0 ); }
+.mm-ring.r-63 { transform: scale3d( 0.9844, 0.9844, 1.0 ); }
+.mm-ring.r-64 { transform: scale3d( 1, 1, 1.0 ); }
+
+/* Heading: rot-N, 10 degrees a step. ------------------------------------------ */
+.mm-mark-icon.rot-0 { transform: rotateZ( 0deg ); }
+.mm-mark-icon.rot-1 { transform: rotateZ( 10deg ); }
+.mm-mark-icon.rot-2 { transform: rotateZ( 20deg ); }
+.mm-mark-icon.rot-3 { transform: rotateZ( 30deg ); }
+.mm-mark-icon.rot-4 { transform: rotateZ( 40deg ); }
+.mm-mark-icon.rot-5 { transform: rotateZ( 50deg ); }
+.mm-mark-icon.rot-6 { transform: rotateZ( 60deg ); }
+.mm-mark-icon.rot-7 { transform: rotateZ( 70deg ); }
+.mm-mark-icon.rot-8 { transform: rotateZ( 80deg ); }
+.mm-mark-icon.rot-9 { transform: rotateZ( 90deg ); }
+.mm-mark-icon.rot-10 { transform: rotateZ( 100deg ); }
+.mm-mark-icon.rot-11 { transform: rotateZ( 110deg ); }
+.mm-mark-icon.rot-12 { transform: rotateZ( 120deg ); }
+.mm-mark-icon.rot-13 { transform: rotateZ( 130deg ); }
+.mm-mark-icon.rot-14 { transform: rotateZ( 140deg ); }
+.mm-mark-icon.rot-15 { transform: rotateZ( 150deg ); }
+.mm-mark-icon.rot-16 { transform: rotateZ( 160deg ); }
+.mm-mark-icon.rot-17 { transform: rotateZ( 170deg ); }
+.mm-mark-icon.rot-18 { transform: rotateZ( 180deg ); }
+.mm-mark-icon.rot-19 { transform: rotateZ( 190deg ); }
+.mm-mark-icon.rot-20 { transform: rotateZ( 200deg ); }
+.mm-mark-icon.rot-21 { transform: rotateZ( 210deg ); }
+.mm-mark-icon.rot-22 { transform: rotateZ( 220deg ); }
+.mm-mark-icon.rot-23 { transform: rotateZ( 230deg ); }
+.mm-mark-icon.rot-24 { transform: rotateZ( 240deg ); }
+.mm-mark-icon.rot-25 { transform: rotateZ( 250deg ); }
+.mm-mark-icon.rot-26 { transform: rotateZ( 260deg ); }
+.mm-mark-icon.rot-27 { transform: rotateZ( 270deg ); }
+.mm-mark-icon.rot-28 { transform: rotateZ( 280deg ); }
+.mm-mark-icon.rot-29 { transform: rotateZ( 290deg ); }
+.mm-mark-icon.rot-30 { transform: rotateZ( 300deg ); }
+.mm-mark-icon.rot-31 { transform: rotateZ( 310deg ); }
+.mm-mark-icon.rot-32 { transform: rotateZ( 320deg ); }
+.mm-mark-icon.rot-33 { transform: rotateZ( 330deg ); }
+.mm-mark-icon.rot-34 { transform: rotateZ( 340deg ); }
+.mm-mark-icon.rot-35 { transform: rotateZ( 350deg ); }
+
+/* Shrink: dur-N on a zone's three panels (MinimapLayout.Durations). After the panels' own 0 s. */
+.dur-5 { transition-duration: 5.0s; }
+.dur-10 { transition-duration: 10.0s; }
+.dur-15 { transition-duration: 15.0s; }
+.dur-20 { transition-duration: 20.0s; }
+.dur-25 { transition-duration: 25.0s; }
+.dur-30 { transition-duration: 30.0s; }
+.dur-35 { transition-duration: 35.0s; }
+.dur-40 { transition-duration: 40.0s; }
+.dur-45 { transition-duration: 45.0s; }
+.dur-50 { transition-duration: 50.0s; }
+.dur-55 { transition-duration: 55.0s; }
+.dur-60 { transition-duration: 60.0s; }
+.dur-65 { transition-duration: 65.0s; }
+.dur-70 { transition-duration: 70.0s; }
+.dur-75 { transition-duration: 75.0s; }
+.dur-80 { transition-duration: 80.0s; }
+.dur-85 { transition-duration: 85.0s; }
+.dur-90 { transition-duration: 90.0s; }
+.dur-95 { transition-duration: 95.0s; }
+.dur-100 { transition-duration: 100.0s; }
+.dur-105 { transition-duration: 105.0s; }
+.dur-110 { transition-duration: 110.0s; }
+.dur-115 { transition-duration: 115.0s; }
+.dur-120 { transition-duration: 120.0s; }
+.dur-150 { transition-duration: 150.0s; }
+.dur-180 { transition-duration: 180.0s; }
+.dur-210 { transition-duration: 210.0s; }
+.dur-240 { transition-duration: 240.0s; }
+.dur-270 { transition-duration: 270.0s; }
+.dur-300 { transition-duration: 300.0s; }
+.dur-360 { transition-duration: 360.0s; }
+.dur-420 { transition-duration: 420.0s; }
+.dur-480 { transition-duration: 480.0s; }
+.dur-540 { transition-duration: 540.0s; }
+.dur-600 { transition-duration: 600.0s; }
+
+/* Zoom levels (MinimapLayout.Zooms) and the markers scaled back. ------------- */
+.mm-zoom.zoom-150 { transform: scale3d( 1.5, 1.5, 1.0 ); }
+.mm-zoom.zoom-150 .mm-mark-icon { pre-transform-scale2d: 0.6667; }
+.mm-zoom.zoom-150 .mm-mark-label { pre-transform-scale2d: 0.6667; }
+.mm-zoom.zoom-200 { transform: scale3d( 2, 2, 1.0 ); }
+.mm-zoom.zoom-200 .mm-mark-icon { pre-transform-scale2d: 0.5; }
+.mm-zoom.zoom-200 .mm-mark-label { pre-transform-scale2d: 0.5; }
+.mm-zoom.zoom-300 { transform: scale3d( 3, 3, 1.0 ); }
+.mm-zoom.zoom-300 .mm-mark-icon { pre-transform-scale2d: 0.3333; }
+.mm-zoom.zoom-300 .mm-mark-label { pre-transform-scale2d: 0.3333; }
+.mm-zoom.zoom-400 { transform: scale3d( 4, 4, 1.0 ); }
+.mm-zoom.zoom-400 .mm-mark-icon { pre-transform-scale2d: 0.25; }
+.mm-zoom.zoom-400 .mm-mark-label { pre-transform-scale2d: 0.25; }
+
+/* Pan: px-N / py-N put the centre of cell N in the middle of the viewport. ---------- */
+.mm-pan.px-0 { transform: translateX( 378px ); }
+.mm-pan.px-1 { transform: translateX( 366px ); }
+.mm-pan.px-2 { transform: translateX( 354px ); }
+.mm-pan.px-3 { transform: translateX( 342px ); }
+.mm-pan.px-4 { transform: translateX( 330px ); }
+.mm-pan.px-5 { transform: translateX( 318px ); }
+.mm-pan.px-6 { transform: translateX( 306px ); }
+.mm-pan.px-7 { transform: translateX( 294px ); }
+.mm-pan.px-8 { transform: translateX( 282px ); }
+.mm-pan.px-9 { transform: translateX( 270px ); }
+.mm-pan.px-10 { transform: translateX( 258px ); }
+.mm-pan.px-11 { transform: translateX( 246px ); }
+.mm-pan.px-12 { transform: translateX( 234px ); }
+.mm-pan.px-13 { transform: translateX( 222px ); }
+.mm-pan.px-14 { transform: translateX( 210px ); }
+.mm-pan.px-15 { transform: translateX( 198px ); }
+.mm-pan.px-16 { transform: translateX( 186px ); }
+.mm-pan.px-17 { transform: translateX( 174px ); }
+.mm-pan.px-18 { transform: translateX( 162px ); }
+.mm-pan.px-19 { transform: translateX( 150px ); }
+.mm-pan.px-20 { transform: translateX( 138px ); }
+.mm-pan.px-21 { transform: translateX( 126px ); }
+.mm-pan.px-22 { transform: translateX( 114px ); }
+.mm-pan.px-23 { transform: translateX( 102px ); }
+.mm-pan.px-24 { transform: translateX( 90px ); }
+.mm-pan.px-25 { transform: translateX( 78px ); }
+.mm-pan.px-26 { transform: translateX( 66px ); }
+.mm-pan.px-27 { transform: translateX( 54px ); }
+.mm-pan.px-28 { transform: translateX( 42px ); }
+.mm-pan.px-29 { transform: translateX( 30px ); }
+.mm-pan.px-30 { transform: translateX( 18px ); }
+.mm-pan.px-31 { transform: translateX( 6px ); }
+.mm-pan.px-32 { transform: translateX( -6px ); }
+.mm-pan.px-33 { transform: translateX( -18px ); }
+.mm-pan.px-34 { transform: translateX( -30px ); }
+.mm-pan.px-35 { transform: translateX( -42px ); }
+.mm-pan.px-36 { transform: translateX( -54px ); }
+.mm-pan.px-37 { transform: translateX( -66px ); }
+.mm-pan.px-38 { transform: translateX( -78px ); }
+.mm-pan.px-39 { transform: translateX( -90px ); }
+.mm-pan.px-40 { transform: translateX( -102px ); }
+.mm-pan.px-41 { transform: translateX( -114px ); }
+.mm-pan.px-42 { transform: translateX( -126px ); }
+.mm-pan.px-43 { transform: translateX( -138px ); }
+.mm-pan.px-44 { transform: translateX( -150px ); }
+.mm-pan.px-45 { transform: translateX( -162px ); }
+.mm-pan.px-46 { transform: translateX( -174px ); }
+.mm-pan.px-47 { transform: translateX( -186px ); }
+.mm-pan.px-48 { transform: translateX( -198px ); }
+.mm-pan.px-49 { transform: translateX( -210px ); }
+.mm-pan.px-50 { transform: translateX( -222px ); }
+.mm-pan.px-51 { transform: translateX( -234px ); }
+.mm-pan.px-52 { transform: translateX( -246px ); }
+.mm-pan.px-53 { transform: translateX( -258px ); }
+.mm-pan.px-54 { transform: translateX( -270px ); }
+.mm-pan.px-55 { transform: translateX( -282px ); }
+.mm-pan.px-56 { transform: translateX( -294px ); }
+.mm-pan.px-57 { transform: translateX( -306px ); }
+.mm-pan.px-58 { transform: translateX( -318px ); }
+.mm-pan.px-59 { transform: translateX( -330px ); }
+.mm-pan.px-60 { transform: translateX( -342px ); }
+.mm-pan.px-61 { transform: translateX( -354px ); }
+.mm-pan.px-62 { transform: translateX( -366px ); }
+.mm-pan.px-63 { transform: translateX( -378px ); }
+.mm-pan-y.py-0 { transform: translateY( 378px ); }
+.mm-pan-y.py-1 { transform: translateY( 366px ); }
+.mm-pan-y.py-2 { transform: translateY( 354px ); }
+.mm-pan-y.py-3 { transform: translateY( 342px ); }
+.mm-pan-y.py-4 { transform: translateY( 330px ); }
+.mm-pan-y.py-5 { transform: translateY( 318px ); }
+.mm-pan-y.py-6 { transform: translateY( 306px ); }
+.mm-pan-y.py-7 { transform: translateY( 294px ); }
+.mm-pan-y.py-8 { transform: translateY( 282px ); }
+.mm-pan-y.py-9 { transform: translateY( 270px ); }
+.mm-pan-y.py-10 { transform: translateY( 258px ); }
+.mm-pan-y.py-11 { transform: translateY( 246px ); }
+.mm-pan-y.py-12 { transform: translateY( 234px ); }
+.mm-pan-y.py-13 { transform: translateY( 222px ); }
+.mm-pan-y.py-14 { transform: translateY( 210px ); }
+.mm-pan-y.py-15 { transform: translateY( 198px ); }
+.mm-pan-y.py-16 { transform: translateY( 186px ); }
+.mm-pan-y.py-17 { transform: translateY( 174px ); }
+.mm-pan-y.py-18 { transform: translateY( 162px ); }
+.mm-pan-y.py-19 { transform: translateY( 150px ); }
+.mm-pan-y.py-20 { transform: translateY( 138px ); }
+.mm-pan-y.py-21 { transform: translateY( 126px ); }
+.mm-pan-y.py-22 { transform: translateY( 114px ); }
+.mm-pan-y.py-23 { transform: translateY( 102px ); }
+.mm-pan-y.py-24 { transform: translateY( 90px ); }
+.mm-pan-y.py-25 { transform: translateY( 78px ); }
+.mm-pan-y.py-26 { transform: translateY( 66px ); }
+.mm-pan-y.py-27 { transform: translateY( 54px ); }
+.mm-pan-y.py-28 { transform: translateY( 42px ); }
+.mm-pan-y.py-29 { transform: translateY( 30px ); }
+.mm-pan-y.py-30 { transform: translateY( 18px ); }
+.mm-pan-y.py-31 { transform: translateY( 6px ); }
+.mm-pan-y.py-32 { transform: translateY( -6px ); }
+.mm-pan-y.py-33 { transform: translateY( -18px ); }
+.mm-pan-y.py-34 { transform: translateY( -30px ); }
+.mm-pan-y.py-35 { transform: translateY( -42px ); }
+.mm-pan-y.py-36 { transform: translateY( -54px ); }
+.mm-pan-y.py-37 { transform: translateY( -66px ); }
+.mm-pan-y.py-38 { transform: translateY( -78px ); }
+.mm-pan-y.py-39 { transform: translateY( -90px ); }
+.mm-pan-y.py-40 { transform: translateY( -102px ); }
+.mm-pan-y.py-41 { transform: translateY( -114px ); }
+.mm-pan-y.py-42 { transform: translateY( -126px ); }
+.mm-pan-y.py-43 { transform: translateY( -138px ); }
+.mm-pan-y.py-44 { transform: translateY( -150px ); }
+.mm-pan-y.py-45 { transform: translateY( -162px ); }
+.mm-pan-y.py-46 { transform: translateY( -174px ); }
+.mm-pan-y.py-47 { transform: translateY( -186px ); }
+.mm-pan-y.py-48 { transform: translateY( -198px ); }
+.mm-pan-y.py-49 { transform: translateY( -210px ); }
+.mm-pan-y.py-50 { transform: translateY( -222px ); }
+.mm-pan-y.py-51 { transform: translateY( -234px ); }
+.mm-pan-y.py-52 { transform: translateY( -246px ); }
+.mm-pan-y.py-53 { transform: translateY( -258px ); }
+.mm-pan-y.py-54 { transform: translateY( -270px ); }
+.mm-pan-y.py-55 { transform: translateY( -282px ); }
+.mm-pan-y.py-56 { transform: translateY( -294px ); }
+.mm-pan-y.py-57 { transform: translateY( -306px ); }
+.mm-pan-y.py-58 { transform: translateY( -318px ); }
+.mm-pan-y.py-59 { transform: translateY( -330px ); }
+.mm-pan-y.py-60 { transform: translateY( -342px ); }
+.mm-pan-y.py-61 { transform: translateY( -354px ); }
+.mm-pan-y.py-62 { transform: translateY( -366px ); }
+.mm-pan-y.py-63 { transform: translateY( -378px ); }

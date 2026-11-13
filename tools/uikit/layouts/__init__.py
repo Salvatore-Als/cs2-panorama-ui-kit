@@ -18,6 +18,11 @@ from uikit.paths import LAYOUTS_DIR, STYLES_DIR
 
 BUNDLED_PREFIX = "uikit_"
 
+EXTRA_BUNDLED: dict[str, str] = {
+    "uikit_bigmap": "minimap",
+}
+"""More bundled layouts on an existing contract: name -> component. Same builder, their own stylesheet."""
+
 
 @dataclass(frozen=True)
 class Written:
@@ -37,6 +42,12 @@ def generate_bundled(contracts: ContractSet, layouts_dir: Path = LAYOUTS_DIR) ->
         contract = contracts[component]
         name = bundled_name(component)
         document = build(name, name, contract, contract.defaults())
+        path = layouts_dir / f"{name}.xml"
+        path.write_text(document.render(), encoding="utf-8")
+        written.append(path)
+    for name, component in EXTRA_BUNDLED.items():
+        contract = contracts[component]
+        document = BUILDERS[component](name, name, contract, contract.defaults())
         path = layouts_dir / f"{name}.xml"
         path.write_text(document.render(), encoding="utf-8")
         written.append(path)

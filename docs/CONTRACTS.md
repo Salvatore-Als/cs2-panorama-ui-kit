@@ -83,13 +83,13 @@ Marker: `<!-- uikit:banner -->`
 
 | Element | Kind | Required | Kit writes | Meaning |
 |---|---|---|---|---|
-| `id="b_card"` | panel | yes | `hidden`, `show`, `style-*` | The banner. `show` plays the entry. |
+| `id="b_card"` | panel | yes | `hidden`, `show`, `style-*`, `at-*` | The banner. `show` plays the entry. `at-*` is BannerOptions.Placement: `at-hud` under the game's team bar (default), `at-top` against the edge, `at-band` under a match bar with its band and the zone status, `at-bottom` above the inventory. |
 | `id="b_kicker"` | panel | no | `empty` | Label of the kicker, `empty` when blank. |
 | `text="{s:b_text}"` | Label text | yes | string | BannerOptions.Text |
 | `text="{s:b_kicker}"` | Label text | no | string | BannerOptions.Kicker |
 | `text="{s:b_<key>}"` | Label text | no | string | BannerOptions.Texts[key] |
 
-Stylesheet should define: `.hidden`, `.show`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+Stylesheet should define: `.hidden`, `.show`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`, `.at-hud`, `.at-top`, `.at-band`, `.at-bottom`.
 
 ## card
 
@@ -122,6 +122,55 @@ Placeholders: `{p}` = each of `placements`, `{n}` = each of `lines`.
 
 Stylesheet should define: `.hidden`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
 
+## comms
+
+Incoming radio transmission: a face as a glitching hologram, a name and a line of text. The face is one class of the stylesheet. Per player.
+
+C#: `CommsLayout / ICommsService`
+
+Marker: `<!-- uikit:comms -->`
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="cm_card"` | panel | yes | `show`, `style-*`, `glitch-hard`, `static`, `burst-a`, `burst-b` | The card. `show` plays the power-on, `style-*` is the hologram tint, `glitch-hard` a stronger jitter, `static` heavy noise while connecting, `burst-a` / `burst-b` (alternated) a static burst when the content is swapped in place. |
+| `id="cm_face"` | panel | yes | `face-*` | The portrait. `face-<name>` sets the `background-image` of its `.comms-face-layer` children: one rule per face in the stylesheet (CommsOptions.Face). |
+| `id="cm_kicker"` | panel | no | `empty` | Label of the kicker, `empty` when blank. |
+| `id="cm_name"` | panel | no | `empty` | Label of the name, `empty` when blank. |
+| `id="cm_footer"` | panel | no | `empty` | Label of the footer, `empty` when blank. |
+| `text="{s:cm_text}"` | Label text | yes | string | CommsOptions.Text |
+| `text="{s:cm_kicker}"` | Label text | no | string | CommsOptions.Kicker |
+| `text="{s:cm_name}"` | Label text | no | string | CommsOptions.Name |
+| `text="{s:cm_footer}"` | Label text | no | string | CommsOptions.Footer |
+| `text="{s:cm_<key>}"` | Label text | no | string | CommsOptions.Texts[key] |
+
+Stylesheet should define: `.show`, `.empty`, `.glitch-hard`, `.static`, `.burst-a`, `.burst-b`, `.face-unknown`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+
+## compass
+
+Horizontal compass strip at the top of the screen, with pins on it. The kit follows the player's view and writes the heading as one class; pins sit at their bearing relative to it.
+
+C#: `CompassLayout / ICompassService`
+
+Marker: `<!-- uikit:compass pins=4 -->`
+
+Pool parameters (marker and C# layout descriptor must agree):
+
+- `pins` (default `4`): Pins in the pool (CompassLayout.Pins).
+
+Placeholders: `{n}` = each of `pins`.
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="cp_bar"` | panel | yes | `hidden`, `style-*`, `at-*` | The compass. Author it with class `hidden`. Style = accent of the caret and of the north. `at-*` is CompassOptions.Placement: `at-hud` under the game's team bar (default), `at-top` against the top edge, `at-bottom` above the inventory, `at-tl` under the radar, `at-tr` under the kill feed, `at-right` on the right edge, centred, `at-band` in the band of a match bar (MatchOptions.Band). |
+| `id="cp_strip"` | panel | yes | `hd-*` | The strip of ticks and letters. `hd-N` puts the heading 2.5*N-90 degrees under the caret (N of 0..216: the strip runs from -180 to 540 degrees so the kit can follow a turn past north without sliding back). |
+| `id="cp_pin_{n}"` | panel | no | `hidden`, `rel-*`, `edge-l`, `edge-r`, `kind-*`, `style-*` | A pin. Author it `hidden`. `rel-N` places it 2.5*N-90 degrees from the caret (N of 0..72); beyond 90 degrees it gets `edge-l` or `edge-r` instead, at that edge. `kind-<name>` is its shape (CompassNames), `style-*` its colour. |
+| `id="cp_pin_{n}_dist"` | panel | no | `empty` | Label of the pin's distance, `empty` when there is none. |
+| `text="{s:cp_deg}"` | Label text | no | string | Heading in whole degrees, 0 = north |
+| `text="{s:cp_pin_{n}_dist}"` | Label text | no | string | Distance to the pin (CompassPin.ShowDistance), `240m` or `1.2km` |
+| `text="{s:cp_<key>}"` | Label text | no | string | CompassOptions.Texts[key] |
+
+Stylesheet should define: `.hidden`, `.at-band`, `.empty`, `.hd-18`, `.rel-18`, `.edge-l`, `.edge-r`, `.kind-dot`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+
 ## dial
 
 Radial dial: a ring that sweeps like a clock hand. Pushed by value, or timed and run by the client. For cooldowns, charges and channels.
@@ -147,6 +196,35 @@ Placeholders: `{p}` = each of `placements`.
 | `text="{s:dl_{p}_<key>}"` | Label text | no | string | DialOptions.Texts[key] |
 
 Stylesheet should define: `.hidden`, `.timed`, `.up`, `.run`, `.step-0`, `.step-18`, `.step-36`, `.dur-1`, `.dur-5`, `.size-sm`, `.size-md`, `.size-lg`, `.size-xl`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+
+## inventory
+
+Row of item tiles, per player: icon, count, key hint, one tile selected. A count that changes pulses its tile.
+
+C#: `InventoryLayout / IInventoryService`
+
+Marker: `<!-- uikit:inventory slots=6 -->`
+
+Pool parameters (marker and C# layout descriptor must agree):
+
+- `slots` (default `6`): Tiles in the pool (InventoryLayout.Slots).
+
+Placeholders: `{n}` = each of `slots`.
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="inv_bar"` | panel | yes | `style-*` | The row. Style = colour of the selected tile. InventoryOptions.Classes go here too. |
+| `id="inv_{n}"` | panel | yes | `hidden`, `selected`, `depleted`, `style-*`, `pulse-a`, `pulse-b` | A tile. Author it `hidden`. `selected` for InventoryOptions.Selected, `depleted` when the count is 0. `pulse-a` and `pulse-b` swap when the count changes: give both the same animation under two names, so each swap restarts it. Style = the tile's accent and icon tint. |
+| `id="inv_{n}_icon"` | panel | yes | `item-*` | The icon. `item-<name>` sets its `background-image`: one rule per item in the stylesheet (InventorySlot.Item). |
+| `id="inv_{n}_count"` | panel | no | `empty` | Label of the count, `empty` when there is no number. |
+| `id="inv_{n}_key"` | panel | no | `empty` | Label of the key hint, `empty` when blank. |
+| `id="inv_{n}_name"` | panel | no | `empty` | Label of the item name, `empty` when blank. The bundled stylesheet shows it only under a `selected` tile. |
+| `text="{s:inv_{n}_count}"` | Label text | yes | string | InventorySlot.Count |
+| `text="{s:inv_{n}_key}"` | Label text | no | string | InventorySlot.Key |
+| `text="{s:inv_{n}_name}"` | Label text | no | string | InventorySlot.Name |
+| `text="{s:inv_<key>}"` | Label text | no | string | InventoryOptions.Texts[key] |
+
+Stylesheet should define: `.hidden`, `.empty`, `.selected`, `.depleted`, `.pulse-a`, `.pulse-b`, `.item-ammo`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
 
 ## killfeed
 
@@ -176,7 +254,7 @@ Stylesheet should define: `.hidden`, `.flash-a`, `.flash-b`, `.empty`, `.style-n
 
 ## match
 
-Compact top bar: a count + title on each side, a timer in the middle, optional score tabs under the sides. Same text for everyone. Tick-friendly.
+Compact top bar: a count + title on each side, a timer in the middle, optional score tabs under the sides, optional band across the top. Same text for everyone. Tick-friendly.
 
 C#: `MatchLayout / IMatchService`
 
@@ -184,7 +262,7 @@ Marker: `<!-- uikit:match -->`
 
 | Element | Kind | Required | Kit writes | Meaning |
 |---|---|---|---|---|
-| `id="m_bar"` | panel | yes | `style-*`, `urgent` | The bar. `urgent` for the last seconds. |
+| `id="m_bar"` | panel | yes | `style-*`, `urgent`, `band` | The bar. `urgent` for the last seconds. `band` (MatchOptions.Band) draws a long strip across the top over the game's team bar and hangs the bar under it; style-* colours the strip's hairline. The strip is room for a compass at `at-band`. |
 | `id="m_left"` | panel | no | `style-*` | Left block: style-* colours its count and title (MatchOptions.LeftStyle). |
 | `id="m_right"` | panel | no | `style-*` | Right block: style-* colours its count and title (MatchOptions.RightStyle). |
 | `id="m_center_sub"` | panel | no | `empty` | Label under the centre, `empty` when blank. |
@@ -201,7 +279,7 @@ Marker: `<!-- uikit:match -->`
 | `text="{s:m_right_score}"` | Label text | no | string | MatchOptions.RightScore |
 | `text="{s:m_<key>}"` | Label text | no | string | MatchOptions.Texts[key] |
 
-Stylesheet should define: `.urgent`, `.hidden`, `.empty`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+Stylesheet should define: `.urgent`, `.band`, `.hidden`, `.empty`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
 
 ## menu
 
@@ -243,6 +321,44 @@ Placeholders: `{n}` = each of `items`, `{c}` = each of `choices`.
 | `text="{s:mn_<key>}"` | Label text | no | string | MenuOptions.Texts[key] |
 
 Stylesheet should define: `.hidden`, `.show`, `.empty`, `.no-back`, `.no-pager`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`, `.kind-button`, `.kind-toggle`, `.kind-select`, `.kind-submenu`, `.on`, `.open`, `.active`, `.disabled`.
+
+## minimap
+
+Map in a corner: the map picture, the current zone (red) and the next one (white), and markers. Zones and global marks are the same for everyone; the map, the player's arrow and personal marks are per player. Positions are a class ladder on a grid; an optional zoom follows the player.
+
+C#: `MinimapLayout / IMinimapService`
+
+Marker: `<!-- uikit:minimap marks=16 -->`
+
+Pool parameters (marker and C# layout descriptor must agree):
+
+- `marks` (default `16`): Markers in the pool (MinimapLayout.Marks).
+
+Placeholders: `{m}` = each of `marks`.
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="mm_frame"` | panel | yes | `hidden`, `at-*`, `size-*`, `style-*` | The minimap. Author it `hidden`. `at-tl|tr|bl|br` is MinimapOptions.Placement, `size-sm|md|lg` MinimapOptions.Size (a ui-scale of the 256px map), `style-*` the frame's accent. |
+| `id="mm_map"` | panel | yes | `map-*` | The map viewport: `map-<name>` is its picture (MinimapMaps), drawn on the `.minimap-world` panel inside. Clips what goes past its edges. |
+| `id="mm_zoom"` | panel | no | `zoom-*` | Everything on the map. `zoom-N` (N of MinimapLayout.Zooms, a percentage) scales it about the viewport's centre; none = the whole map. Markers are scaled back to their size. |
+| `id="mm_pan"` | panel | no | `px-*` | Inside mm_zoom: `px-N` moves cell N to the centre (X axis), so a zoom follows the player. |
+| `id="mm_pan_y"` | panel | no | `py-*` | Y axis of the pan, a child of mm_pan. |
+| `id="mm_title"` | panel | no | `empty` | Label under the map, `empty` when blank. |
+| `id="mm_zone_cur"` | panel | yes | `hidden`, `x-*`, `dur-*` | Current zone, X axis of its centre. `x-N` (N of MinimapLayout.Grid) places it, `dur-N` is the length of a shrink: without one it snaps. |
+| `id="mm_zone_cur_y"` | panel | yes | `y-*`, `dur-*` | Y axis of the current zone's centre: a child, so each axis has its own transform. |
+| `id="mm_zone_cur_ring"` | panel | yes | `r-*`, `dur-*` | The current zone's circle, centred on its parent: `r-N` scales it, `r-<Radii>` being a radius as wide as the map. |
+| `id="mm_zone_next"` | panel | no | `hidden`, `x-*`, `dur-*` | Next zone, same as the current one. |
+| `id="mm_zone_next_y"` | panel | no | `y-*`, `dur-*` | Y axis of the next zone's centre. |
+| `id="mm_zone_next_ring"` | panel | no | `r-*`, `dur-*` | The next zone's circle. |
+| `id="mm_mark_{m}"` | panel | no | `hidden`, `x-*`, `kind-*`, `state-*`, `style-*` | A marker, X axis. Author it `hidden`. `kind-<name>` its icon and stacking order (MinimapNames), `state-downed|dead|alerted`, `style-*` a colour over the kind's. |
+| `id="mm_mark_{m}_y"` | panel | no | `y-*` | Y axis of the marker. |
+| `id="mm_mark_{m}_icon"` | panel | no | `rot-*` | The icon: `rot-N` turns it N*10 degrees clockwise from north (N of 0..35). |
+| `id="mm_mark_{m}_label"` | panel | no | `empty` | Label of the marker, `empty` when blank. |
+| `text="{s:mm_title}"` | Label text | no | string | MinimapOptions.Title |
+| `text="{s:mm_mark_{m}_label}"` | Label text | no | string | MinimapMark.Label |
+| `text="{s:mm_<key>}"` | Label text | no | string | MinimapOptions.Texts[key] |
+
+Stylesheet should define: `.hidden`, `.empty`, `.at-tl`, `.at-tr`, `.at-bl`, `.at-br`, `.size-md`, `.map-de_dust2`, `.map-slot-1`, `.x-32`, `.y-32`, `.r-32`, `.rot-9`, `.dur-60`, `.kind-self`, `.kind-mate`, `.state-downed`, `.style-danger`, `.zoom-200`, `.px-32`, `.py-32`.
 
 ## panel
 
@@ -311,6 +427,57 @@ Placeholders: `{p}` = each of `placements`.
 | `text="{s:pg_{p}_<key>}"` | Label text | no | string | ProgressOptions.Texts[key] |
 
 Stylesheet should define: `.hidden`, `.timed`, `.up`, `.run`, `.step-0`, `.step-25`, `.step-50`, `.dur-1`, `.dur-5`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+
+## recap
+
+End of match screen for one player: placement, headline, and a strip at the bottom with the player's name and stat tiles (icon, value, label). Per player. Optionally a few player rows (a duo, a squad) instead of the single player.
+
+C#: `RecapLayout / IRecapService`
+
+Marker: `<!-- uikit:recap stats=8 rows=4 row_stats=4 -->`
+
+Pool parameters (marker and C# layout descriptor must agree):
+
+- `stats` (default `8`): Stat tiles in the pool (RecapLayout.Stats).
+- `rows` (default `4`): Player rows in the pool (RecapLayout.Rows): a squad's names and stats instead of one player.
+- `row_stats` (default `4`): Stats per player row (RecapLayout.RowStats).
+
+Placeholders: `{n}` = each of `stats`, `{r}` = each of `rows`, `{s}` = each of `row_stats`.
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="rc_screen"` | panel | yes | `show`, `style-*` | The screen. Style = outcome colour. `show` plays the whole entry, staggered by the stylesheet. |
+| `id="rc_kicker"` | panel | no | `empty` | Label of the kicker, `empty` when blank. |
+| `id="rc_place_row"` | panel | no | `hidden` | Placement row, `hidden` without a placement. |
+| `id="rc_place_total"` | panel | no | `empty` | Label of the field size, `empty` when blank. |
+| `id="rc_player_sub"` | panel | no | `empty` | Label under the player's name, `empty` when blank. |
+| `id="rc_stats"` | panel | no | `hidden` | Tile row, `hidden` when there are no stats. |
+| `id="rc_stat_{n}"` | panel | yes | `hidden`, `style-*`, `best`, `pulse-a`, `pulse-b` | A stat tile. Author it `hidden`. `best` highlights it; `pulse-a` / `pulse-b` swap when its value changes while shown. |
+| `id="rc_stat_{n}_icon"` | panel | no | `icon-*` | The tile's icon: `icon-<name>` sets its picture (RecapStat.Icon, RecapIcons). |
+| `id="rc_solo"` | panel | no | `hidden` | The single player's name block. `hidden` when RecapOptions.Players is given. |
+| `id="rc_rows"` | panel | no | `hidden` | The player rows. `hidden` unless RecapOptions.Players is given; then the single player and rc_stats are hidden. |
+| `id="rc_row_{r}"` | panel | no | `hidden`, `style-*` | A player row: name, sub line and its stats on one line. Author it `hidden`. style-* colours the name. |
+| `id="rc_row_{r}_sub"` | panel | no | `empty` | Label beside the name, `empty` when blank. |
+| `id="rc_row_{r}_stat_{s}"` | panel | no | `hidden`, `style-*`, `best` | A stat of the row. Author it `hidden`. |
+| `id="rc_row_{r}_stat_{s}_icon"` | panel | no | `icon-*` | Its icon, as rc_stat_{n}_icon. |
+| `id="rc_restart"` | panel | no | `hidden` | Countdown line, `hidden` without a countdown. |
+| `text="{s:rc_title}"` | Label text | yes | string | RecapOptions.Title |
+| `text="{s:rc_kicker}"` | Label text | no | string | RecapOptions.Kicker |
+| `text="{s:rc_place}"` | Label text | no | string | RecapOptions.Place, as RecapOptions.PlaceFormat |
+| `text="{s:rc_place_total}"` | Label text | no | string | RecapOptions.Total, as RecapOptions.TotalFormat |
+| `text="{s:rc_player}"` | Label text | yes | string | RecapOptions.Player, or the player's name |
+| `text="{s:rc_player_sub}"` | Label text | no | string | RecapOptions.PlayerSub |
+| `text="{s:rc_stat_{n}_value}"` | Label text | yes | string | RecapStat.Value |
+| `text="{s:rc_stat_{n}_label}"` | Label text | no | string | RecapStat.Label |
+| `text="{s:rc_row_{r}_name}"` | Label text | no | string | RecapPlayer.Name |
+| `text="{s:rc_row_{r}_sub}"` | Label text | no | string | RecapPlayer.Sub |
+| `text="{s:rc_row_{r}_stat_{s}_value}"` | Label text | no | string | RecapStat.Value |
+| `text="{s:rc_row_{r}_stat_{s}_label}"` | Label text | no | string | RecapStat.Label |
+| `text="{s:rc_restart_label}"` | Label text | no | string | RecapOptions.RestartLabel |
+| `text="{s:rc_restart_eta}"` | Label text | no | string | Countdown, RecapOptions.RestartFormat |
+| `text="{s:rc_<key>}"` | Label text | no | string | RecapOptions.Texts[key] |
+
+Stylesheet should define: `.show`, `.hidden`, `.empty`, `.best`, `.pulse-a`, `.pulse-b`, `.icon-kills`, `.style-neutral`, `.style-success`, `.style-danger`, `.style-gold`.
 
 ## roulette
 
@@ -481,3 +648,34 @@ Placeholders: `{n}` = each of `choices`.
 | `text="{s:vt_<key>}"` | Label text | no | string | VoteOptions.Texts[key] |
 
 Stylesheet should define: `.show`, `.hidden`, `.empty`, `.locked`, `.no-close`, `.no-pager`, `.disabled`, `.selected`, `.leading`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+
+## zone
+
+Safe zone: a status widget under the compass (phase, countdown ticked by the kit, a bar drained by the client) and an alert when the zone moves. Per player.
+
+C#: `ZoneLayout / IZoneService`
+
+Marker: `<!-- uikit:zone -->`
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="zn_status"` | panel | yes | `hidden`, `state-*`, `outside`, `style-*`, `at-*`, `icon-*` | The status widget. Author it `hidden`. `state-waiting|closing|final` is ZoneOptions.State, `outside` the player outside the safe zone. `at-*` (hud, top, band, bottom, tl, tr, bl, br, right) is ZoneOptions.Placement: a corner, or under the compass of the same placement. `icon-<name>` (ZoneOptions.Icon, ZoneIcons) overrides the state's icon; `icon-slot-N` is a picture another addon provides. |
+| `id="zn_phase"` | panel | no | `empty` | Label of the phase, `empty` when blank. |
+| `id="zn_timer"` | panel | no | `empty` | Label of the countdown, `empty` without one. |
+| `id="zn_info"` | panel | no | `empty` | Label of the extra line, `empty` when blank. |
+| `id="zn_bar"` | panel | no | `hidden` | Track of the phase bar, `hidden` without ZoneOptions.TotalSeconds. |
+| `id="zn_bar_fill"` | panel | no | `step-*`, `dur-*`, `run` | The fill, drawn with `clip`. `step-N` (N of ZoneLayout.Steps) is the share of the phase left, with no transition; `dur-N` is the seconds left (ZoneLayout.Durations); `run` drains it to empty. |
+| `id="zn_alert"` | panel | yes | `hidden`, `show`, `style-*`, `icon-*` | The alert. Author it `hidden`. `show` plays the entry, dropping it the exit. `icon-<name>` (ZoneAlertOptions.Icon, ZoneIcons) replaces the icon. |
+| `id="zn_alert_kicker"` | panel | no | `empty` | Label of the alert kicker, `empty` when blank. |
+| `id="zn_alert_desc"` | panel | no | `empty` | Label of the alert description, `empty` when blank. |
+| `text="{s:zn_phase}"` | Label text | no | string | ZoneOptions.Phase |
+| `text="{s:zn_state}"` | Label text | yes | string | ZoneOptions.StateText, or the state's own text |
+| `text="{s:zn_timer}"` | Label text | yes | string | Countdown, ZoneOptions.TimerFormat |
+| `text="{s:zn_info}"` | Label text | no | string | ZoneOptions.Info |
+| `text="{s:zn_alert_kicker}"` | Label text | no | string | ZoneAlertOptions.Kicker |
+| `text="{s:zn_alert_title}"` | Label text | yes | string | ZoneAlertOptions.Title |
+| `text="{s:zn_alert_desc}"` | Label text | no | string | ZoneAlertOptions.Description |
+| `text="{s:zn_<key>}"` | Label text | no | string | ZoneOptions.Texts[key] |
+| `text="{s:zn_alert_<key>}"` | Label text | no | string | ZoneAlertOptions.Texts[key] |
+
+Stylesheet should define: `.hidden`, `.empty`, `.show`, `.outside`, `.state-waiting`, `.state-closing`, `.state-final`, `.run`, `.step-0`, `.step-20`, `.dur-5`, `.dur-60`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`, `.icon-ring`, `.icon-slot-1`, `.at-band`, `.at-bl`, `.at-br`.

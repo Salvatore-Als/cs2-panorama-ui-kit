@@ -10,10 +10,10 @@ Marker: `<!-- uikit:banner -->`
 
 | Element | Kind | Required | Kit writes | Meaning |
 |---|---|---|---|---|
-| `id="b_card"` | panel | yes | `hidden`, `show`, `style-*` | The banner. `show` plays the entry. |
+| `id="b_card"` | panel | yes | `hidden`, `show`, `style-*`, `at-*` | The banner. `show` plays the entry. `at-*` is BannerOptions.Placement: `at-hud` under the game's team bar (default), `at-top` against the edge, `at-band` under a match bar with its band and the zone status, `at-bottom` above the inventory. |
 | `id="b_kicker"` | panel | no | `empty` | Label of the kicker, `empty` when blank. |
 | `text="{s:b_text}"` | Label text | yes | string | BannerOptions.Text |
 | `text="{s:b_kicker}"` | Label text | no | string | BannerOptions.Kicker |
 | `text="{s:b_<key>}"` | Label text | no | string | BannerOptions.Texts[key] |
 
-Stylesheet should define: `.hidden`, `.show`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`.
+Stylesheet should define: `.hidden`, `.show`, `.style-neutral`, `.style-info`, `.style-success`, `.style-warn`, `.style-danger`, `.at-hud`, `.at-top`, `.at-band`, `.at-bottom`.

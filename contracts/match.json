@@ -1,7 +1,7 @@
 {
   "component": "match",
   "csharp": "MatchLayout / IMatchService",
-  "summary": "Compact top bar: a count + title on each side, a timer in the middle, optional score tabs under the sides. Same text for everyone. Tick-friendly.",
+  "summary": "Compact top bar: a count + title on each side, a timer in the middle, optional score tabs under the sides, optional band across the top. Same text for everyone. Tick-friendly.",
   "params": {},
   "repeat": {},
   "panels": [
@@ -10,9 +10,10 @@
       "required": true,
       "classes": [
         "style-*",
-        "urgent"
+        "urgent",
+        "band"
       ],
-      "doc": "The bar. `urgent` for the last seconds."
+      "doc": "The bar. `urgent` for the last seconds. `band` (MatchOptions.Band) draws a long strip across the top over the game's team bar and hangs the bar under it; style-* colours the strip's hairline. The strip is room for a compass at `at-band`."
     },
     {
       "id": "m_left",
@@ -113,6 +114,7 @@
   ],
   "css": [
     "urgent",
+    "band",
     "hidden",
     "empty",
     "style-neutral",

@@ -44,6 +44,11 @@ python3 -m uikit check-all
 | [Progress bar](docs/components/progress.md)  | Bar pushed by value, or timed and run by the client |
 | [Dial](docs/components/dial.md)              | Radial ring for cooldowns and charges            |
 | [Screamer](docs/components/screamer.md)      | Full-screen picture with its sound               |
+| [Compass](docs/components/compass.md)        | Heading strip at the top, follows the view, with pins |
+| [Inventory](docs/components/inventory.md)    | Row of item tiles: icon, count, key hint, selection |
+| [Zone](docs/components/zone.md)              | Safe zone status, countdown and alerts           |
+| [Comms](docs/components/comms.md)            | Radio transmission, villain face as a glitching hologram |
+| [Recap](docs/components/recap.md)            | End of match screen: placement, name and stat tiles |
 
 
 Concepts shared by every component: [docs/components](docs/components/README.md#common-concepts).
@@ -70,6 +75,8 @@ Requires CounterStrikeSharp 1.0.376 or newer, and [PanoramaManager](https://gith
 
 The demo plugin is a consumer: it references only `PanoramaUiKit.Shared` ([csproj](src/PanoramaUiKit.Demo/PanoramaUiKit.Demo.csproj)), resolves the capability and preloads every layout ([DemoPlugin.cs](src/PanoramaUiKit.Demo/DemoPlugin.cs)), and names each layout file ([DemoLayouts.cs](src/PanoramaUiKit.Demo/DemoLayouts.cs)). One file per component:
 
+To browse them without typing, `css_uikit_demo` (chat: `!uikit_demo`) opens a showcase menu ([DemoPlugin.Showcase.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Showcase.cs)): one entry per demo and per variant, each running the command below as you.
+
 
 | Component      | Demo                                                                         | Command                    |
 | -------------- | ---------------------------------------------------------------------------- | -------------------------- |
@@ -89,6 +96,12 @@ The demo plugin is a consumer: it references only `PanoramaUiKit.Shared` ([cspro
 | Progress bar   | [DemoPlugin.Progress.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Progress.cs)   | `css_uikit_demo_progress`  |
 | Dial           | [DemoPlugin.Dial.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Dial.cs)           | `css_uikit_demo_dial`      |
 | Screamer       | [DemoPlugin.Screamer.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Screamer.cs)   | `css_uikit_demo_screamer`  |
+| Compass        | [DemoPlugin.Compass.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Compass.cs)     | `css_uikit_demo_compass`   |
+| Inventory      | [DemoPlugin.Inventory.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Inventory.cs) | `css_uikit_demo_inventory` |
+| Zone           | [DemoPlugin.Zone.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Zone.cs)           | `css_uikit_demo_zone`      |
+| Comms          | [DemoPlugin.Comms.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Comms.cs)         | `css_uikit_demo_comms`     |
+| Recap          | [DemoPlugin.Recap.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Recap.cs)         | `css_uikit_demo_recap`     |
+| Minimap        | [DemoPlugin.Minimap.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Minimap.cs)     | `css_uikit_demo_minimap`   |
 
 
 

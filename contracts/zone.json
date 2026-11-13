@@ -1,0 +1,164 @@
+{
+  "component": "zone",
+  "csharp": "ZoneLayout / IZoneService",
+  "summary": "Safe zone: a status widget under the compass (phase, countdown ticked by the kit, a bar drained by the client) and an alert when the zone moves. Per player.",
+  "params": {},
+  "repeat": {},
+  "panels": [
+    {
+      "id": "zn_status",
+      "required": true,
+      "classes": [
+        "hidden",
+        "state-*",
+        "outside",
+        "style-*",
+        "at-*",
+        "icon-*"
+      ],
+      "doc": "The status widget. Author it `hidden`. `state-waiting|closing|final` is ZoneOptions.State, `outside` the player outside the safe zone. `at-*` (hud, top, band, bottom, tl, tr, bl, br, right) is ZoneOptions.Placement: a corner, or under the compass of the same placement. `icon-<name>` (ZoneOptions.Icon, ZoneIcons) overrides the state's icon; `icon-slot-N` is a picture another addon provides."
+    },
+    {
+      "id": "zn_phase",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the phase, `empty` when blank."
+    },
+    {
+      "id": "zn_timer",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the countdown, `empty` without one."
+    },
+    {
+      "id": "zn_info",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the extra line, `empty` when blank."
+    },
+    {
+      "id": "zn_bar",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "doc": "Track of the phase bar, `hidden` without ZoneOptions.TotalSeconds."
+    },
+    {
+      "id": "zn_bar_fill",
+      "required": false,
+      "classes": [
+        "step-*",
+        "dur-*",
+        "run"
+      ],
+      "doc": "The fill, drawn with `clip`. `step-N` (N of ZoneLayout.Steps) is the share of the phase left, with no transition; `dur-N` is the seconds left (ZoneLayout.Durations); `run` drains it to empty."
+    },
+    {
+      "id": "zn_alert",
+      "required": true,
+      "classes": [
+        "hidden",
+        "show",
+        "style-*",
+        "icon-*"
+      ],
+      "doc": "The alert. Author it `hidden`. `show` plays the entry, dropping it the exit. `icon-<name>` (ZoneAlertOptions.Icon, ZoneIcons) replaces the icon."
+    },
+    {
+      "id": "zn_alert_kicker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the alert kicker, `empty` when blank."
+    },
+    {
+      "id": "zn_alert_desc",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the alert description, `empty` when blank."
+    }
+  ],
+  "texts": [
+    {
+      "var": "zn_phase",
+      "required": false,
+      "doc": "ZoneOptions.Phase"
+    },
+    {
+      "var": "zn_state",
+      "required": true,
+      "doc": "ZoneOptions.StateText, or the state's own text"
+    },
+    {
+      "var": "zn_timer",
+      "required": true,
+      "doc": "Countdown, ZoneOptions.TimerFormat"
+    },
+    {
+      "var": "zn_info",
+      "required": false,
+      "doc": "ZoneOptions.Info"
+    },
+    {
+      "var": "zn_alert_kicker",
+      "required": false,
+      "doc": "ZoneAlertOptions.Kicker"
+    },
+    {
+      "var": "zn_alert_title",
+      "required": true,
+      "doc": "ZoneAlertOptions.Title"
+    },
+    {
+      "var": "zn_alert_desc",
+      "required": false,
+      "doc": "ZoneAlertOptions.Description"
+    },
+    {
+      "var": "zn_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "ZoneOptions.Texts[key]"
+    },
+    {
+      "var": "zn_alert_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "ZoneAlertOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "empty",
+    "show",
+    "outside",
+    "state-waiting",
+    "state-closing",
+    "state-final",
+    "run",
+    "step-0",
+    "step-20",
+    "dur-5",
+    "dur-60",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger",
+    "icon-ring",
+    "icon-slot-1",
+    "at-band",
+    "at-bl",
+    "at-br"
+  ]
+}

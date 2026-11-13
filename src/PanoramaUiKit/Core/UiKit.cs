@@ -7,18 +7,24 @@ using PanoramaUiKit.Shared.Api;
 using PanoramaUiKit.Shared.Banners;
 using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Comms;
+using PanoramaUiKit.Shared.Compass;
 using PanoramaUiKit.Shared.Dials;
+using PanoramaUiKit.Shared.Inventory;
 using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
+using PanoramaUiKit.Shared.Minimap;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
+using PanoramaUiKit.Shared.Recap;
 using PanoramaUiKit.Shared.Roulette;
 using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
 using PanoramaUiKit.Shared.Votes;
+using PanoramaUiKit.Shared.Zone;
 
 namespace PanoramaUiKit.Core;
 
@@ -47,6 +53,12 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
         ProgressBars = new ProgressService(registry);
         Dials = new DialService(registry);
         Screamers = new ScreamerService(registry);
+        Compass = new CompassService(registry);
+        Inventory = new InventoryService(registry);
+        Zone = new ZoneService(registry);
+        Comms = new CommsService(registry);
+        Recap = new RecapService(registry);
+        Minimap = new MinimapService(registry);
     }
 
     public int Version => IPanoramaUiKit.ApiVersion;
@@ -82,6 +94,18 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
     public IDialService Dials { get; }
 
     public IScreamerService Screamers { get; }
+
+    public ICompassService Compass { get; }
+
+    public IInventoryService Inventory { get; }
+
+    public IZoneService Zone { get; }
+
+    public ICommsService Comms { get; }
+
+    public IRecapService Recap { get; }
+
+    public IMinimapService Minimap { get; }
 
     public IEnumerable<LayoutChannel> Channels => _registry.Channels;
 

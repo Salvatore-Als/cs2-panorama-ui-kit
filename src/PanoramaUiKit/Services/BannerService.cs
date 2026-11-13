@@ -19,7 +19,7 @@ internal sealed class BannerService(LayoutRegistry registry) : ComponentService<
             return Dead;
         }
 
-        CardContent content = new(options.Text, null, options.Kicker, options.Seconds, options);
+        CardContent content = new(options.Text, null, options.Kicker, options.Seconds, options, [options.Placement.Class()]);
         return WhenWarm(channel, player, card => card.Show(player, content));
     }
 

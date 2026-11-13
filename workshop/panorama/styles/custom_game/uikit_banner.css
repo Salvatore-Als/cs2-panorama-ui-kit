@@ -1,7 +1,9 @@
 /*
     uikit_banner - one line under the top of the screen, flanked by accent rules. Optional kicker
-    before the text. "show" plays the entry; style-* colours the rules and the kicker.
-    Contract "banner" (docs/CONTRACTS.md).
+    before the text. "show" plays the entry; style-* colours the rules, the kicker and the bottom edge.
+    at-* (BannerOptions.Placement) moves it: at-hud under the game's team bar (default), at-top against
+    the edge, at-band under a uikit_match bar with "band" and the zone status under it, at-bottom above
+    the inventory row. Contract "banner" (docs/CONTRACTS.md).
 */
 
 .banner {
@@ -15,9 +17,10 @@
     border-radius: 0px 0px 10px 10px;
     border-left: 1px solid #ffffff14;
     border-right: 1px solid #ffffff14;
-    border-bottom: 1px solid #ffffff14;
+    border-bottom: 2px solid #9aa2ac;
     border-top: 0px solid #ffffff00;
-    background-color: #12171e;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #12171e ), to( #171d26 ) );
+    box-shadow: #00000080 0px 6px 16px 0px;
 
     opacity: 0;
     transform: translateY( 10px );
@@ -29,6 +32,23 @@
 .banner.show {
     opacity: 1;
     transform: translateY( 0px );
+}
+
+/* Placement (BannerOptions.Placement). Off the edge it is a floating card: rounded all round. */
+.banner.at-hud { vertical-align: top; margin-top: 60px; }
+.banner.at-top { vertical-align: top; margin-top: 0px; }
+.banner.at-band {
+    vertical-align: top;
+    margin-top: 200px;
+    border-radius: 8px;
+    border-top: 1px solid #ffffff14;
+}
+.banner.at-bottom {
+    vertical-align: bottom;
+    margin-top: 0px;
+    margin-bottom: 220px;
+    border-radius: 8px;
+    border-top: 1px solid #ffffff14;
 }
 
 .banner-line {
@@ -46,8 +66,11 @@
 
 .banner-kicker {
     vertical-align: center;
-    margin-right: 12px;
+    margin-right: 14px;
+    font-family: Stratum2 Bold;
     font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     color: #9aa2ac;
 }
 
@@ -55,9 +78,10 @@
     max-width: 680px;
     vertical-align: center;
     text-align: center;
-    font-size: 18px;
+    font-size: 19px;
     letter-spacing: 0.6px;
     color: #f2f4f7;
+    text-shadow: 0px 1px 2px 1.0 #000000cc;
     white-space: nowrap;
     text-overflow: shrink min( 12px ) ellipsis;
 }
@@ -66,21 +90,28 @@
 
 .banner.style-neutral .banner-line   { background-color: #9aa2ac; }
 .banner.style-neutral .banner-kicker { color: #9aa2ac; }
+.banner.style-neutral { border-bottom-color: #9aa2ac; }
 
 .banner.style-info .banner-line   { background-color: #56a0dd; }
 .banner.style-info .banner-kicker { color: #56a0dd; }
+.banner.style-info { border-bottom-color: #56a0dd; }
 
 .banner.style-success .banner-line   { background-color: #9ccf4f; }
 .banner.style-success .banner-kicker { color: #9ccf4f; }
+.banner.style-success { border-bottom-color: #9ccf4f; }
 
 .banner.style-warn .banner-line   { background-color: #f0a531; }
 .banner.style-warn .banner-kicker { color: #f0a531; }
+.banner.style-warn { border-bottom-color: #f0a531; }
 
 .banner.style-danger .banner-line   { background-color: #e0432f; }
 .banner.style-danger .banner-kicker { color: #e0432f; }
+.banner.style-danger { border-bottom-color: #e0432f; }
 
 .banner.style-purple .banner-line   { background-color: #8847ff; }
 .banner.style-purple .banner-kicker { color: #8847ff; }
+.banner.style-purple { border-bottom-color: #8847ff; }
 
 .banner.style-gold .banner-line   { background-color: #e0a24a; }
 .banner.style-gold .banner-kicker { color: #e0a24a; }
+.banner.style-gold { border-bottom-color: #e0a24a; }

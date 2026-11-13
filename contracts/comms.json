@@ -1,0 +1,101 @@
+{
+  "component": "comms",
+  "csharp": "CommsLayout / ICommsService",
+  "summary": "Incoming radio transmission: a face as a glitching hologram, a name and a line of text. The face is one class of the stylesheet. Per player.",
+  "params": {},
+  "repeat": {},
+  "panels": [
+    {
+      "id": "cm_card",
+      "required": true,
+      "classes": [
+        "show",
+        "style-*",
+        "glitch-hard",
+        "static",
+        "burst-a",
+        "burst-b"
+      ],
+      "doc": "The card. `show` plays the power-on, `style-*` is the hologram tint, `glitch-hard` a stronger jitter, `static` heavy noise while connecting, `burst-a` / `burst-b` (alternated) a static burst when the content is swapped in place.",
+      "once": true
+    },
+    {
+      "id": "cm_face",
+      "required": true,
+      "classes": [
+        "face-*"
+      ],
+      "doc": "The portrait. `face-<name>` sets the `background-image` of its `.comms-face-layer` children: one rule per face in the stylesheet (CommsOptions.Face).",
+      "once": true
+    },
+    {
+      "id": "cm_kicker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the kicker, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "cm_name",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the name, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "cm_footer",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the footer, `empty` when blank.",
+      "once": true
+    }
+  ],
+  "texts": [
+    {
+      "var": "cm_text",
+      "required": true,
+      "doc": "CommsOptions.Text"
+    },
+    {
+      "var": "cm_kicker",
+      "required": false,
+      "doc": "CommsOptions.Kicker"
+    },
+    {
+      "var": "cm_name",
+      "required": false,
+      "doc": "CommsOptions.Name"
+    },
+    {
+      "var": "cm_footer",
+      "required": false,
+      "doc": "CommsOptions.Footer"
+    },
+    {
+      "var": "cm_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "CommsOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "show",
+    "empty",
+    "glitch-hard",
+    "static",
+    "burst-a",
+    "burst-b",
+    "face-unknown",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

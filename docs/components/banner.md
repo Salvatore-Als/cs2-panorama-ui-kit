@@ -35,6 +35,7 @@ kit.Banners.Show(player, new BannerOptions
 | `Text` | required | The line. A blank text hides the banner. |
 | `Kicker` | none | Small label beside or above the text. Collapsed when blank. |
 | `Seconds` | `0` | Time on screen. `0` or less keeps it until it is hidden. |
+| `Placement` | `UnderHud` | `at-*` on `b_card`. `UnderHud`: under the game's team bar. `Top`: against the top edge. `UnderBand`: under a match bar with `Band` and a zone status at `Band`, clear of both. `Bottom`: above the inventory row. |
 
 ## Other calls
 

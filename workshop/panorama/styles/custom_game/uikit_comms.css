@@ -1,0 +1,521 @@
+/*
+    uikit_comms - incoming radio transmission, on the left of the screen. Contract "comms".
+
+    One card, #cm_card. "show" plays a CRT power-on (a line that opens up, with a flash); losing it
+    plays the power-off. The portrait #cm_face carries face-<name> (CommsOptions.Face): the rule sets the
+    background-image of its three .comms-face-layer children - the face, and two colour ghosts (red,
+    blue) that only appear during a glitch. The picture is white; wash-color tints it per style-*.
+
+    Over the face: scanlines (1px panels from the builder), a scan band sliding down, a flicker, and
+    a jitter every few seconds. On cm_card:
+      glitch-hard         stronger, faster jitter
+      static              heavy noise, face barely visible: the kit sets it while connecting
+      burst-a / burst-b   a short static burst; the kit alternates them when it swaps the content
+
+    Everything loops on the client: no server write after the show.
+
+    The faces ship with this addon, one SVG per name, compiled to .vsvg_c:
+      panorama/images/custom_game/uikit/comms/<name>.svg
+    Adding another: one more rule at the bottom, then CommsOptions.Face = "<name>". A PNG works too,
+    through its .vtex (see docs/components/comms.md).
+
+    Placement: left edge, its top at about a third of the screen - under the radar, above the health.
+*/
+
+.comms {
+    width: 470px;
+    margin: 330px 0px 0px 24px;
+    horizontal-align: left;
+    vertical-align: top;
+    flow-children: down;
+    padding: 10px 12px 12px 12px;
+    border-radius: 3px;
+    border: 1px solid #4fd6ff40;
+    background-color: #0a1016e6;
+    box-shadow: #00000080 0px 6px 18px 0px;
+    overflow: noclip;
+    transform-origin: 50% 50%;
+
+    opacity: 0;
+    transform: scale3d( 1.0, 0.02, 1.0 );
+    transition-property: opacity, transform;
+    transition-duration: 0.22s;
+    transition-timing-function: ease-in;
+}
+
+.comms.show {
+    opacity: 1;
+    transform: scale3d( 1.0, 1.0, 1.0 );
+    animation-name: comms-power-on;
+    animation-duration: 0.45s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+    sound: "UIPanorama.container_reveal";
+}
+
+@keyframes 'comms-power-on' {
+    0%   { opacity: 1.0; transform: scale3d( 0.4, 0.01, 1.0 ); brightness: 4.0; }
+    35%  { opacity: 1.0; transform: scale3d( 1.0, 0.02, 1.0 ); brightness: 3.0; }
+    70%  { opacity: 1.0; transform: scale3d( 1.0, 1.06, 1.0 ); brightness: 1.6; }
+    100% { opacity: 1.0; transform: scale3d( 1.0, 1.0, 1.0 ); brightness: 1.0; }
+}
+
+/* Header ------------------------------------------------------------------- */
+
+.comms-head {
+    width: 100%;
+    flow-children: right;
+    margin-bottom: 8px;
+}
+
+.comms-rec {
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
+    vertical-align: center;
+    border-radius: 4px;
+    background-color: #e0432f;
+    box-shadow: #e0432f99 0px 0px 6px 1px;
+    animation-name: comms-blink;
+    animation-duration: 1.0s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes 'comms-blink' {
+    0%   { opacity: 1.0; }
+    49%  { opacity: 1.0; }
+    50%  { opacity: 0.15; }
+    100% { opacity: 0.15; }
+}
+
+.comms-kicker {
+    width: fill-parent-flow( 1.0 );
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #4fd6ff;
+    white-space: nowrap;
+    text-overflow: shrink min( 9px ) ellipsis;
+}
+
+.comms-signal {
+    height: 14px;
+    flow-children: right;
+    vertical-align: center;
+}
+
+.comms-signal-bar {
+    width: 3px;
+    margin-left: 2px;
+    vertical-align: bottom;
+    background-color: #4fd6ff;
+    animation-name: comms-signal;
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.comms-signal-bar-1 { height: 4px; }
+.comms-signal-bar-2 { height: 7px; animation-delay: 0.15s; }
+.comms-signal-bar-3 { height: 10px; animation-delay: 0.3s; }
+.comms-signal-bar-4 { height: 14px; animation-delay: 0.45s; }
+
+@keyframes 'comms-signal' {
+    0%   { opacity: 1.0; }
+    60%  { opacity: 1.0; }
+    70%  { opacity: 0.2; }
+    100% { opacity: 1.0; }
+}
+
+/* Body --------------------------------------------------------------------- */
+
+.comms-body {
+    width: 100%;
+    flow-children: right;
+}
+
+/* Portrait: a dark frame, the face over a soft glow, scanlines and band on top. */
+.comms-portrait {
+    width: 160px;
+    height: 180px;
+    border: 1px solid #4fd6ff33;
+    background-color: #050a0f;
+    overflow: clip;
+}
+
+.comms-portrait-glow {
+    width: 100%;
+    height: 100%;
+    background-color: gradient( radial, 50% 45%, 0% 0%, 60% 60%, from( #4fd6ff38 ), to( #4fd6ff00 ) );
+}
+
+.comms-face {
+    width: 100%;
+    height: 100%;
+    animation-name: comms-flicker;
+    animation-duration: 3.1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.comms-face-layer {
+    width: 100%;
+    height: 100%;
+    margin-top: 6px;
+    background-size: contains;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+}
+
+.comms-face-main {
+    wash-color: #4fd6ffff;
+    animation-name: comms-jitter;
+    animation-duration: 2.7s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.comms-face-ghost-r,
+.comms-face-ghost-b {
+    opacity: 0;
+    animation-duration: 2.7s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.comms-face-ghost-r {
+    wash-color: #ff3355ff;
+    animation-name: comms-ghost-r;
+}
+
+.comms-face-ghost-b {
+    wash-color: #3366ffff;
+    animation-name: comms-ghost-b;
+}
+
+@keyframes 'comms-flicker' {
+    0%   { opacity: 0.92; brightness: 1.0; }
+    7%   { opacity: 0.70; brightness: 1.0; }
+    8%   { opacity: 0.95; brightness: 1.0; }
+    30%  { opacity: 0.90; brightness: 1.0; }
+    31%  { opacity: 0.55; brightness: 1.8; }
+    32%  { opacity: 0.95; brightness: 1.0; }
+    60%  { opacity: 0.90; brightness: 1.0; }
+    61%  { opacity: 0.75; brightness: 1.3; }
+    62%  { opacity: 0.95; brightness: 1.0; }
+    100% { opacity: 0.92; brightness: 1.0; }
+}
+
+/* Jitter: still most of the time, two sudden kicks per loop. The ghosts show only during a kick. */
+@keyframes 'comms-jitter' {
+    0%   { transform: translateX( 0px ); }
+    41%  { transform: translateX( 0px ); }
+    42%  { transform: translateX( -5px ); }
+    43%  { transform: translateX( 3px ); }
+    44%  { transform: translateX( 0px ); }
+    77%  { transform: translateX( 0px ); }
+    78%  { transform: translateX( 6px ); }
+    79%  { transform: translateX( -2px ); }
+    80%  { transform: translateX( 0px ); }
+    100% { transform: translateX( 0px ); }
+}
+
+@keyframes 'comms-ghost-r' {
+    0%   { opacity: 0.0; transform: translateX( 0px ); }
+    41%  { opacity: 0.0; transform: translateX( 0px ); }
+    42%  { opacity: 0.55; transform: translateX( -9px ); }
+    44%  { opacity: 0.0; transform: translateX( 0px ); }
+    77%  { opacity: 0.0; transform: translateX( 0px ); }
+    78%  { opacity: 0.5; transform: translateX( 2px ); }
+    80%  { opacity: 0.0; transform: translateX( 0px ); }
+    100% { opacity: 0.0; transform: translateX( 0px ); }
+}
+
+@keyframes 'comms-ghost-b' {
+    0%   { opacity: 0.0; transform: translateX( 0px ); }
+    41%  { opacity: 0.0; transform: translateX( 0px ); }
+    42%  { opacity: 0.55; transform: translateX( 4px ); }
+    44%  { opacity: 0.0; transform: translateX( 0px ); }
+    77%  { opacity: 0.0; transform: translateX( 0px ); }
+    78%  { opacity: 0.5; transform: translateX( 10px ); }
+    80%  { opacity: 0.0; transform: translateX( 0px ); }
+    100% { opacity: 0.0; transform: translateX( 0px ); }
+}
+
+/* glitch-hard: the same kicks, bigger and twice as often. */
+.comms.glitch-hard .comms-face-main { animation-name: comms-jitter-hard; animation-duration: 1.3s; }
+.comms.glitch-hard .comms-face-ghost-r { animation-name: comms-ghost-r-hard; animation-duration: 1.3s; }
+.comms.glitch-hard .comms-face-ghost-b { animation-name: comms-ghost-b-hard; animation-duration: 1.3s; }
+
+@keyframes 'comms-jitter-hard' {
+    0%   { transform: translateX( 0px ); }
+    30%  { transform: translateX( 0px ); }
+    32%  { transform: translateX( -12px ); }
+    34%  { transform: translateX( 8px ); }
+    36%  { transform: translateX( 0px ); }
+    70%  { transform: translateX( 0px ); }
+    72%  { transform: translateX( 14px ) translateY( -3px ); }
+    74%  { transform: translateX( -6px ); }
+    76%  { transform: translateX( 0px ); }
+    100% { transform: translateX( 0px ); }
+}
+
+@keyframes 'comms-ghost-r-hard' {
+    0%   { opacity: 0.0; transform: translateX( 0px ); }
+    30%  { opacity: 0.0; transform: translateX( 0px ); }
+    32%  { opacity: 0.7; transform: translateX( -18px ); }
+    36%  { opacity: 0.0; transform: translateX( 0px ); }
+    70%  { opacity: 0.0; transform: translateX( 0px ); }
+    72%  { opacity: 0.7; transform: translateX( 6px ); }
+    76%  { opacity: 0.0; transform: translateX( 0px ); }
+    100% { opacity: 0.0; transform: translateX( 0px ); }
+}
+
+@keyframes 'comms-ghost-b-hard' {
+    0%   { opacity: 0.0; transform: translateX( 0px ); }
+    30%  { opacity: 0.0; transform: translateX( 0px ); }
+    32%  { opacity: 0.7; transform: translateX( 6px ); }
+    36%  { opacity: 0.0; transform: translateX( 0px ); }
+    70%  { opacity: 0.0; transform: translateX( 0px ); }
+    72%  { opacity: 0.7; transform: translateX( 22px ); }
+    76%  { opacity: 0.0; transform: translateX( 0px ); }
+    100% { opacity: 0.0; transform: translateX( 0px ); }
+}
+
+/* Scanlines: stacked in their own layer over the face. */
+.comms-scanlines {
+    width: 100%;
+    height: 100%;
+    flow-children: down;
+}
+
+.comms-scanline {
+    width: 100%;
+    height: 1px;
+    margin-bottom: 3px;
+    background-color: #00000066;
+}
+
+.comms-scanband {
+    width: 100%;
+    height: 28px;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #4fd6ff00 ), color-stop( 0.5, #4fd6ff2e ), to( #4fd6ff00 ) );
+    animation-name: comms-scan;
+    animation-duration: 2.6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes 'comms-scan' {
+    0%   { transform: translateY( -30px ); }
+    100% { transform: translateY( 190px ); }
+}
+
+/* Static: bright and dark bands racing down, invisible until static or a burst. */
+.comms-noise {
+    width: 100%;
+    height: 200%;
+    opacity: 0;
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #ffffff22 ), color-stop( 0.08, #00000088 ), color-stop( 0.13, #ffffff55 ), color-stop( 0.2, #00000044 ), color-stop( 0.31, #ffffff33 ), color-stop( 0.37, #000000aa ), color-stop( 0.45, #ffffff44 ), color-stop( 0.52, #00000066 ), color-stop( 0.6, #ffffff22 ), color-stop( 0.66, #00000099 ), color-stop( 0.74, #ffffff55 ), color-stop( 0.83, #00000055 ), color-stop( 0.9, #ffffff33 ), to( #00000077 ));
+}
+
+.comms.static .comms-noise {
+    opacity: 0.85;
+    animation-name: comms-noise;
+    animation-duration: 0.18s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.comms.static .comms-face { opacity: 0.25; animation-name: none; }
+
+@keyframes 'comms-noise' {
+    0%   { transform: translateY( 0px ); }
+    33%  { transform: translateY( -60px ); }
+    66%  { transform: translateY( -25px ); }
+    100% { transform: translateY( -90px ); }
+}
+
+/* Bursts: one short pass of static. Two names, so each swap restarts it. */
+.comms.burst-a .comms-noise { animation-name: comms-burst-a; animation-duration: 0.35s; animation-timing-function: linear; }
+.comms.burst-b .comms-noise { animation-name: comms-burst-b; animation-duration: 0.35s; animation-timing-function: linear; }
+
+@keyframes 'comms-burst-a' {
+    0%   { opacity: 0.9; transform: translateY( 0px ); }
+    50%  { opacity: 0.8; transform: translateY( -70px ); }
+    100% { opacity: 0.0; transform: translateY( -30px ); }
+}
+
+@keyframes 'comms-burst-b' {
+    0%   { opacity: 0.9; transform: translateY( -40px ); }
+    50%  { opacity: 0.8; transform: translateY( -10px ); }
+    100% { opacity: 0.0; transform: translateY( -80px ); }
+}
+
+/* Two corner brackets, a viewfinder. */
+.comms-corner {
+    width: 14px;
+    height: 14px;
+}
+
+.comms-corner-tl {
+    x: 4px;
+    y: 4px;
+    border-top: 2px solid #4fd6ffaa;
+    border-left: 2px solid #4fd6ffaa;
+}
+
+.comms-corner-br {
+    horizontal-align: right;
+    vertical-align: bottom;
+    margin: 0px 4px 4px 0px;
+    border-bottom: 2px solid #4fd6ffaa;
+    border-right: 2px solid #4fd6ffaa;
+}
+
+/* Copy --------------------------------------------------------------------- */
+
+.comms-copy {
+    width: fill-parent-flow( 1.0 );
+    margin-left: 14px;
+    flow-children: down;
+}
+
+.comms-name {
+    width: 100%;
+    font-family: Stratum2 Bold;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #4fd6ff;
+    white-space: nowrap;
+    text-overflow: shrink min( 13px ) ellipsis;
+}
+
+/* Revealed by a wipe on show, and again on every swap. */
+.comms-text {
+    width: 100%;
+    max-height: 96px;
+    margin-top: 8px;
+    font-size: 17px;
+    color: #f2f4f7;
+    white-space: normal;
+    text-overflow: ellipsis;
+    clip: rect( 0%, 0%, 100%, 0% );
+    transition-property: clip;
+    transition-duration: 0.9s;
+    transition-timing-function: linear;
+    transition-delay: 0.35s;
+}
+
+.comms.show .comms-text { clip: rect( 0%, 100%, 100%, 0% ); }
+
+.comms.show.burst-a .comms-text { animation-name: comms-wipe-a; animation-duration: 0.7s; animation-timing-function: linear; }
+.comms.show.burst-b .comms-text { animation-name: comms-wipe-b; animation-duration: 0.7s; animation-timing-function: linear; }
+
+@keyframes 'comms-wipe-a' {
+    0%   { clip: rect( 0%, 0%, 100%, 0% ); }
+    100% { clip: rect( 0%, 100%, 100%, 0% ); }
+}
+
+@keyframes 'comms-wipe-b' {
+    0%   { clip: rect( 0%, 0%, 100%, 0% ); }
+    100% { clip: rect( 0%, 100%, 100%, 0% ); }
+}
+
+.comms-footer {
+    width: 100%;
+    margin-top: 10px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #61686f;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Styles (UiStyle): hologram tint ------------------------------------------ */
+
+.comms.style-info { border: 1px solid #4fd6ff40; }
+.comms.style-info .comms-kicker,
+.comms.style-info .comms-name { color: #4fd6ff; }
+.comms.style-info .comms-face-main { wash-color: #4fd6ffff; }
+.comms.style-info .comms-signal-bar { background-color: #4fd6ff; }
+
+.comms.style-neutral { border: 1px solid #9aa2ac40; }
+.comms.style-neutral .comms-kicker,
+.comms.style-neutral .comms-name { color: #c4cad1; }
+.comms.style-neutral .comms-face-main { wash-color: #c4cad1ff; }
+.comms.style-neutral .comms-signal-bar { background-color: #9aa2ac; }
+.comms.style-neutral .comms-portrait-glow { background-color: gradient( radial, 50% 45%, 0% 0%, 60% 60%, from( #9aa2ac30 ), to( #9aa2ac00 ) ); }
+
+.comms.style-success { border: 1px solid #9ccf4f40; }
+.comms.style-success .comms-kicker,
+.comms.style-success .comms-name { color: #9ccf4f; }
+.comms.style-success .comms-face-main { wash-color: #9ccf4fff; }
+.comms.style-success .comms-signal-bar { background-color: #9ccf4f; }
+.comms.style-success .comms-portrait-glow { background-color: gradient( radial, 50% 45%, 0% 0%, 60% 60%, from( #9ccf4f38 ), to( #9ccf4f00 ) ); }
+
+.comms.style-warn { border: 1px solid #f0a53140; }
+.comms.style-warn .comms-kicker,
+.comms.style-warn .comms-name { color: #f0a531; }
+.comms.style-warn .comms-face-main { wash-color: #f0a531ff; }
+.comms.style-warn .comms-signal-bar { background-color: #f0a531; }
+.comms.style-warn .comms-portrait-glow { background-color: gradient( radial, 50% 45%, 0% 0%, 60% 60%, from( #f0a53138 ), to( #f0a53100 ) ); }
+
+.comms.style-danger { border: 1px solid #e0432f50; }
+.comms.style-danger .comms-kicker,
+.comms.style-danger .comms-name { color: #ff5a44; }
+.comms.style-danger .comms-face-main { wash-color: #ff5a44ff; }
+.comms.style-danger .comms-signal-bar { background-color: #e0432f; }
+.comms.style-danger .comms-portrait-glow { background-color: gradient( radial, 50% 45%, 0% 0%, 60% 60%, from( #e0432f40 ), to( #e0432f00 ) ); }
+
+.comms.style-purple { border: 1px solid #8847ff50; }
+.comms.style-purple .comms-kicker,
+.comms.style-purple .comms-name { color: #a77bff; }
+.comms.style-purple .comms-face-main { wash-color: #a77bffff; }
+.comms.style-purple .comms-signal-bar { background-color: #8847ff; }
+.comms.style-purple .comms-portrait-glow { background-color: gradient( radial, 50% 45%, 0% 0%, 60% 60%, from( #8847ff40 ), to( #8847ff00 ) ); }
+
+.comms.style-gold { border: 1px solid #e0a24a40; }
+.comms.style-gold .comms-kicker,
+.comms.style-gold .comms-name { color: #e0a24a; }
+.comms.style-gold .comms-face-main { wash-color: #e0a24aff; }
+.comms.style-gold .comms-signal-bar { background-color: #e0a24a; }
+.comms.style-gold .comms-portrait-glow { background-color: gradient( radial, 50% 45%, 0% 0%, 60% 60%, from( #e0a24a38 ), to( #e0a24a00 ) ); }
+
+/* Faces (CommsFaces) --------------------------------------------------------- */
+
+.comms-face.face-warden .comms-face-layer {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/comms/warden.vsvg" );
+}
+
+.comms-face.face-jackal .comms-face-layer {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/comms/jackal.vsvg" );
+}
+
+.comms-face.face-doctor .comms-face-layer {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/comms/doctor.vsvg" );
+}
+
+.comms-face.face-oracle .comms-face-layer {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/comms/oracle.vsvg" );
+}
+
+.comms-face.face-unknown .comms-face-layer {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/comms/unknown.vsvg" );
+}
+
+/*
+    Villain: a colour photo (PNG, 320x360 = the portrait's ratio, 2x), not a white SVG. Drawn as is - no tint,
+    full frame - while the red / blue ghosts of a glitch keep theirs. Same recipe for any photo face.
+*/
+.comms-face.face-villain .comms-face-layer {
+    margin-top: 0px;
+    background-size: 100% 100%;
+    background-image: url( "s2r://panorama/images/custom_game/uikit/comms/villain_png.vtex" );
+}
+
+.comms-face.face-villain .comms-face-main {
+    wash-color: #ffffff00;
+}
