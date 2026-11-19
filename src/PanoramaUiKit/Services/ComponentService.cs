@@ -21,6 +21,8 @@ internal abstract class ComponentService<TChannel, TLayout>
         _registry = registry;
     }
 
+    protected LayoutRegistry Registry => _registry;
+
     /// <summary>The channel for <paramref name="layout"/>; null when the registry refused it (logged).</summary>
     protected TChannel? Channel(TLayout layout) => _registry.Get<TChannel>(layout);
 

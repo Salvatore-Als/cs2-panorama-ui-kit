@@ -6,11 +6,11 @@ Map in a corner: the map picture, the current zone (red) and the next one (white
 
 C#: `MinimapLayout / IMinimapService`
 
-Marker: `<!-- uikit:minimap marks=16 -->`
+Marker: `<!-- uikit:minimap marks=64 -->`
 
 Pool parameters (marker and C# layout descriptor must agree):
 
-- `marks` (default `16`): Markers in the pool (MinimapLayout.Marks).
+- `marks` (default `64`): Markers in the pool (MinimapLayout.Marks).
 
 Placeholders: `{m}` = each of `marks`.
 

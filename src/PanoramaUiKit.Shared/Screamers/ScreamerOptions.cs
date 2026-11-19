@@ -14,8 +14,8 @@ public sealed record ScreamerOptions : UiContent
     /// Whether <see cref="Sound"/> is played when the screamer shows. False = picture only.
     ///
     /// <para>The sound is played by the server on the player's client (<c>play</c>), not by the stylesheet: a CSS
-    /// <c>sound</c> is loaded on use and reaches the player well after the picture. Even <c>play</c> is slow to
-    /// start, so the picture waits <see cref="SoundLeadSeconds"/> for it.</para>
+    /// <c>sound</c> is loaded on use and reaches the player at an unknown time. It starts
+    /// <see cref="SoundLeadSeconds"/> after the picture.</para>
     /// </summary>
     public bool PlaySound { get; init; } = true;
 
@@ -26,8 +26,8 @@ public sealed record ScreamerOptions : UiContent
     public string? Sound { get; init; } = ScreamerNames.Sound;
 
     /// <summary>
-    /// Seconds between the sound and the picture: the client takes a moment to start a sound, so the picture
-    /// waits for it. Only when a sound is played; zero shows both at once.
+    /// Seconds between the picture and the sound: the picture shows at once, the sound starts this long after.
+    /// Only when a sound is played; zero plays both at once.
     /// </summary>
     public float SoundLeadSeconds { get; init; } = 1f;
 

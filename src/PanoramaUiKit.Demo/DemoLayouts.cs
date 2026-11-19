@@ -11,6 +11,7 @@ using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Minimap;
+using PanoramaUiKit.Shared.Overlays;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Recap;
@@ -75,6 +76,8 @@ internal static class DemoLayouts
 
     public static readonly ScreamerLayout Screamer = new() { Name = "uikit_screamer" };
 
+    public static readonly OverlayLayout Overlay = new() { Name = "uikit_overlay" };
+
     public static readonly CompassLayout Compass = new() { Name = "uikit_compass" };
 
     public static readonly InventoryLayout Inventory = new() { Name = "uikit_inventory" };
@@ -93,7 +96,7 @@ internal static class DemoLayouts
     /// <summary>Every layout the demo draws on, to spawn them at load.</summary>
     public static IEnumerable<UiLayout> All =>
     [
-        Toast, NeonToast, Banner, Announce, Abilities, Match, KillFeed, Victory, Roulette, Vote, Panel, Menu, Card, Target, Progress, Dial, Screamer,
+        Toast, NeonToast, Banner, Announce, Abilities, Match, KillFeed, Victory, Roulette, Vote, Panel, Menu, Card, Target, Progress, Dial, Screamer, Overlay,
         Compass, Inventory, Zone, Comms, Recap, Minimap, BigMap,
     ];
 }

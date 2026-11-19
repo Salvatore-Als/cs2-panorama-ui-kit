@@ -1,0 +1,42 @@
+/*
+    uikit_overlay - a full-screen effect over the player's view. Contract "overlay".
+
+    One panel, ov_fx, and one class on it, fx-<name> (IOverlayService.Show, OverlayEffects): frozen, burning, knocked
+    down, poisoned, or custom1..8, a picture your addon ships (a logo, a splash). The panel holds a pool - 8 full-screen
+    layers, 40 particles - that each effect styles in uikit_overlay_fx.css, written by tools/overlay_fx.py. This file
+    only lays the pool out; unused parts stay collapsed.
+
+    debug1, below, is a plain magenta screen written here. Its twin debug2 is in uikit_overlay_fx.css: if debug1 shows
+    and debug2 does not, uikit_overlay_fx.css did not load.
+*/
+
+.ov-fx {
+    width: 100%;
+    height: 100%;
+}
+
+.ov-fx-l, .ov-fx-pts {
+    width: 100%;
+    height: 100%;
+}
+
+.ov-fx-l, .ov-fx-p {
+    visibility: collapse;
+}
+
+/* Check: a plain magenta screen from this stylesheet. */
+.ov-fx.fx-debug1 .ov-fx-l0 {
+    visibility: visible;
+    background-color: #ff00ff;
+    opacity: 0.5;
+}
+
+/* Check: ov_fx itself, yellow, nothing from its children (the screamer's way: a class on the panel styles it). */
+.ov-fx.fx-debug3 {
+    background-color: #ffd60a80;
+}
+
+/* Check: the particle box, green; it is never collapsed, so this tests a child without visibility toggled. */
+.ov-fx.fx-debug4 .ov-fx-pts {
+    background-color: #00ff6a80;
+}

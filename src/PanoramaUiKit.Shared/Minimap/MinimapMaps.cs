@@ -10,7 +10,8 @@ namespace PanoramaUiKit.Shared.Minimap;
 ///
 /// <see cref="Slot"/> names a picture the addon does not ship, for another addon (a custom map):
 /// <c>panorama/images/custom_game/uikit/minimap/maps/slot_&lt;n&gt;.png</c> with its <c>slot_&lt;n&gt;_png.vtex</c>,
-/// with <see cref="MinimapBounds"/> of your own.
+/// with <see cref="MinimapBounds"/> of your own. Register it under the map's name
+/// (<see cref="IMinimapService.RegisterMap"/>) and it is shown like an official one.
 /// </summary>
 public static class MinimapMaps
 {
@@ -26,8 +27,8 @@ public static class MinimapMaps
     public const string Office = "cs_office";
     public const string Italy = "cs_italy";
 
-    /// <summary>Slots in the bundled stylesheet: <c>slot-1</c> to <c>slot-8</c>.</summary>
-    public const int Slots = 8;
+    /// <summary>Slots in the bundled stylesheets: <c>slot-1</c> to <c>slot-32</c>.</summary>
+    public const int Slots = 32;
 
     /// <summary>Bounds of the official maps, from their overview files (<c>pos_x</c>, <c>pos_y</c>, <c>scale</c>, 1024px).</summary>
     public static readonly IReadOnlyDictionary<string, MinimapBounds> Official = new Dictionary<string, MinimapBounds>(StringComparer.OrdinalIgnoreCase)

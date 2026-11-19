@@ -1,0 +1,23 @@
+{
+  "component": "overlay",
+  "csharp": "OverlayLayout / IOverlayService",
+  "summary": "A full-screen effect over the player's view: frozen, burning, knocked down, poisoned, or a custom picture (a logo). One per player.",
+  "params": {},
+  "repeat": {},
+  "panels": [
+    {
+      "id": "ov_fx",
+      "required": true,
+      "classes": [
+        "hidden",
+        "fx-*",
+        "style-*"
+      ],
+      "doc": "The effect. Author it with class `hidden`. `fx-<name>` (OverlayEffects) picks the look: the stylesheets style the pool inside it, panels `.ov-fx-l0`..`.ov-fx-l7` (layers) and `.ov-fx-p.p0`..`.p39` (particles), collapsed unless the effect uses them."
+    }
+  ],
+  "texts": [],
+  "css": [
+    "hidden"
+  ]
+}

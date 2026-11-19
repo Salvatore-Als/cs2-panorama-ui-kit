@@ -12,6 +12,7 @@ using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Minimap;
+using PanoramaUiKit.Shared.Overlays;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Recap;
@@ -120,6 +121,9 @@ public interface IPanoramaUiKit
 
     /// <summary>Map in a corner: the map picture, the zone circles and markers, the player's arrow followed by the kit. Zones and global marks for everyone, the rest per player.</summary>
     IMinimapService Minimap { get; }
+
+    /// <summary>A full-screen effect over the view: frozen, burning, knocked down, poisoned, or your own (a logo) as a custom effect. Per player.</summary>
+    IOverlayService Overlays { get; }
 
     /// <summary>
     /// Spawns the layout entity now instead of on first use. Call it for every layout your plugin

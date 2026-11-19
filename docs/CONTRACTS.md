@@ -328,11 +328,11 @@ Map in a corner: the map picture, the current zone (red) and the next one (white
 
 C#: `MinimapLayout / IMinimapService`
 
-Marker: `<!-- uikit:minimap marks=16 -->`
+Marker: `<!-- uikit:minimap marks=64 -->`
 
 Pool parameters (marker and C# layout descriptor must agree):
 
-- `marks` (default `16`): Markers in the pool (MinimapLayout.Marks).
+- `marks` (default `64`): Markers in the pool (MinimapLayout.Marks).
 
 Placeholders: `{m}` = each of `marks`.
 
@@ -359,6 +359,20 @@ Placeholders: `{m}` = each of `marks`.
 | `text="{s:mm_<key>}"` | Label text | no | string | MinimapOptions.Texts[key] |
 
 Stylesheet should define: `.hidden`, `.empty`, `.at-tl`, `.at-tr`, `.at-bl`, `.at-br`, `.size-md`, `.map-de_dust2`, `.map-slot-1`, `.x-32`, `.y-32`, `.r-32`, `.rot-9`, `.dur-60`, `.kind-self`, `.kind-mate`, `.state-downed`, `.style-danger`, `.zoom-200`, `.px-32`, `.py-32`.
+
+## overlay
+
+A full-screen effect over the player's view: frozen, burning, knocked down, poisoned, or a custom picture (a logo). One per player.
+
+C#: `OverlayLayout / IOverlayService`
+
+Marker: `<!-- uikit:overlay -->`
+
+| Element | Kind | Required | Kit writes | Meaning |
+|---|---|---|---|---|
+| `id="ov_fx"` | panel | yes | `hidden`, `fx-*`, `style-*` | The effect. Author it with class `hidden`. `fx-<name>` (OverlayEffects) picks the look: the stylesheets style the pool inside it, panels `.ov-fx-l0`..`.ov-fx-l7` (layers) and `.ov-fx-p.p0`..`.p39` (particles), collapsed unless the effect uses them. |
+
+Stylesheet should define: `.hidden`.
 
 ## panel
 

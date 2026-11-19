@@ -37,6 +37,15 @@ public sealed record MinimapOptions : UiContent
     /// <summary>The kit puts the player in slot 0 (<see cref="MinimapNames.Self"/>, turned by the view) and keeps it there.</summary>
     public bool FollowSelf { get; init; } = true;
 
+    /// <summary>
+    /// Size of the player's own arrow and its halo, 1 = the stylesheet's. Snapped to 10 % steps from 0.5 to 2.5
+    /// (class <c>self-NNN</c> on <c>mm_frame</c>, NNN in percent). Other markers keep their size.
+    /// </summary>
+    public float SelfScale { get; init; } = 1f;
+
+    /// <summary>Style of the player's own arrow, see <see cref="MinimapArrows"/>. Null or <c>classic</c> = the gold arrow in its ring.</summary>
+    public string? SelfArrow { get; init; }
+
     /// <summary>Seconds between two reads of the player's position while following.</summary>
     public float FollowInterval { get; init; } = 0.05f;
 

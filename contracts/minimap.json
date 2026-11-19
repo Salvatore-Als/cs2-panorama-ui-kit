@@ -4,7 +4,7 @@
   "summary": "Map in a corner: the map picture, the current zone (red) and the next one (white), and markers. Zones and global marks are the same for everyone; the map, the player's arrow and personal marks are per player. Positions are a class ladder on a grid; an optional zoom follows the player.",
   "params": {
     "marks": {
-      "default": 16,
+      "default": 64,
       "doc": "Markers in the pool (MinimapLayout.Marks)."
     }
   },

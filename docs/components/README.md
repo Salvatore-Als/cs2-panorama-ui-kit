@@ -18,6 +18,7 @@
 | [Progress bar](progress.md) | Bar pushed by value, or timed and run by the client | Per player or everyone |
 | [Dial](dial.md) | Radial ring for cooldowns and charges, pushed or timed | Per player or everyone |
 | [Screamer](screamer.md) | Full-screen picture with its sound | Per player |
+| [Overlay](overlay.md) | Full-screen effect over the view: frozen, burning, knocked down, poisoned, or your own picture | Per player or everyone |
 | [Compass](compass.md) | Heading strip at the top that follows the view, with pins | Per player |
 | [Inventory](inventory.md) | Row of item tiles: icon, count, key hint, selection | Per player |
 | [Zone](zone.md) | Safe zone status under the compass, countdown, bar and alerts | Per player or everyone |

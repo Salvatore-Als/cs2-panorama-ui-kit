@@ -18,6 +18,18 @@ namespace PanoramaUiKit.Shared.Minimap;
 /// </summary>
 public interface IMinimapService
 {
+    /// <summary>
+    /// Tells the kit how to draw a map that is not an official one: by its name (<c>dz_arcadias</c>), the picture and its
+    /// bounds. From then on, a <see cref="Show"/> on that map (the server's, when <see cref="MinimapOptions.Map"/> is
+    /// null, or named) uses them, on every minimap layout. Typically a slot your addon fills:
+    /// <code>kit.Minimap.RegisterMap("dz_arcadias", new MinimapMap(MinimapMaps.Slot(1), MinimapBounds.FromOverview(-4096, 4096, 8)));</code>
+    /// Register from OnAllPluginsLoaded; registering a name again replaces it.
+    /// </summary>
+    void RegisterMap(string map, MinimapMap picture);
+
+    /// <summary>How a map is drawn: registered, else official (<see cref="MinimapMaps.Official"/>), else null (nothing is placed on it).</summary>
+    MinimapMap? FindMap(string map);
+
     /// <summary>Shows or updates this player's map. It stays until hidden, through a round restart.</summary>
     IUiHandle Show(CCSPlayerController player, MinimapOptions options);
 
@@ -48,6 +60,17 @@ public interface IMinimapService
 
     /// <summary>Same, on <paramref name="viewer"/>'s map only (a teammate). <see cref="ClearMark"/> on the slot stops it.</summary>
     void TrackPlayerFor(CCSPlayerController viewer, MinimapLayout layout, CCSPlayerController target, MinimapTrack track);
+
+    /// <summary>
+    /// Follows every player of <paramref name="targets"/> on every map of the layout (null = every minimap layout), one
+    /// marker each in the slots of <paramref name="list"/>, in list order, a colour each. Call again with the new list
+    /// whenever it changes: players no longer in it are taken off. An empty list clears the range.
+    /// </summary>
+    void TrackPlayers(MinimapLayout? layout, IReadOnlyList<CCSPlayerController> targets, MinimapTrackList? list = null);
+
+    /// <summary>Same, on <paramref name="viewer"/>'s map only (their squad, the players they spectate).</summary>
+    void TrackPlayersFor(CCSPlayerController viewer, MinimapLayout layout, IReadOnlyList<CCSPlayerController> targets,
+                         MinimapTrackList? list = null);
 
     /// <summary>True while a map is on this player's screen, on that layout or on any when null.</summary>
     bool IsShowing(CCSPlayerController player, MinimapLayout? layout = null);

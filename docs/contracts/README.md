@@ -40,6 +40,7 @@ else (structure, colours, animation) is yours.
 | [match](match.md) | Compact top bar: a count + title on each side, a timer in the middle, optional score tabs under the sides, optional band across the top. Same text for everyone. Tick-friendly. |
 | [menu](menu.md) | Menus and sub-menus: entries paginated by the pool size, back button on sub-menus, pager at the bottom. Takes the mouse. |
 | [minimap](minimap.md) | Map in a corner: the map picture, the current zone (red) and the next one (white), and markers. Zones and global marks are the same for everyone; the map, the player's arrow and personal marks are per player. Positions are a class ladder on a grid; an optional zoom follows the player. |
+| [overlay](overlay.md) | A full-screen effect over the player's view: frozen, burning, knocked down, poisoned, or a custom picture (a logo). One per player. |
 | [panel](panel.md) | Modal panel: pages in a left menu, stats strip, typed rows with buttons, switches and steppers. Takes the mouse. |
 | [progress](progress.md) | Progress bar with an optional label and value. Follows a value you push, or runs on its own for a duration. |
 | [recap](recap.md) | End of match screen for one player: placement, headline, and a strip at the bottom with the player's name and stat tiles (icon, value, label). Per player. Optionally a few player rows (a duo, a squad) instead of the single player. |

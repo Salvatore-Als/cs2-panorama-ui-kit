@@ -734,6 +734,36 @@ def screamer(
     )
 
 
+def overlay(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    # One full-screen effect panel: a pool of layers and particles each effect (fx-<name>) styles.
+    pool = "\n".join(f'<Panel class="ov-fx-l ov-fx-l{i}" hittest="false" />' for i in range(8))
+    dots = "\n".join(f'<Panel class="ov-fx-p p{i}" hittest="false" />' for i in range(40))
+    body = (
+        '<Panel id="ov_fx" class="ov-fx hidden" hittest="false">\n'
+        + indent(pool, 1)
+        + '\t<Panel class="ov-fx-pts" hittest="false">\n'
+        + indent(dots, 2)
+        + "\t</Panel>\n"
+        + "</Panel>"
+    )
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body=body,
+        extra_stylesheets=("uikit_overlay_fx",),
+        description=(
+            "Overlay: one full-screen effect, ov_fx. fx-<name> picks it (OverlayEffects).\n"
+            "8 layers and 40 particles, styled in uikit_overlay_fx.css (tools/overlay_fx.py)."
+        ),
+    )
+
+
 def recap(
     name: str,
     stylesheet: str,
@@ -1105,6 +1135,7 @@ BUILDERS: dict[str, Builder] = {
     "progress": progress,
     "dial": dial,
     "screamer": screamer,
+    "overlay": overlay,
     "inventory": inventory,
     "compass": compass,
     "comms": comms,

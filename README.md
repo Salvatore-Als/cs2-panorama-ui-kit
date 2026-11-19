@@ -1,6 +1,6 @@
 # Panorama UI Kit
 
-**Version 1.3.0.** I built this out of necessity: I needed UI for my own projects. It turned out to be practical enough to share.
+**Version 1.4.0.** I built this out of necessity: I needed UI for my own projects. It turned out to be practical enough to share.
 
 Shared Panorama HUD components for [CounterStrikeSharp](https://docs.cssharp.dev/) plugins. Built with [PanoramaManager](https://github.com/Next-il/PanoramaManager).
 
@@ -44,6 +44,7 @@ python3 -m uikit check-all
 | [Progress bar](docs/components/progress.md)  | Bar pushed by value, or timed and run by the client |
 | [Dial](docs/components/dial.md)              | Radial ring for cooldowns and charges            |
 | [Screamer](docs/components/screamer.md)      | Full-screen picture with its sound               |
+| [Overlay](docs/components/overlay.md)        | Full-screen effects: frozen, burning, knocked…   |
 | [Compass](docs/components/compass.md)        | Heading strip at the top, follows the view, with pins |
 | [Inventory](docs/components/inventory.md)    | Row of item tiles: icon, count, key hint, selection |
 | [Zone](docs/components/zone.md)              | Safe zone status, countdown and alerts           |
@@ -96,6 +97,7 @@ To browse them without typing, `css_uikit_demo` (chat: `!uikit_demo`) opens a sh
 | Progress bar   | [DemoPlugin.Progress.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Progress.cs)   | `css_uikit_demo_progress`  |
 | Dial           | [DemoPlugin.Dial.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Dial.cs)           | `css_uikit_demo_dial`      |
 | Screamer       | [DemoPlugin.Screamer.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Screamer.cs)   | `css_uikit_demo_screamer`  |
+| Overlay        | [DemoPlugin.Overlay.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Overlay.cs)     | `css_uikit_demo_overlay`   |
 | Compass        | [DemoPlugin.Compass.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Compass.cs)     | `css_uikit_demo_compass`   |
 | Inventory      | [DemoPlugin.Inventory.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Inventory.cs) | `css_uikit_demo_inventory` |
 | Zone           | [DemoPlugin.Zone.cs](src/PanoramaUiKit.Demo/UI/DemoPlugin.Zone.cs)           | `css_uikit_demo_zone`      |

@@ -25,14 +25,17 @@ public sealed class MinimapLayout : UiLayout
 
     public override string Component => "minimap";
 
-    /// <summary><c>x-0</c>..<c>x-{Grid-1}</c> and the same for <c>y-*</c>. The bundled stylesheet has 64 (4px cells on its 256px map).</summary>
-    public int Grid { get; init; } = 64;
+    /// <summary>
+    /// <c>x-0</c>..<c>x-{Grid-1}</c> and the same for <c>y-*</c>, <c>px-*</c>, <c>py-*</c>. Both bundled stylesheets have 768: one pixel
+    /// a cell on the big map, a third of one on the corner map. The same on both, so one layout object fits either.
+    /// </summary>
+    public int Grid { get; init; } = 768;
 
     /// <summary>Markers <c>mm_mark_0</c>..<c>mm_mark_{Marks-1}</c>. Marks beyond it are not drawn.</summary>
-    public int Marks { get; init; } = 16;
+    public int Marks { get; init; } = 64;
 
-    /// <summary><c>r-0</c>..<c>r-{Radii}</c>: a zone's radius, <c>r-{Radii}</c> being the width of the whole map.</summary>
-    public int Radii { get; init; } = 64;
+    /// <summary><c>r-0</c>..<c>r-{Radii}</c>: a zone's radius, <c>r-{Radii}</c> being the width of the whole map. 768: a pixel a step on the big map.</summary>
+    public int Radii { get; init; } = 768;
 
     /// <summary><c>zoom-N</c> classes the bundled stylesheet defines, in percent. <see cref="MinimapOptions.Zoom"/> snaps to the nearest.</summary>
     public IReadOnlyList<int> Zooms { get; init; } = [150, 200, 300, 400];

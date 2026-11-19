@@ -22,6 +22,14 @@ def test_every_component_has_a_contract(contracts: ContractSet) -> None:
         "target",
         "progress",
         "dial",
+        "screamer",
+        "overlay",
+        "compass",
+        "inventory",
+        "zone",
+        "comms",
+        "recap",
+        "minimap",
     }
 
 

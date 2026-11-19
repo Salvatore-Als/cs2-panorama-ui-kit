@@ -8,6 +8,16 @@ namespace PanoramaUiKit.Services;
 
 internal sealed class MinimapService(LayoutRegistry registry) : ComponentService<MinimapChannel, MinimapLayout>(registry), IMinimapService
 {
+    public void RegisterMap(string map, MinimapMap picture)
+    {
+        if (!string.IsNullOrWhiteSpace(map))
+        {
+            Registry.Maps.Register(map, picture);
+        }
+    }
+
+    public MinimapMap? FindMap(string map) => Registry.Maps.Find(map);
+
     public IUiHandle Show(CCSPlayerController player, MinimapOptions options) =>
         WhenWarm(Channel(options.Layout), player, channel => channel.Show(player, options));
 
@@ -29,6 +39,39 @@ internal sealed class MinimapService(LayoutRegistry registry) : ComponentService
 
     public void TrackPlayerFor(CCSPlayerController viewer, MinimapLayout layout, CCSPlayerController target, MinimapTrack track) =>
         Channel(layout)?.Track(viewer, target, track);
+
+    public void TrackPlayers(MinimapLayout? layout, IReadOnlyList<CCSPlayerController> targets, MinimapTrackList? list = null) =>
+        Each(layout, channel => TrackList(list, targets,
+                                          (target, track) => channel.Track(null, target, track),
+                                          slot => channel.ClearGlobalMark(slot)));
+
+    public void TrackPlayersFor(CCSPlayerController viewer, MinimapLayout layout, IReadOnlyList<CCSPlayerController> targets,
+                                MinimapTrackList? list = null)
+    {
+        if (Channel(layout) is { } channel)
+        {
+            TrackList(list, targets, (target, track) => channel.Track(viewer, target, track), slot => channel.ClearMark(viewer, slot));
+        }
+    }
+
+    /// <summary>One track per player in the list's slots, the rest of the range cleared.</summary>
+    private static void TrackList(MinimapTrackList? list, IReadOnlyList<CCSPlayerController> targets,
+                                  Action<CCSPlayerController, MinimapTrack> track, Action<int> clear)
+    {
+        list ??= new MinimapTrackList();
+        List<CCSPlayerController> valid = targets.Where(t => t is { IsValid: true }).ToList();
+        for (int i = 0; i < list.Slots; i++)
+        {
+            if (i < valid.Count)
+            {
+                track(valid[i], list.Track(i));
+            }
+            else
+            {
+                clear(list.FirstSlot + i);
+            }
+        }
+    }
 
     public bool IsShowing(CCSPlayerController player, MinimapLayout? layout = null) =>
         player is { IsValid: true } && Targets(layout).Any(channel => channel.IsShowing(player));

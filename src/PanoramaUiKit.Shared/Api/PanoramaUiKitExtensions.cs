@@ -3,6 +3,7 @@ using PanoramaUiKit.Shared.Announcements;
 using PanoramaUiKit.Shared.Banners;
 using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Overlays;
 using PanoramaUiKit.Shared.Dials;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Roulette;
@@ -27,6 +28,7 @@ namespace PanoramaUiKit.Shared.Api;
 /// kit.Progress(player, Bars, "Defusing", seconds: 5);
 /// kit.Dial(player, Dials, "Dash", seconds: 8);
 /// kit.Screamer(player, Screamers, ScreamerNames.Momo);
+/// kit.Overlay(player, Overlays, OverlayEffects.Frozen5, seconds: 4);
 /// </code>
 /// </summary>
 public static class PanoramaUiKitExtensions
@@ -190,6 +192,18 @@ public static class PanoramaUiKitExtensions
             Seconds = seconds,
             PlaySound = playSound,
             Sound = sound,
+        });
+    }
+
+    /// <summary>A full-screen effect (<see cref="OverlayEffects"/>), until hidden (<paramref name="seconds"/> = 0) or for that long.</summary>
+    public static IUiHandle Overlay(this IPanoramaUiKit kit, CCSPlayerController player, OverlayLayout layout, string effect,
+                                    float seconds = 0f)
+    {
+        return kit.Overlays.Show(player, new OverlayOptions
+        {
+            Layout = layout,
+            Effect = effect,
+            Seconds = seconds,
         });
     }
 }

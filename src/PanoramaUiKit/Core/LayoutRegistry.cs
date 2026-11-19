@@ -15,6 +15,7 @@ using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Minimap;
+using PanoramaUiKit.Shared.Overlays;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Recap;
@@ -47,7 +48,17 @@ internal sealed class LayoutRegistry : IDisposable
     {
         _plugin = plugin;
         _logger = logger;
+        Maps.Changed += () =>
+        {
+            foreach (MinimapChannel minimap in _channels.Values.OfType<MinimapChannel>())
+            {
+                minimap.RefreshMaps();
+            }
+        };
     }
+
+    /// <summary>How each map is drawn on the minimaps (dev, plugin, official), shared by every minimap layout.</summary>
+    public MapCatalog Maps { get; } = new();
 
     public IEnumerable<LayoutChannel> Channels => _channels.Values;
 
@@ -177,12 +188,13 @@ internal sealed class LayoutRegistry : IDisposable
         ProgressLayout progress => new FillChannel(_plugin, progress, progress.Placements.Select(p => p.Code()).ToList(), "pg", progress.Steps, progress.Durations),
         DialLayout dial => new FillChannel(_plugin, dial, dial.Placements.Select(p => p.Code()).ToList(), "dl", dial.Steps, dial.Durations),
         ScreamerLayout screamer => new ScreamerChannel(_plugin, screamer),
+        OverlayLayout overlay => new OverlayChannel(_plugin, overlay),
         CompassLayout compass => new CompassChannel(_plugin, compass),
         InventoryLayout inventory => new InventoryChannel(_plugin, inventory),
         ZoneLayout zone => new ZoneChannel(_plugin, zone),
         CommsLayout comms => new CommsChannel(_plugin, comms),
         RecapLayout recap => new RecapChannel(_plugin, recap),
-        MinimapLayout minimap => new MinimapChannel(_plugin, minimap),
+        MinimapLayout minimap => new MinimapChannel(_plugin, minimap, Maps),
         _ => throw new ArgumentOutOfRangeException(nameof(layout), layout.GetType().Name, "Unknown layout type"),
     };
 

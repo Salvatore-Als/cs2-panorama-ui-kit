@@ -5,6 +5,8 @@ using CounterStrikeSharp.API.Modules.Commands;
 using PanoramaUiKit.Shared.Api;
 using PanoramaUiKit.Shared.Common;
 using PanoramaUiKit.Shared.Menus;
+using PanoramaUiKit.Shared.Minimap;
+using PanoramaUiKit.Shared.Overlays;
 
 namespace PanoramaUiKit.Demo;
 
@@ -35,13 +37,15 @@ public sealed partial class DemoPlugin
         MenuEntry.Open("Screens", _ => ShowcaseScreens(), "Victory, recap, roulette, screamer, vote, panel, menu."),
         MenuEntry.Open("Full HUD preview", _ => ShowcaseFullHudMenu(),
                        "Everything at once; pick where the zone status goes."),
-        MenuEntry.Open("Minimap", _ => ShowcaseMinimap(), "Maps, zones, zoom, tracked players."),
+        MenuEntry.Open("Minimap", _ => ShowcaseMinimap(), "Maps, zones, zoom, your arrow, coloured points, tracked players."),
+        MenuEntry.Open("Overlay", _ => ShowcaseOverlay(), "Full-screen effects: frozen, burning, zombie, knocked, other states, custom."),
         Demo("Inventory", "css_uikit_demo_inventory", "Item bar at the bottom; each click changes the selection."),
         Demo("Diagnostics", "css_panorama_diag", "PanoramaManager's report: open your console to read it."),
         MenuEntry.Button("Clear everything", p =>
         {
             RunDemo(p, "css_uikit_demo_clear");
             RunDemo(p, "css_uikit_demo_minimap off");
+            RunDemo(p, "css_uikit_demo_overlay off");
         }, "Removes every kit element on your screen."),
     ]);
 
@@ -122,8 +126,38 @@ public sealed partial class DemoPlugin
         Demo("Zoom x4", "css_uikit_demo_minimap tr zoom 4"),
         Demo("Shrink the zone", "css_uikit_demo_minimap shrink", "Red zone closes onto the white one over 20 s."),
         Demo("Track other players", "css_uikit_demo_minimap track", "Bots too: kill or kick one and watch its marker."),
+        MenuEntry.Open("Your arrow: style", _ => ShowcaseMenu("Your arrow", "The 19 MinimapArrows styles", UiStyle.Success,
+            [.. MinimapArrows.All.Select(a => Demo(a, $"css_uikit_demo_minimap tr arrow {a}"))])),
+        MenuEntry.Open("Your arrow: size", _ => ShowcaseMenu("Your arrow", "MinimapOptions.SelfScale", UiStyle.Success,
+            [.. new[] { "0.5", "0.75", "1", "1.25", "1.5", "2", "2.5" }.Select(s => Demo($"x{s}", $"css_uikit_demo_minimap tr self {s}"))])),
+        Demo("Coloured points", "css_uikit_demo_minimap colors", "One point per MinimapColors colour, in a ring around you."),
+        Demo("Follow a list of players", "css_uikit_demo_minimap follow", "TrackPlayersFor with everyone else, one colour each. Again to stop."),
+        Demo("Calibrate this map (dev)", "css_uikit_dev", "The kit's dev menu: picture, bounds, landmarks, code, save. Admin.", closeMenu: true),
         Demo("Hide", "css_uikit_demo_minimap off"),
     ]);
+
+    private static MenuOptions ShowcaseOverlay() => ShowcaseMenu("Overlay", "One effect at a time, another replaces it", UiStyle.Warn,
+    [
+        MenuEntry.Open("Frozen", _ => ShowcaseEffectList("Frozen", e => e.StartsWith("frozen", StringComparison.Ordinal))),
+        MenuEntry.Open("Burning", _ => ShowcaseEffectList("Burning", e => e.StartsWith("burn", StringComparison.Ordinal))),
+        MenuEntry.Open("Zombie and knocked", _ => ShowcaseEffectList("Zombie and knocked",
+            e => e.StartsWith("zombie", StringComparison.Ordinal) || e.StartsWith("knock", StringComparison.Ordinal))),
+        MenuEntry.Open("Other states", _ => ShowcaseEffectList("Other states", e => !char.IsDigit(e[^1]))),
+        MenuEntry.Open("Custom and checks", _ => ShowcaseMenu("Custom and checks", "Your pictures, and the two plain screens", UiStyle.Warn,
+        [
+            Demo("debug1 (magenta)", "css_uikit_demo_overlay debug1", "Written in uikit_overlay.css."),
+            Demo("debug2 (cyan)", "css_uikit_demo_overlay debug2", "Written in uikit_overlay_fx.css: if only debug1 shows, that file did not load."),
+            Demo("debug3 (yellow)", "css_uikit_demo_overlay debug3", "ov_fx itself, no children: the screamer's way."),
+            Demo("debug4 (green)", "css_uikit_demo_overlay debug4", "The particle box, a child that is never collapsed."),
+            .. Enumerable.Range(1, 6).Select(n => Demo($"custom{n}", $"css_uikit_demo_overlay custom{n}", $"uikit/overlay/custom/custom_{n}.png from your addon.")),
+        ])),
+        Demo("Next", "css_uikit_demo_overlay next", "Walks through all the bundled effects."),
+        Demo("Previous", "css_uikit_demo_overlay prev"),
+        Demo("Off", "css_uikit_demo_overlay off"),
+    ]);
+
+    private static MenuOptions ShowcaseEffectList(string title, Func<string, bool> which) =>
+        ShowcaseMenu(title, "Click to show it", UiStyle.Warn, [.. OverlayEffects.All.Where(which).Select(e => Demo(e, $"css_uikit_demo_overlay {e}"))]);
 
     private static MenuOptions ShowcaseMessages() => ShowcaseMenu("Messages", "Timed notices", UiStyle.Warn,
     [

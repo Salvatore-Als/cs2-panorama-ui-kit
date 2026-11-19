@@ -15,6 +15,7 @@ using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
 using PanoramaUiKit.Shared.Minimap;
+using PanoramaUiKit.Shared.Overlays;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
 using PanoramaUiKit.Shared.Recap;
@@ -32,6 +33,7 @@ namespace PanoramaUiKit.Core;
 internal sealed class UiKit : IPanoramaUiKit, IDisposable
 {
     private readonly LayoutRegistry _registry;
+    private readonly OverlayService _overlays;
 
     public UiKit(LayoutRegistry registry)
     {
@@ -59,6 +61,7 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
         Comms = new CommsService(registry);
         Recap = new RecapService(registry);
         Minimap = new MinimapService(registry);
+        _overlays = new OverlayService(registry);
     }
 
     public int Version => IPanoramaUiKit.ApiVersion;
@@ -107,6 +110,8 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
 
     public IMinimapService Minimap { get; }
 
+    public IOverlayService Overlays => _overlays;
+
     public IEnumerable<LayoutChannel> Channels => _registry.Channels;
 
     public bool Preload(UiLayout layout) => _registry.Get<LayoutChannel>(layout) != null;
@@ -114,6 +119,9 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
     public void ClearAll(CCSPlayerController player) => _registry.ClearAll(player);
 
     public void ClearEveryone() => _registry.ClearEveryone();
+
+    /// <summary>A player died: what was shown to them only while alive goes.</summary>
+    public void PlayerDied(CCSPlayerController player) => _overlays.PlayerDied(player);
 
     public void Dispose() => _registry.Dispose();
 }

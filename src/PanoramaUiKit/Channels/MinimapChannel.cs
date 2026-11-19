@@ -2,6 +2,7 @@ using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using PanoramaManager;
 using PanoramaUiKit.Channels.Base;
+using PanoramaUiKit.Core;
 using PanoramaUiKit.Internal;
 using PanoramaUiKit.Shared.Common;
 using PanoramaUiKit.Shared.Compass;
@@ -18,9 +19,13 @@ namespace PanoramaUiKit.Channels;
 /// Every viewer is painted from both, in grid cells of its own bounds. The client state only sends what changed,
 /// so the follow timer can repaint everything: a player standing still costs nothing.
 ///
-/// A zone shrink is the zone bar's pattern on three panels: <c>dur-*</c> dropped (snap to where the zone is now),
-/// <c>dur-N</c> after <see cref="RestartSeconds"/>, the target classes one update later. Each zone carries a
-/// version; a viewer paints a zone again only when its version moved, so a running shrink is never restarted.
+/// The next zone's shrink is the zone bar's pattern on three panels: <c>dur-*</c> dropped (snap to where the zone is
+/// now), <c>dur-N</c> after <see cref="RestartSeconds"/>, the target classes one update later. Each zone carries a
+/// version; a viewer paints it again only when its version moved, so a running shrink is never restarted.
+///
+/// The current zone is a hole in a red veil, sized per step rather than scaled (a scale would thin the veil), so the
+/// client cannot run its shrink: the kit sends a step every <see cref="ShrinkStepSeconds"/> and the stylesheet glides
+/// each one, linear, over that time.
 /// </summary>
 internal sealed class MinimapChannel : LayoutChannel<MinimapChannel.Viewer>
 {
@@ -38,6 +43,9 @@ internal sealed class MinimapChannel : LayoutChannel<MinimapChannel.Viewer>
     private const float RunGapSeconds = 0.12f;
 
     private static readonly MinimapZoneId[] ZoneIds = [MinimapZoneId.Next, MinimapZoneId.Current];
+
+    /// <summary>Between two steps of the current zone's shrink; the stylesheet's glide (tools/minimap_css.py SHRINK_STEP).</summary>
+    private const float ShrinkStepSeconds = 0.1f;
 
     internal sealed class Viewer : ViewerState
     {
@@ -99,10 +107,15 @@ internal sealed class MinimapChannel : LayoutChannel<MinimapChannel.Viewer>
     private readonly Dictionary<int, Tracked> _globalTracks = new();
     private int _zoneVersion;
     private bool _tracking;
+    /// <summary>When the current zone's shrink last stepped. Its timer dies with the map: a stale one is restarted.</summary>
+    private float _shrinkStepAt = float.MinValue;
 
-    public MinimapChannel(BasePlugin plugin, MinimapLayout layout) : base(plugin, layout)
+    private readonly MapCatalog _maps;
+
+    public MinimapChannel(BasePlugin plugin, MinimapLayout layout, MapCatalog maps) : base(plugin, layout)
     {
         _layout = layout;
+        _maps = maps;
     }
 
     protected override Viewer CreateViewer(int slot) => new(NewClient());
@@ -125,10 +138,8 @@ internal sealed class MinimapChannel : LayoutChannel<MinimapChannel.Viewer>
         viewer.CancelTimers();
         UiHandle handle = viewer.NewHandle(player, () => Hide(player));
 
-        string? map = Names.Token(options.Map) ?? Names.Token(Server.MapName);
         viewer.Options = options;
-        viewer.MapClass = map == null ? null : MinimapMaps.Class(map);
-        viewer.Bounds = options.Bounds ?? (map != null && MinimapMaps.Official.TryGetValue(map, out MinimapBounds? known) ? known : null);
+        Resolve(viewer);
         viewer.ZoneVersions.Clear();
         if (!options.FollowSelf)
         {
@@ -145,6 +156,35 @@ internal sealed class MinimapChannel : LayoutChannel<MinimapChannel.Viewer>
         }
 
         return handle;
+    }
+
+    /// <summary>
+    /// The picture and bounds of the map a viewer asked for (the server's when <c>Map</c> is null): from the catalog
+    /// (dev, plugin, official), else the name itself as a picture with no bounds (nothing placed). Bounds given in the
+    /// options win.
+    /// </summary>
+    private void Resolve(Viewer viewer)
+    {
+        MinimapOptions options = viewer.Options!;
+        string? requested = options.Map ?? Server.MapName;
+        MinimapMap? map = _maps.Find(requested);
+        string? picture = Names.Token(map?.Picture ?? requested);
+        viewer.MapClass = picture == null ? null : MinimapMaps.Class(picture);
+        viewer.Bounds = options.Bounds ?? map?.Bounds;
+    }
+
+    /// <summary>A map's picture or bounds changed (dev menu, RegisterMap): every open map redrawn with them.</summary>
+    public void RefreshMaps()
+    {
+        foreach (CCSPlayerController player in Humans())
+        {
+            if (Viewers.TryGetValue(player.Slot, out Viewer? viewer) && viewer.Options != null)
+            {
+                Resolve(viewer);
+                viewer.ZoneVersions.Clear();
+                Paint(player, viewer);
+            }
+        }
     }
 
     public void SetMark(CCSPlayerController player, MinimapMark mark)
@@ -211,6 +251,27 @@ internal sealed class MinimapChannel : LayoutChannel<MinimapChannel.Viewer>
         float seconds = from == null ? 0f : shrinkSeconds;
         _zones[id] = new ZoneState(zone, from, now, seconds, ++_zoneVersion);
         RepaintShowing(PaintZones);
+
+        bool stepping = now >= _shrinkStepAt && now - _shrinkStepAt < ShrinkStepSeconds * 4f;
+        if (id == MinimapZoneId.Current && seconds > 0f && !stepping)
+        {
+            _shrinkStepAt = now;
+            Later(ShrinkStepSeconds, ShrinkTick);
+        }
+    }
+
+    /// <summary>The current zone's next step on every map, while it shrinks; one last at its end.</summary>
+    private void ShrinkTick()
+    {
+        RepaintShowing((player, viewer) => PaintZone(player, viewer, MinimapZoneId.Current));
+        if (_zones.TryGetValue(MinimapZoneId.Current, out ZoneState? zone) && zone.Left(Server.CurrentTime) > 0f)
+        {
+            _shrinkStepAt = Server.CurrentTime;
+            Later(ShrinkStepSeconds, ShrinkTick);
+            return;
+        }
+
+        _shrinkStepAt = float.MinValue;
     }
 
     public void SetGlobalMark(MinimapMark mark)
@@ -463,6 +524,8 @@ internal sealed class MinimapChannel : LayoutChannel<MinimapChannel.Viewer>
         client.Group(player, FrameId, "at", options.Placement.Class());
         client.Group(player, FrameId, "size", options.Size.Class());
         client.Group(player, FrameId, "style", Names.StyleOrNeutral(options.Style));
+        client.Group(player, FrameId, "self", SelfClass(options.SelfScale));
+        client.Group(player, FrameId, "arrow", Names.Token(options.SelfArrow) is { } arrow and not MinimapArrows.Classic ? $"arrow-{arrow}" : null);
         client.FreeClasses(player, FrameId, options.Classes);
         client.Group(player, MapId, "map", viewer.MapClass);
         client.OptionalText(player, "mm_title", options.Title);
@@ -497,6 +560,13 @@ internal sealed class MinimapChannel : LayoutChannel<MinimapChannel.Viewer>
         client.Group(player, "mm_zoom", "zoom", $"zoom-{zoom}");
         client.Group(player, "mm_pan", "px", $"px-{x}");
         client.Group(player, "mm_pan_y", "py", $"py-{y}");
+    }
+
+    /// <summary><c>self-NNN</c>: the arrow's scale in 10 % steps, 50 to 250; none at 100 %.</summary>
+    private static string? SelfClass(float scale)
+    {
+        int percent = Math.Clamp((int)Math.Round(scale * 10f) * 10, 50, 250);
+        return percent == 100 ? null : $"self-{percent}";
     }
 
     /// <summary>The nearest zoom class, in percent; 100 or less = none.</summary>
@@ -561,6 +631,14 @@ internal sealed class MinimapChannel : LayoutChannel<MinimapChannel.Viewer>
         {
             client.Class(player, id, "hidden", true);
             viewer.ZoneVersions.Remove(zoneId);
+            return;
+        }
+
+        // Current: where it is now, every time; the client state only sends a step that moved.
+        if (zoneId == MinimapZoneId.Current)
+        {
+            PlaceZone(player, client, id, bounds, zone.Now(Server.CurrentTime)!);
+            client.Class(player, id, "hidden", false);
             return;
         }
 
