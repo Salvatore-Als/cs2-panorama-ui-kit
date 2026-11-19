@@ -11,9 +11,10 @@
       "classes": [
         "hidden",
         "show",
-        "style-*"
+        "style-*",
+        "at-*"
       ],
-      "doc": "The banner. `show` plays the entry."
+      "doc": "The banner. `show` plays the entry. `at-*` is BannerOptions.Placement: `at-hud` under the game's team bar (default), `at-top` against the edge, `at-band` under a match bar with its band and the zone status, `at-bottom` above the inventory."
     },
     {
       "id": "b_kicker",
@@ -49,6 +50,10 @@
     "style-info",
     "style-success",
     "style-warn",
-    "style-danger"
+    "style-danger",
+    "at-hud",
+    "at-top",
+    "at-band",
+    "at-bottom"
   ]
 }

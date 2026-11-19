@@ -158,30 +158,35 @@ def match(
 ) -> LayoutDocument:
     body = """\
 <Panel id="m_bar" class="match-bar" hittest="false">
-	<Panel class="match-row" hittest="false">
-		<Panel id="m_left" class="match-side" hittest="false">
-			<Label class="match-value" hittest="false" text="{s:m_left_value}" />
-			<Label class="match-label" hittest="false" text="{s:m_left_label}" />
-		</Panel>
-		<Panel class="match-mid" hittest="false">
-			<Label class="match-center" hittest="false" text="{s:m_center}" />
-			<Label id="m_center_sub" class="match-sub" hittest="false" text="{s:m_center_sub}" />
-		</Panel>
-		<Panel id="m_right" class="match-side" hittest="false">
-			<Label class="match-value" hittest="false" text="{s:m_right_value}" />
-			<Label class="match-label" hittest="false" text="{s:m_right_label}" />
-		</Panel>
+	<Panel class="match-band" hittest="false">
+		<Panel class="match-band-line" hittest="false" />
 	</Panel>
-	<Panel id="m_scores" class="match-scores hidden" hittest="false">
-		<Panel class="match-cell" hittest="false">
-			<Panel id="m_left_tab" class="match-tab" hittest="false">
-				<Label class="match-score" hittest="false" text="{s:m_left_score}" />
+	<Panel class="match-core" hittest="false">
+		<Panel class="match-row" hittest="false">
+			<Panel id="m_left" class="match-side" hittest="false">
+				<Label class="match-value" hittest="false" text="{s:m_left_value}" />
+				<Label class="match-label" hittest="false" text="{s:m_left_label}" />
+			</Panel>
+			<Panel class="match-mid" hittest="false">
+				<Label class="match-center" hittest="false" text="{s:m_center}" />
+				<Label id="m_center_sub" class="match-sub" hittest="false" text="{s:m_center_sub}" />
+			</Panel>
+			<Panel id="m_right" class="match-side" hittest="false">
+				<Label class="match-value" hittest="false" text="{s:m_right_value}" />
+				<Label class="match-label" hittest="false" text="{s:m_right_label}" />
 			</Panel>
 		</Panel>
-		<Panel class="match-gap" hittest="false" />
-		<Panel class="match-cell" hittest="false">
-			<Panel id="m_right_tab" class="match-tab" hittest="false">
-				<Label class="match-score" hittest="false" text="{s:m_right_score}" />
+		<Panel id="m_scores" class="match-scores hidden" hittest="false">
+			<Panel class="match-cell" hittest="false">
+				<Panel id="m_left_tab" class="match-tab" hittest="false">
+					<Label class="match-score" hittest="false" text="{s:m_left_score}" />
+				</Panel>
+			</Panel>
+			<Panel class="match-gap" hittest="false" />
+			<Panel class="match-cell" hittest="false">
+				<Panel id="m_right_tab" class="match-tab" hittest="false">
+					<Label class="match-score" hittest="false" text="{s:m_right_score}" />
+				</Panel>
 			</Panel>
 		</Panel>
 	</Panel>
@@ -193,7 +198,8 @@ def match(
         body=body,
         description=(
             "Match bar, glued to the top edge: count + title / timer / count + title,\n"
-            "with an optional score tab under each side. Same text for everyone."
+            "with an optional score tab under each side. Same text for everyone.\n"
+            "band (MatchOptions.Band) adds a long strip across the top and hangs the bar under it."
         ),
     )
 
@@ -728,6 +734,390 @@ def screamer(
     )
 
 
+def overlay(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    # One full-screen effect panel: a pool of layers and particles each effect (fx-<name>) styles.
+    pool = "\n".join(f'<Panel class="ov-fx-l ov-fx-l{i}" hittest="false" />' for i in range(8))
+    dots = "\n".join(f'<Panel class="ov-fx-p p{i}" hittest="false" />' for i in range(40))
+    body = (
+        '<Panel id="ov_fx" class="ov-fx hidden" hittest="false">\n'
+        + indent(pool, 1)
+        + '\t<Panel class="ov-fx-pts" hittest="false">\n'
+        + indent(dots, 2)
+        + "\t</Panel>\n"
+        + "</Panel>"
+    )
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body=body,
+        extra_stylesheets=("uikit_overlay_fx",),
+        description=(
+            "Overlay: one full-screen effect, ov_fx. fx-<name> picks it (OverlayEffects).\n"
+            "8 layers and 40 particles, styled in uikit_overlay_fx.css (tools/overlay_fx.py)."
+        ),
+    )
+
+
+def recap(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    stats = _count(params, "stats")
+    rows = _count(params, "rows")
+    row_stats = _count(params, "row_stats")
+
+    def row_stat(r: int, i: int) -> str:
+        return f"""\
+<Panel id="rc_row_{r}_stat_{i}" class="recap-stat recap-row-stat hidden" hittest="false">
+	<Panel id="rc_row_{r}_stat_{i}_icon" class="recap-stat-icon" hittest="false" />
+	<Label class="recap-stat-value" hittest="false" text="{{s:rc_row_{r}_stat_{i}_value}}" />
+	<Label class="recap-stat-label" hittest="false" text="{{s:rc_row_{r}_stat_{i}_label}}" />
+</Panel>"""
+
+    def row(r: int) -> str:
+        cells = indent("\n".join(row_stat(r, i) for i in range(row_stats)), 2)
+        return f"""\
+<Panel id="rc_row_{r}" class="recap-row hidden" hittest="false">
+	<Panel class="recap-row-who" hittest="false">
+		<Label class="recap-row-name" hittest="false" text="{{s:rc_row_{r}_name}}" />
+		<Label id="rc_row_{r}_sub" class="recap-row-sub" hittest="false" text="{{s:rc_row_{r}_sub}}" />
+	</Panel>
+	<Panel class="recap-row-stats" hittest="false">
+{cells}	</Panel>
+</Panel>"""
+
+    row_block = indent("\n".join(row(r) for r in range(rows)), 4)
+
+    def stat(i: int) -> str:
+        return f"""\
+<Panel id="rc_stat_{i}" class="recap-stat hidden" hittest="false">
+	<Panel class="recap-stat-accent" hittest="false" />
+	<Panel id="rc_stat_{i}_icon" class="recap-stat-icon" hittest="false" />
+	<Label class="recap-stat-value" hittest="false" text="{{s:rc_stat_{i}_value}}" />
+	<Label class="recap-stat-label" hittest="false" text="{{s:rc_stat_{i}_label}}" />
+</Panel>"""
+
+    stat_block = indent("\n".join(stat(i) for i in range(stats)), 4)
+    body = f"""\
+<Panel id="rc_screen" class="recap-screen" hittest="false">
+	<Panel class="recap-veil" hittest="false" />
+	<Panel class="recap-glow" hittest="false" />
+	<Panel class="recap-head" hittest="false">
+		<Label id="rc_kicker" class="recap-kicker" hittest="false" text="{{s:rc_kicker}}" />
+		<Panel id="rc_place_row" class="recap-place-row" hittest="false">
+			<Label class="recap-place" hittest="false" text="{{s:rc_place}}" />
+			<Label id="rc_place_total" class="recap-place-total" hittest="false" text="{{s:rc_place_total}}" />
+		</Panel>
+		<Label class="recap-title" hittest="false" text="{{s:rc_title}}" />
+		<Panel class="recap-rule" hittest="false" />
+	</Panel>
+	<Panel class="recap-foot" hittest="false">
+		<Panel class="recap-strip" hittest="false">
+			<Panel class="recap-strip-accent" hittest="false" />
+			<Panel class="recap-strip-body" hittest="false">
+				<Panel id="rc_solo" class="recap-player" hittest="false">
+					<Label class="recap-player-name" hittest="false" text="{{s:rc_player}}" />
+					<Label id="rc_player_sub" class="recap-player-sub" hittest="false" text="{{s:rc_player_sub}}" />
+				</Panel>
+				<Panel id="rc_stats" class="recap-stats" hittest="false">
+{stat_block}				</Panel>
+				<Panel id="rc_rows" class="recap-rows hidden" hittest="false">
+{row_block}				</Panel>
+			</Panel>
+		</Panel>
+		<Panel id="rc_restart" class="recap-restart hidden" hittest="false">
+			<Label class="recap-restart-label" hittest="false" text="{{s:rc_restart_label}}" />
+			<Label class="recap-restart-eta" hittest="false" text="{{s:rc_restart_eta}}" />
+		</Panel>
+	</Panel>
+</Panel>"""
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body=body,
+        description=(
+            f"End of match screen: veil, placement and headline at the top, a strip at the bottom with\n"
+            f"the player's name and {stats} stat tile(s). icon-<name> on rc_stat_<n>_icon sets a tile's picture.\n"
+            'Elements enter one after the other through transition-delay: one "show", one write.\n'
+            "pulse-a / pulse-b swap on a tile whose value changed while shown.\n"
+            f"Or {rows} player row(s) of {row_stats} stat(s) (a duo, a squad) in place of the single player."
+        ),
+    )
+
+
+def zone(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    hazard = "\n".join('<Panel class="zone-hazard-bar" hittest="false" />' for _ in range(16))
+    stripes = '<Panel class="zone-hazard" hittest="false">\n' + indent(hazard, 1) + "</Panel>"
+    body = f"""\
+<Panel class="zone-area zone-area-status" hittest="false">
+	<Panel id="zn_status" class="zone-status hidden" hittest="false">
+		<Panel class="zone-row" hittest="false">
+			<Panel class="zone-icon" hittest="false" />
+			<Label id="zn_phase" class="zone-phase" hittest="false" text="{{s:zn_phase}}" />
+			<Label class="zone-state" hittest="false" text="{{s:zn_state}}" />
+			<Label id="zn_timer" class="zone-timer" hittest="false" text="{{s:zn_timer}}" />
+		</Panel>
+		<Panel id="zn_bar" class="zone-bar" hittest="false">
+			<Panel id="zn_bar_fill" class="zone-bar-fill" hittest="false" />
+		</Panel>
+		<Label id="zn_info" class="zone-info" hittest="false" text="{{s:zn_info}}" />
+	</Panel>
+</Panel>
+<Panel class="zone-area zone-area-alert" hittest="false">
+	<Panel id="zn_alert" class="zone-alert hidden" hittest="false">
+		<Panel class="zone-alert-flash" hittest="false" />
+{indent(stripes, 2)}		<Panel class="zone-alert-body" hittest="false">
+			<Panel class="zone-alert-icon" hittest="false" />
+			<Label id="zn_alert_kicker" class="zone-alert-kicker" hittest="false" text="{{s:zn_alert_kicker}}" />
+			<Label class="zone-alert-title" hittest="false" text="{{s:zn_alert_title}}" />
+			<Label id="zn_alert_desc" class="zone-alert-desc" hittest="false" text="{{s:zn_alert_desc}}" />
+		</Panel>
+{indent(stripes, 2)}	</Panel>
+</Panel>"""
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body=body,
+        description=(
+            "Zone: a status widget under the compass (phase, state, countdown, bar, info line)\n"
+            "and an alert in the upper third, framed by hazard stripes.\n"
+            "The bar is a clip: step-N snaps it to the share left, dur-N + run drain it."
+        ),
+    )
+
+
+def minimap(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    marks = _count(params, "marks")
+
+    def zone(z: str) -> str:
+        return f"""\
+<Panel id="mm_zone_{z}" class="mm-zone mm-zone-{z} hidden" hittest="false">
+	<Panel id="mm_zone_{z}_y" class="mm-zone-y" hittest="false">
+		<Panel id="mm_zone_{z}_ring" class="mm-ring" hittest="false" />
+	</Panel>
+</Panel>"""
+
+    def mark(m: int) -> str:
+        return f"""\
+<Panel id="mm_mark_{m}" class="mm-mark hidden" hittest="false">
+	<Panel id="mm_mark_{m}_y" class="mm-mark-y" hittest="false">
+		<Panel class="mm-mark-halo" hittest="false" />
+		<Panel id="mm_mark_{m}_icon" class="mm-mark-icon" hittest="false" />
+		<Label id="mm_mark_{m}_label" class="mm-mark-label" hittest="false" text="{{s:mm_mark_{m}_label}}" />
+	</Panel>
+</Panel>"""
+
+    # Next under current, markers over both, in slot order (z-index by kind does the rest).
+    layers = "\n".join([zone("next"), zone("cur"), *(mark(m) for m in range(marks))])
+    body = f"""\
+<Panel id="mm_frame" class="minimap hidden" hittest="false">
+	<Panel class="minimap-veil" hittest="false" />
+	<Panel class="minimap-box" hittest="false">
+		<Panel id="mm_map" class="minimap-map" hittest="false">
+			<Panel id="mm_zoom" class="mm-zoom" hittest="false">
+				<Panel id="mm_pan" class="mm-pan" hittest="false">
+					<Panel id="mm_pan_y" class="mm-pan-y" hittest="false">
+						<Panel class="minimap-world" hittest="false" />
+{indent(layers, 6)}					</Panel>
+				</Panel>
+			</Panel>
+		</Panel>
+	</Panel>
+	<Label id="mm_title" class="minimap-title" hittest="false" text="{{s:mm_title}}" />
+</Panel>"""
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body=body,
+        description=(
+            f"Minimap: map picture, current and next zone circles, {marks} marker(s).\n"
+            "Positions are x-N / y-N on two nested panels (one transform per axis), radii r-N on the ring,\n"
+            "a shrink is dur-N then the target classes, run by the client.\n"
+            "Zoom: everything on the map sits in mm_zoom (zoom-*, a scale) > mm_pan / mm_pan_y (px-* / py-*, centre on the player)."
+        ),
+    )
+
+
+COMMS_SCANLINES = 45
+"""1px lines, 4px apart: they cover the 180px portrait."""
+
+
+def comms(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    scanlines = indent(
+        "\n".join('<Panel class="comms-scanline" hittest="false" />' for _ in range(COMMS_SCANLINES)), 1
+    )
+    bars = "\n".join(
+        f'\t<Panel class="comms-signal-bar comms-signal-bar-{i}" hittest="false" />' for i in range(1, 5)
+    )
+    body = f"""\
+<Panel id="cm_card" class="comms" hittest="false">
+	<Panel class="comms-head" hittest="false">
+		<Panel class="comms-rec" hittest="false" />
+		<Label id="cm_kicker" class="comms-kicker" hittest="false" text="{{s:cm_kicker}}" />
+		<Panel class="comms-signal" hittest="false">
+{indent(bars, 2)}		</Panel>
+	</Panel>
+	<Panel class="comms-body" hittest="false">
+		<Panel class="comms-portrait" hittest="false">
+			<Panel class="comms-portrait-glow" hittest="false" />
+			<Panel id="cm_face" class="comms-face" hittest="false">
+				<Panel class="comms-face-layer comms-face-ghost-r" hittest="false" />
+				<Panel class="comms-face-layer comms-face-ghost-b" hittest="false" />
+				<Panel class="comms-face-layer comms-face-main" hittest="false" />
+			</Panel>
+			<Panel class="comms-scanlines" hittest="false">
+{indent(scanlines, 3)}			</Panel>
+			<Panel class="comms-scanband" hittest="false" />
+			<Panel class="comms-noise" hittest="false" />
+			<Panel class="comms-corner comms-corner-tl" hittest="false" />
+			<Panel class="comms-corner comms-corner-br" hittest="false" />
+		</Panel>
+		<Panel class="comms-copy" hittest="false">
+			<Label id="cm_name" class="comms-name" hittest="false" text="{{s:cm_name}}" />
+			<Label class="comms-text" hittest="false" text="{{s:cm_text}}" />
+			<Label id="cm_footer" class="comms-footer" hittest="false" text="{{s:cm_footer}}" />
+		</Panel>
+	</Panel>
+</Panel>"""
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body=body,
+        description=(
+            "Comms: radio transmission card on the left. Kicker with rec dot and signal bars,\n"
+            "a hologram portrait (face-<name> on cm_face: three layers, the main one and two colour ghosts,\n"
+            f"under {COMMS_SCANLINES} scanlines, a moving scan band and a static layer), name, text, footer."
+        ),
+    )
+
+
+COMPASS_CARDINALS = {0: "N", 45: "NE", 90: "E", 135: "SE", 180: "S", 225: "SW", 270: "W", 315: "NW"}
+"""Letters on the compass strip, by heading."""
+
+
+def compass(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    pins = _count(params, "pins")
+
+    # One cell per 15 degrees, -180..540: the kit keeps the heading unwrapped within -90..450, and
+    # the viewport shows 90 degrees either side of it.
+    def cell(angle: int) -> str:
+        heading = angle % 360
+        letter = COMPASS_CARDINALS.get(heading)
+        if letter is None:
+            return '<Panel class="compass-cell" hittest="false"><Panel class="compass-tick" hittest="false" /></Panel>'
+
+        kind = "compass-cardinal" if heading % 90 == 0 else "compass-ordinal"
+        if heading == 0:
+            kind += " compass-north"
+        return f"""\
+<Panel class="compass-cell {kind}" hittest="false">
+	<Label class="compass-letter" hittest="false" text="{letter}" />
+	<Panel class="compass-tick" hittest="false" />
+</Panel>"""
+
+    def pin(i: int) -> str:
+        return f"""\
+<Panel id="cp_pin_{i}" class="compass-pin hidden" hittest="false">
+	<Panel class="compass-pin-icon" hittest="false" />
+	<Panel class="compass-pin-arrow" hittest="false" />
+	<Label id="cp_pin_{i}_dist" class="compass-pin-dist" hittest="false" text="{{s:cp_pin_{i}_dist}}" />
+</Panel>"""
+
+    cells = indent("\n".join(cell(angle) for angle in range(-180, 541, 15)), 4)
+    pin_block = indent("\n".join(pin(i) for i in range(pins)), 3)
+    body = f"""\
+<Panel id="cp_bar" class="compass hidden" hittest="false">
+	<Panel class="compass-frame" hittest="false">
+		<Panel class="compass-view" hittest="false">
+			<Panel id="cp_strip" class="compass-strip" hittest="false">
+{cells}			</Panel>
+			<Panel class="compass-fade compass-fade-l" hittest="false" />
+			<Panel class="compass-fade compass-fade-r" hittest="false" />
+		</Panel>
+		<Panel class="compass-pins" hittest="false">
+{pin_block}		</Panel>
+		<Panel class="compass-caret" hittest="false" />
+	</Panel>
+	<Label class="compass-deg" hittest="false" text="{{s:cp_deg}}" />
+</Panel>"""
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body=body,
+        description=(
+            f"Compass: a strip of 15-degree cells (-180..540) in a clipped viewport, {pins} pin(s) over it.\n"
+            "hd-N on cp_strip slides the heading under the caret; rel-N / edge-l / edge-r on a pin place it."
+        ),
+    )
+
+
+def inventory(
+    name: str,
+    stylesheet: str,
+    contract: Contract,
+    params: dict[str, ParamValue],
+) -> LayoutDocument:
+    slots = _count(params, "slots")
+
+    def tile(i: int) -> str:
+        return f"""\
+<Panel id="inv_{i}" class="inv-slot hidden" hittest="false">
+	<Panel class="inv-tile" hittest="false">
+		<Panel class="inv-accent" hittest="false" />
+		<Panel id="inv_{i}_icon" class="inv-icon" hittest="false" />
+		<Label id="inv_{i}_key" class="inv-key" hittest="false" text="{{s:inv_{i}_key}}" />
+		<Label id="inv_{i}_count" class="inv-count" hittest="false" text="{{s:inv_{i}_count}}" />
+	</Panel>
+	<Label id="inv_{i}_name" class="inv-name" hittest="false" text="{{s:inv_{i}_name}}" />
+</Panel>"""
+
+    tiles = "\n".join(tile(i) for i in range(slots))
+    body = '<Panel id="inv_bar" class="inv-bar" hittest="false">\n' + indent(tiles, 1) + "</Panel>"
+    return LayoutDocument(
+        name=name,
+        stylesheet=stylesheet,
+        marker=contract.marker(params),
+        body=body,
+        description=(
+            f"Inventory: a row of {slots} tile(s) at the bottom centre. Tile inv_<n>.\n"
+            "item-<name> on inv_<n>_icon sets the icon; the name shows under the selected tile."
+        ),
+    )
+
+
 BUILDERS: dict[str, Builder] = {
     "toast": toast,
     "banner": banner,
@@ -745,4 +1135,11 @@ BUILDERS: dict[str, Builder] = {
     "progress": progress,
     "dial": dial,
     "screamer": screamer,
+    "overlay": overlay,
+    "inventory": inventory,
+    "compass": compass,
+    "comms": comms,
+    "zone": zone,
+    "recap": recap,
+    "minimap": minimap,
 }

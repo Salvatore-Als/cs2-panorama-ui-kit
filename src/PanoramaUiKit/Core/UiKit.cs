@@ -7,18 +7,25 @@ using PanoramaUiKit.Shared.Api;
 using PanoramaUiKit.Shared.Banners;
 using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Comms;
+using PanoramaUiKit.Shared.Compass;
 using PanoramaUiKit.Shared.Dials;
+using PanoramaUiKit.Shared.Inventory;
 using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
+using PanoramaUiKit.Shared.Minimap;
+using PanoramaUiKit.Shared.Overlays;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
+using PanoramaUiKit.Shared.Recap;
 using PanoramaUiKit.Shared.Roulette;
 using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
 using PanoramaUiKit.Shared.Votes;
+using PanoramaUiKit.Shared.Zone;
 
 namespace PanoramaUiKit.Core;
 
@@ -26,6 +33,7 @@ namespace PanoramaUiKit.Core;
 internal sealed class UiKit : IPanoramaUiKit, IDisposable
 {
     private readonly LayoutRegistry _registry;
+    private readonly OverlayService _overlays;
 
     public UiKit(LayoutRegistry registry)
     {
@@ -47,6 +55,13 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
         ProgressBars = new ProgressService(registry);
         Dials = new DialService(registry);
         Screamers = new ScreamerService(registry);
+        Compass = new CompassService(registry);
+        Inventory = new InventoryService(registry);
+        Zone = new ZoneService(registry);
+        Comms = new CommsService(registry);
+        Recap = new RecapService(registry);
+        Minimap = new MinimapService(registry);
+        _overlays = new OverlayService(registry);
     }
 
     public int Version => IPanoramaUiKit.ApiVersion;
@@ -83,6 +98,20 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
 
     public IScreamerService Screamers { get; }
 
+    public ICompassService Compass { get; }
+
+    public IInventoryService Inventory { get; }
+
+    public IZoneService Zone { get; }
+
+    public ICommsService Comms { get; }
+
+    public IRecapService Recap { get; }
+
+    public IMinimapService Minimap { get; }
+
+    public IOverlayService Overlays => _overlays;
+
     public IEnumerable<LayoutChannel> Channels => _registry.Channels;
 
     public bool Preload(UiLayout layout) => _registry.Get<LayoutChannel>(layout) != null;
@@ -90,6 +119,9 @@ internal sealed class UiKit : IPanoramaUiKit, IDisposable
     public void ClearAll(CCSPlayerController player) => _registry.ClearAll(player);
 
     public void ClearEveryone() => _registry.ClearEveryone();
+
+    /// <summary>A player died: what was shown to them only while alive goes.</summary>
+    public void PlayerDied(CCSPlayerController player) => _overlays.PlayerDied(player);
 
     public void Dispose() => _registry.Dispose();
 }

@@ -1,0 +1,230 @@
+/*
+    uikit_inventory - a row of item tiles at the bottom centre, between the health (left) and the ammo
+    (right) of the game HUD. Contract "inventory" (docs/CONTRACTS.md).
+
+    Per tile inv_<n>, set by the kit:
+      item-<name>   on inv_<n>_icon: its background-image is the icon (InventorySlot.Item)
+      selected      lifted, outlined in the bar's style colour, name shown under it
+      depleted      count is 0: the icon goes grey and the count red
+      pulse-a/b     swapped when the count changes: the same animation under two names, so every swap
+                    restarts it (a class off then on in one tick never reaches the client)
+      style-*       the tile's accent line and icon tint. style-* on inv_bar is the selection colour.
+
+    Icons are single-colour white SVGs, tinted with wash-color, written next to this addon's other
+    pictures: panorama/images/custom_game/uikit/items/<name>.svg -> <name>.vsvg_c.
+    UNVERIFIED IN GAME: a .vsvg from the addon as a background-image (Valve's own layouts use .vsvg as
+    an Image src). If it draws nothing, swap the url for a PNG + .vtex, as the screamer pictures do.
+
+    Adding an item: an SVG in that folder and one rule below, then InventorySlot.Item = "<name>".
+*/
+
+.inv-bar {
+    flow-children: right;
+    horizontal-align: center;
+    vertical-align: bottom;
+    /* Clear of the game's health / armour / ammo row, with room for the selected item's name under it. */
+    margin-bottom: 100px;
+    overflow: noclip;
+}
+
+.inv-slot {
+    width: 56px;
+    height: 56px;
+    margin: 0px 3px;
+    overflow: noclip;
+}
+
+/* Tile --------------------------------------------------------------------- */
+
+.inv-tile {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    border: 1px solid #ffffff14;
+    background-color: #12171ed9;
+    box-shadow: #00000070 0px 4px 12px 0px;
+    overflow: clip;
+    transform: translateY( 0px );
+    transition-property: transform, background-color, opacity;
+    transition-duration: 0.14s;
+    transition-timing-function: ease-out;
+}
+
+/* Selected: lighter, a bright border, the accent full. It stays in the row: no lift. */
+.inv-slot.selected .inv-tile {
+    background-color: #1a222cf2;
+    border: 2px solid #9aa2ac;
+}
+
+.inv-accent {
+    width: 100%;
+    height: 3px;
+    vertical-align: bottom;
+    background-color: #9aa2ac;
+    opacity: 0.5;
+}
+
+.inv-slot.selected .inv-accent { opacity: 1; }
+
+.inv-icon {
+    width: 32px;
+    height: 32px;
+    horizontal-align: center;
+    vertical-align: center;
+    background-size: contains;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    wash-color: #f2f4f7;
+    opacity: 0.82;
+    transition-property: opacity;
+    transition-duration: 0.14s;
+}
+
+.inv-slot.selected .inv-icon { opacity: 1; }
+
+.inv-key {
+    horizontal-align: left;
+    vertical-align: top;
+    margin: 2px 0px 0px 4px;
+    font-family: Stratum2 Bold;
+    font-size: 11px;
+    color: #61686f;
+}
+
+.inv-slot.selected .inv-key { color: #f2f4f7; }
+
+.inv-count {
+    horizontal-align: right;
+    vertical-align: bottom;
+    margin: 0px 4px 3px 0px;
+    font-family: Stratum2 Bold;
+    font-size: 13px;
+    color: #f2f4f7;
+    text-shadow: 0px 1px 2px 1.0 #000000;
+}
+
+/* Depleted: count 0. Under inv-bar so it wins over a tile style's tint. -- */
+
+.inv-bar .inv-slot.depleted .inv-icon {
+    wash-color: #61686f;
+    opacity: 0.45;
+}
+
+.inv-slot.depleted .inv-count { color: #e0432f; }
+
+/* Name: only under the selected tile, outside the row's flow --------------- */
+
+.inv-name {
+    ignore-parent-flow: true;
+    width: 180px;
+    x: -62px;
+    y: 56px;
+    text-align: center;
+    font-size: 12px;
+    color: #f2f4f7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    text-overflow: shrink min( 10px ) ellipsis;
+    text-shadow: 0px 1px 3px 1.0 #000000;
+    visibility: collapse;
+}
+
+.inv-slot.selected .inv-name { visibility: visible; }
+.inv-slot.selected .inv-name.empty { visibility: collapse; }
+
+/* Pulse: a count changed. Two names for one animation, so each swap restarts it. */
+
+.inv-slot.pulse-a .inv-tile { animation-name: inv-pulse-a; }
+.inv-slot.pulse-b .inv-tile { animation-name: inv-pulse-b; }
+
+.inv-slot.pulse-a .inv-tile,
+.inv-slot.pulse-b .inv-tile {
+    animation-duration: 0.35s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+}
+
+@keyframes 'inv-pulse-a' {
+    0%   { brightness: 2.2; }
+    100% { brightness: 1.0; }
+}
+
+@keyframes 'inv-pulse-b' {
+    0%   { brightness: 2.2; }
+    100% { brightness: 1.0; }
+}
+
+/* Items (InventoryItems) --------------------------------------------------- */
+
+.inv-icon.item-flashlight_on {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/flashlight_on.vsvg" );
+}
+
+.inv-icon.item-flashlight_off {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/flashlight_off.vsvg" );
+}
+
+.inv-icon.item-ammo {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/ammo.vsvg" );
+}
+
+.inv-icon.item-medkit {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/medkit.vsvg" );
+}
+
+.inv-icon.item-bandage {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/bandage.vsvg" );
+}
+
+.inv-icon.item-armor {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/armor.vsvg" );
+}
+
+.inv-icon.item-grenade {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/grenade.vsvg" );
+}
+
+.inv-icon.item-battery {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/battery.vsvg" );
+}
+
+.inv-icon.item-key {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/key.vsvg" );
+}
+
+.inv-icon.item-food {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/items/food.vsvg" );
+}
+
+/* Tile styles (UiStyle on inv_<n>): accent line and icon tint. Neutral keeps the icon white. */
+
+.inv-slot.style-neutral .inv-accent { background-color: #9aa2ac; }
+
+.inv-slot.style-info .inv-accent { background-color: #56a0dd; }
+.inv-slot.style-info .inv-icon { wash-color: #56a0dd; }
+
+.inv-slot.style-success .inv-accent { background-color: #9ccf4f; }
+.inv-slot.style-success .inv-icon { wash-color: #9ccf4f; }
+
+.inv-slot.style-warn .inv-accent { background-color: #f0a531; }
+.inv-slot.style-warn .inv-icon { wash-color: #f0a531; }
+
+.inv-slot.style-danger .inv-accent { background-color: #e0432f; }
+.inv-slot.style-danger .inv-icon { wash-color: #e0432f; }
+
+.inv-slot.style-purple .inv-accent { background-color: #8847ff; }
+.inv-slot.style-purple .inv-icon { wash-color: #8847ff; }
+
+.inv-slot.style-gold .inv-accent { background-color: #e0a24a; }
+.inv-slot.style-gold .inv-icon { wash-color: #e0a24a; }
+
+/* Selection colour (UiStyle on inv_bar) --------------------------------------- */
+
+.inv-bar.style-neutral .inv-slot.selected .inv-tile { border: 2px solid #9aa2ac; }
+.inv-bar.style-info .inv-slot.selected .inv-tile { border: 2px solid #56a0dd; }
+.inv-bar.style-success .inv-slot.selected .inv-tile { border: 2px solid #9ccf4f; }
+.inv-bar.style-warn .inv-slot.selected .inv-tile { border: 2px solid #f0a531; }
+.inv-bar.style-danger .inv-slot.selected .inv-tile { border: 2px solid #e0432f; }
+.inv-bar.style-purple .inv-slot.selected .inv-tile { border: 2px solid #8847ff; }
+.inv-bar.style-gold .inv-slot.selected .inv-tile { border: 2px solid #e0a24a; }

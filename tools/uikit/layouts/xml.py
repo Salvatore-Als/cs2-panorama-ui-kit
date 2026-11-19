@@ -32,14 +32,17 @@ class LayoutDocument:
     body: str
     """Content of the root panel, flush-left; indented on render."""
     generated_by: str = "python -m uikit generate"
+    extra_stylesheets: tuple[str, ...] = ()
+    """More stylesheets, included after the main one (the overlay's effects)."""
 
     def render(self) -> str:
         description = indent(self.description, 2).rstrip("\n")
+        extra = "".join(f'\t\t<include src="s2r://panorama/styles/custom_game/{s}.vcss_c" />\n' for s in self.extra_stylesheets)
         return f"""<root>
 	<styles>
 		<include src="s2r://panorama/styles/custom_game/uikit_shared.vcss_c" />
 		<include src="s2r://panorama/styles/custom_game/{self.stylesheet}.vcss_c" />
-	</styles>
+{extra}	</styles>
 
 	<!-- {self.marker} -->
 	<!--

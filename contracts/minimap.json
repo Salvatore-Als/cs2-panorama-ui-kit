@@ -1,0 +1,212 @@
+{
+  "component": "minimap",
+  "csharp": "MinimapLayout / IMinimapService",
+  "summary": "Map in a corner: the map picture, the current zone (red) and the next one (white), and markers. Zones and global marks are the same for everyone; the map, the player's arrow and personal marks are per player. Positions are a class ladder on a grid; an optional zoom follows the player.",
+  "params": {
+    "marks": {
+      "default": 64,
+      "doc": "Markers in the pool (MinimapLayout.Marks)."
+    }
+  },
+  "repeat": {
+    "m": "marks"
+  },
+  "panels": [
+    {
+      "id": "mm_frame",
+      "required": true,
+      "classes": [
+        "hidden",
+        "at-*",
+        "size-*",
+        "style-*"
+      ],
+      "doc": "The minimap. Author it `hidden`. `at-tl|tr|bl|br` is MinimapOptions.Placement, `size-sm|md|lg` MinimapOptions.Size (a ui-scale of the 256px map), `style-*` the frame's accent.",
+      "once": true
+    },
+    {
+      "id": "mm_map",
+      "required": true,
+      "classes": [
+        "map-*"
+      ],
+      "doc": "The map viewport: `map-<name>` is its picture (MinimapMaps), drawn on the `.minimap-world` panel inside. Clips what goes past its edges.",
+      "once": true
+    },
+    {
+      "id": "mm_zoom",
+      "required": false,
+      "classes": [
+        "zoom-*"
+      ],
+      "once": true,
+      "doc": "Everything on the map. `zoom-N` (N of MinimapLayout.Zooms, a percentage) scales it about the viewport's centre; none = the whole map. Markers are scaled back to their size."
+    },
+    {
+      "id": "mm_pan",
+      "required": false,
+      "classes": [
+        "px-*"
+      ],
+      "once": true,
+      "doc": "Inside mm_zoom: `px-N` moves cell N to the centre (X axis), so a zoom follows the player."
+    },
+    {
+      "id": "mm_pan_y",
+      "required": false,
+      "classes": [
+        "py-*"
+      ],
+      "once": true,
+      "doc": "Y axis of the pan, a child of mm_pan."
+    },
+    {
+      "id": "mm_title",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label under the map, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "mm_zone_cur",
+      "required": true,
+      "classes": [
+        "hidden",
+        "x-*",
+        "dur-*"
+      ],
+      "doc": "Current zone, X axis of its centre. `x-N` (N of MinimapLayout.Grid) places it, `dur-N` is the length of a shrink: without one it snaps.",
+      "once": true
+    },
+    {
+      "id": "mm_zone_cur_y",
+      "required": true,
+      "classes": [
+        "y-*",
+        "dur-*"
+      ],
+      "doc": "Y axis of the current zone's centre: a child, so each axis has its own transform.",
+      "once": true
+    },
+    {
+      "id": "mm_zone_cur_ring",
+      "required": true,
+      "classes": [
+        "r-*",
+        "dur-*"
+      ],
+      "doc": "The current zone's circle, centred on its parent: `r-N` scales it, `r-<Radii>` being a radius as wide as the map.",
+      "once": true
+    },
+    {
+      "id": "mm_zone_next",
+      "required": false,
+      "classes": [
+        "hidden",
+        "x-*",
+        "dur-*"
+      ],
+      "doc": "Next zone, same as the current one.",
+      "once": true
+    },
+    {
+      "id": "mm_zone_next_y",
+      "required": false,
+      "classes": [
+        "y-*",
+        "dur-*"
+      ],
+      "doc": "Y axis of the next zone's centre.",
+      "once": true
+    },
+    {
+      "id": "mm_zone_next_ring",
+      "required": false,
+      "classes": [
+        "r-*",
+        "dur-*"
+      ],
+      "doc": "The next zone's circle.",
+      "once": true
+    },
+    {
+      "id": "mm_mark_{m}",
+      "required": false,
+      "classes": [
+        "hidden",
+        "x-*",
+        "kind-*",
+        "state-*",
+        "style-*"
+      ],
+      "doc": "A marker, X axis. Author it `hidden`. `kind-<name>` its icon and stacking order (MinimapNames), `state-downed|dead|alerted`, `style-*` a colour over the kind's."
+    },
+    {
+      "id": "mm_mark_{m}_y",
+      "required": false,
+      "classes": [
+        "y-*"
+      ],
+      "doc": "Y axis of the marker."
+    },
+    {
+      "id": "mm_mark_{m}_icon",
+      "required": false,
+      "classes": [
+        "rot-*"
+      ],
+      "doc": "The icon: `rot-N` turns it N*10 degrees clockwise from north (N of 0..35)."
+    },
+    {
+      "id": "mm_mark_{m}_label",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the marker, `empty` when blank."
+    }
+  ],
+  "texts": [
+    {
+      "var": "mm_title",
+      "required": false,
+      "doc": "MinimapOptions.Title"
+    },
+    {
+      "var": "mm_mark_{m}_label",
+      "required": false,
+      "doc": "MinimapMark.Label"
+    },
+    {
+      "var": "mm_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "MinimapOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "empty",
+    "at-tl",
+    "at-tr",
+    "at-bl",
+    "at-br",
+    "size-md",
+    "map-de_dust2",
+    "map-slot-1",
+    "x-32",
+    "y-32",
+    "r-32",
+    "rot-9",
+    "dur-60",
+    "kind-self",
+    "kind-mate",
+    "state-downed",
+    "style-danger",
+    "zoom-200",
+    "px-32",
+    "py-32"
+  ]
+}

@@ -3,18 +3,25 @@ using PanoramaUiKit.Shared.Announcements;
 using PanoramaUiKit.Shared.Banners;
 using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Comms;
+using PanoramaUiKit.Shared.Compass;
 using PanoramaUiKit.Shared.Dials;
+using PanoramaUiKit.Shared.Inventory;
 using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
+using PanoramaUiKit.Shared.Minimap;
+using PanoramaUiKit.Shared.Overlays;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
+using PanoramaUiKit.Shared.Recap;
 using PanoramaUiKit.Shared.Roulette;
 using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
 using PanoramaUiKit.Shared.Votes;
+using PanoramaUiKit.Shared.Zone;
 
 namespace PanoramaUiKit.Demo;
 
@@ -69,9 +76,27 @@ internal static class DemoLayouts
 
     public static readonly ScreamerLayout Screamer = new() { Name = "uikit_screamer" };
 
+    public static readonly OverlayLayout Overlay = new() { Name = "uikit_overlay" };
+
+    public static readonly CompassLayout Compass = new() { Name = "uikit_compass" };
+
+    public static readonly InventoryLayout Inventory = new() { Name = "uikit_inventory" };
+
+    public static readonly ZoneLayout Zone = new() { Name = "uikit_zone" };
+
+    public static readonly CommsLayout Comms = new() { Name = "uikit_comms" };
+
+    public static readonly RecapLayout Recap = new() { Name = "uikit_recap" };
+
+    public static readonly MinimapLayout Minimap = new() { Name = "uikit_minimap" };
+
+    /// <summary>Same contract, its own stylesheet: the big map in the centre.</summary>
+    public static readonly MinimapLayout BigMap = new() { Name = "uikit_bigmap" };
+
     /// <summary>Every layout the demo draws on, to spawn them at load.</summary>
     public static IEnumerable<UiLayout> All =>
     [
-        Toast, NeonToast, Banner, Announce, Abilities, Match, KillFeed, Victory, Roulette, Vote, Panel, Menu, Card, Target, Progress, Dial, Screamer,
+        Toast, NeonToast, Banner, Announce, Abilities, Match, KillFeed, Victory, Roulette, Vote, Panel, Menu, Card, Target, Progress, Dial, Screamer, Overlay,
+        Compass, Inventory, Zone, Comms, Recap, Minimap, BigMap,
     ];
 }

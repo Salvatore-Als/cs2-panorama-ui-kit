@@ -1,0 +1,435 @@
+/*
+    uikit_zone - the safe zone. Contract "zone" (docs/CONTRACTS.md).
+
+    Two parts on one layout, each shown on its own:
+      zn_status  a pill under the compass: icon, phase, state, countdown (ticked by the kit every second),
+                 a thin bar and an optional info line. state-waiting / state-closing / state-final colour it,
+                 "outside" turns it red and makes it pulse. style-* tints its top edge.
+      zn_alert   a card in the upper third between two hazard stripes, for when the zone moves. "show"
+                 plays the entry (scale down + flash), dropping it the exit. style-* is its colour.
+
+    The bar is a clip, never a width: the countdown text next to it is rewritten every second.
+      step-N  where it starts (N of 20, ZoneLayout.Steps), snapped: no transition without a dur-*.
+      dur-N   the seconds left (ZoneLayout.Durations), run  drains it to empty over them.
+
+    Icons ship with this addon, white, tinted with wash-color:
+      panorama/images/custom_game/uikit/zone/ring.svg, closing.svg, danger.svg  -> <name>.vsvg_c
+    The state picks one; icon-<name> on zn_status / zn_alert (ZoneOptions.Icon, ZoneAlertOptions.Icon)
+    overrides it, except "outside", which always shows the warning glyph.
+
+    icon-slot-1..8 point at pictures this addon does NOT ship, for another addon to provide - a game mode
+    that wants its own art without forking this layout. Drawn untinted, PNG:
+      panorama/images/custom_game/uikit/zone/slots/slot_<n>.png + slot_<n>_png.vtex  -> slot_<n>_png.vtex_c
+    A slot nobody filled draws nothing. To replace a built-in icon everywhere instead, ship a file at the
+    built-in's path in an addon mounted before this one.
+*/
+
+/* Areas: full-screen, out of flow, so the two parts never push each other. */
+.zone-area {
+    ignore-parent-flow: true;
+    width: 100%;
+    height: 100%;
+}
+
+/* Status --------------------------------------------------------------------- */
+
+.zone-status {
+    width: 360px;
+    flow-children: down;
+    horizontal-align: center;
+    vertical-align: top;
+    margin-top: 168px;
+    padding: 7px 12px 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ffffff14;
+    border-top: 2px solid #9aa2ac;
+    background-color: #12171ee6;
+    box-shadow: #00000070 0px 4px 12px 0px;
+    transition-property: background-color, border-color;
+    transition-duration: 0.25s;
+}
+
+.zone-row {
+    width: 100%;
+    flow-children: right;
+}
+
+.zone-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    vertical-align: center;
+    background-image: url( "s2r://panorama/images/custom_game/uikit/zone/ring.vsvg" );
+    background-size: contains;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    wash-color: #56a0dd;
+}
+
+.zone-phase {
+    margin-right: 8px;
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: nowrap;
+}
+
+.zone-state {
+    width: fill-parent-flow( 1.0 );
+    vertical-align: center;
+    font-size: 14px;
+    color: #9aa2ac;
+    white-space: nowrap;
+    text-overflow: shrink min( 10px ) ellipsis;
+}
+
+.zone-timer {
+    margin-left: 10px;
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: #f2f4f7;
+    white-space: nowrap;
+}
+
+.zone-bar {
+    width: 100%;
+    height: 4px;
+    margin-top: 6px;
+    border-radius: 2px;
+    background-color: #ffffff1a;
+    overflow: clip;
+}
+
+.zone-bar-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    background-color: #56a0dd;
+    clip: rect( 0%, 100%, 100%, 0% );
+    transition-property: clip;
+    transition-duration: 0.0s;
+    transition-timing-function: linear;
+}
+
+.zone-info {
+    width: 100%;
+    margin-top: 5px;
+    font-size: 13px;
+    color: #9aa2ac;
+    white-space: nowrap;
+    text-overflow: shrink min( 10px ) ellipsis;
+}
+
+/*
+    Placement (ZoneOptions.Placement). Centre ones: under the compass of the same placement, above it at the
+    bottom. Corners: clear of the game's HUD there (radar, kill feed, health, ammo); a compass in the same top
+    corner sits where the status does, so pick one or the other.
+*/
+.zone-status.at-hud { vertical-align: top; margin-top: 168px; }
+.zone-status.at-top { vertical-align: top; margin-top: 78px; }
+.zone-status.at-bottom { vertical-align: bottom; margin-top: 0px; margin-bottom: 198px; }
+.zone-status.at-tl { horizontal-align: left; vertical-align: top; margin-top: 330px; margin-left: 16px; }
+.zone-status.at-tr { horizontal-align: right; vertical-align: top; margin-top: 270px; margin-right: 16px; }
+.zone-status.at-bl { horizontal-align: left; vertical-align: bottom; margin-top: 0px; margin-bottom: 120px; margin-left: 16px; }
+.zone-status.at-br { horizontal-align: right; vertical-align: bottom; margin-top: 0px; margin-bottom: 120px; margin-right: 16px; }
+.zone-status.at-right { horizontal-align: right; vertical-align: center; margin-top: 0px; margin-right: 16px; transform: translateY( 30px ); }
+/* Compass in uikit_match's band: under the bar hanging from it (62px strip + 60px bar + 8px). */
+.zone-status.at-band { vertical-align: top; margin-top: 130px; }
+
+/* States --------------------------------------------------------------------- */
+
+.zone-status.state-waiting .zone-icon { wash-color: #56a0dd; }
+.zone-status.state-waiting .zone-bar-fill { background-color: #56a0dd; }
+
+.zone-status.state-closing .zone-icon {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/zone/closing.vsvg" );
+    wash-color: #f0a531;
+}
+.zone-status.state-closing .zone-bar-fill { background-color: #f0a531; }
+.zone-status.state-closing .zone-timer { color: #f0a531; }
+
+.zone-status.state-final .zone-icon {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/zone/closing.vsvg" );
+    wash-color: #e0432f;
+}
+.zone-status.state-final .zone-bar-fill { background-color: #e0432f; }
+.zone-status.state-final .zone-timer { color: #e0432f; }
+
+/* Icon (ZoneOptions.Icon): after the states so it wins, before "outside" so it does not. */
+
+.zone-status.icon-ring .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/ring.vsvg" ); }
+.zone-status.icon-closing .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/closing.vsvg" ); }
+.zone-status.icon-danger .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/danger.vsvg" ); }
+.zone-status.icon-slot-1 .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_1_png.vtex" ); wash-color: #ffffff00; }
+.zone-status.icon-slot-2 .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_2_png.vtex" ); wash-color: #ffffff00; }
+.zone-status.icon-slot-3 .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_3_png.vtex" ); wash-color: #ffffff00; }
+.zone-status.icon-slot-4 .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_4_png.vtex" ); wash-color: #ffffff00; }
+.zone-status.icon-slot-5 .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_5_png.vtex" ); wash-color: #ffffff00; }
+.zone-status.icon-slot-6 .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_6_png.vtex" ); wash-color: #ffffff00; }
+.zone-status.icon-slot-7 .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_7_png.vtex" ); wash-color: #ffffff00; }
+.zone-status.icon-slot-8 .zone-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_8_png.vtex" ); wash-color: #ffffff00; }
+
+/* Outside the safe zone: red, pulsing, the warning glyph. */
+.zone-status.outside {
+    border: 1px solid #e0432f;
+    border-top: 2px solid #e0432f;
+    animation-name: zone-outside;
+    animation-duration: 1.2s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+.zone-status.outside .zone-icon {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/zone/danger.vsvg" );
+    wash-color: #e0432f;
+}
+
+.zone-status.outside .zone-state { color: #e0432f; }
+
+@keyframes 'zone-outside' {
+    0%   { background-color: #12171ee6; }
+    50%  { background-color: #4a1610e6; }
+    100% { background-color: #12171ee6; }
+}
+
+/* Bar: start position (20 steps) --------------------------------------------- */
+
+.zone-bar-fill.step-0 { clip: rect( 0%, 0%, 100%, 0% ); }
+.zone-bar-fill.step-1 { clip: rect( 0%, 5%, 100%, 0% ); }
+.zone-bar-fill.step-2 { clip: rect( 0%, 10%, 100%, 0% ); }
+.zone-bar-fill.step-3 { clip: rect( 0%, 15%, 100%, 0% ); }
+.zone-bar-fill.step-4 { clip: rect( 0%, 20%, 100%, 0% ); }
+.zone-bar-fill.step-5 { clip: rect( 0%, 25%, 100%, 0% ); }
+.zone-bar-fill.step-6 { clip: rect( 0%, 30%, 100%, 0% ); }
+.zone-bar-fill.step-7 { clip: rect( 0%, 35%, 100%, 0% ); }
+.zone-bar-fill.step-8 { clip: rect( 0%, 40%, 100%, 0% ); }
+.zone-bar-fill.step-9 { clip: rect( 0%, 45%, 100%, 0% ); }
+.zone-bar-fill.step-10 { clip: rect( 0%, 50%, 100%, 0% ); }
+.zone-bar-fill.step-11 { clip: rect( 0%, 55%, 100%, 0% ); }
+.zone-bar-fill.step-12 { clip: rect( 0%, 60%, 100%, 0% ); }
+.zone-bar-fill.step-13 { clip: rect( 0%, 65%, 100%, 0% ); }
+.zone-bar-fill.step-14 { clip: rect( 0%, 70%, 100%, 0% ); }
+.zone-bar-fill.step-15 { clip: rect( 0%, 75%, 100%, 0% ); }
+.zone-bar-fill.step-16 { clip: rect( 0%, 80%, 100%, 0% ); }
+.zone-bar-fill.step-17 { clip: rect( 0%, 85%, 100%, 0% ); }
+.zone-bar-fill.step-18 { clip: rect( 0%, 90%, 100%, 0% ); }
+.zone-bar-fill.step-19 { clip: rect( 0%, 95%, 100%, 0% ); }
+.zone-bar-fill.step-20 { clip: rect( 0%, 100%, 100%, 0% ); }
+
+/* Bar: seconds left (ZoneLayout.Durations) ------------------------------------ */
+
+.zone-bar-fill.dur-5 { transition-duration: 5.0s; }
+.zone-bar-fill.dur-10 { transition-duration: 10.0s; }
+.zone-bar-fill.dur-15 { transition-duration: 15.0s; }
+.zone-bar-fill.dur-20 { transition-duration: 20.0s; }
+.zone-bar-fill.dur-25 { transition-duration: 25.0s; }
+.zone-bar-fill.dur-30 { transition-duration: 30.0s; }
+.zone-bar-fill.dur-35 { transition-duration: 35.0s; }
+.zone-bar-fill.dur-40 { transition-duration: 40.0s; }
+.zone-bar-fill.dur-45 { transition-duration: 45.0s; }
+.zone-bar-fill.dur-50 { transition-duration: 50.0s; }
+.zone-bar-fill.dur-55 { transition-duration: 55.0s; }
+.zone-bar-fill.dur-60 { transition-duration: 60.0s; }
+.zone-bar-fill.dur-65 { transition-duration: 65.0s; }
+.zone-bar-fill.dur-70 { transition-duration: 70.0s; }
+.zone-bar-fill.dur-75 { transition-duration: 75.0s; }
+.zone-bar-fill.dur-80 { transition-duration: 80.0s; }
+.zone-bar-fill.dur-85 { transition-duration: 85.0s; }
+.zone-bar-fill.dur-90 { transition-duration: 90.0s; }
+.zone-bar-fill.dur-95 { transition-duration: 95.0s; }
+.zone-bar-fill.dur-100 { transition-duration: 100.0s; }
+.zone-bar-fill.dur-105 { transition-duration: 105.0s; }
+.zone-bar-fill.dur-110 { transition-duration: 110.0s; }
+.zone-bar-fill.dur-115 { transition-duration: 115.0s; }
+.zone-bar-fill.dur-120 { transition-duration: 120.0s; }
+.zone-bar-fill.dur-150 { transition-duration: 150.0s; }
+.zone-bar-fill.dur-180 { transition-duration: 180.0s; }
+.zone-bar-fill.dur-210 { transition-duration: 210.0s; }
+.zone-bar-fill.dur-240 { transition-duration: 240.0s; }
+.zone-bar-fill.dur-270 { transition-duration: 270.0s; }
+.zone-bar-fill.dur-300 { transition-duration: 300.0s; }
+
+/* Drains to empty. After the steps, and one level deeper, so it wins over any step-N. */
+.zone-status .zone-bar-fill.run { clip: rect( 0%, 0%, 100%, 0% ); }
+
+/* Styles (UiStyle): top edge ------------------------------------------------- */
+
+.zone-status.style-neutral { border-top-color: #9aa2ac; }
+.zone-status.style-info { border-top-color: #56a0dd; }
+.zone-status.style-success { border-top-color: #9ccf4f; }
+.zone-status.style-warn { border-top-color: #f0a531; }
+.zone-status.style-danger { border-top-color: #e0432f; }
+.zone-status.style-purple { border-top-color: #8847ff; }
+.zone-status.style-gold { border-top-color: #e0a24a; }
+
+/* Alert ---------------------------------------------------------------------- */
+
+.zone-alert {
+    width: 640px;
+    flow-children: down;
+    horizontal-align: center;
+    vertical-align: top;
+    margin-top: 290px;
+    overflow: noclip;
+
+    opacity: 0;
+    transform: scale3d( 1.18, 1.18, 1.0 );
+    transition-property: opacity, transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}
+
+.zone-alert.show {
+    opacity: 1;
+    transform: scale3d( 1.0, 1.0, 1.0 );
+    sound: "UIPanorama.container_reveal";
+}
+
+/* A white flash over the whole card on entry. */
+.zone-alert-flash {
+    ignore-parent-flow: true;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    opacity: 0;
+    z-index: 2;
+}
+
+.zone-alert.show .zone-alert-flash {
+    animation-name: zone-flash;
+    animation-duration: 0.45s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: both;
+}
+
+@keyframes 'zone-flash' {
+    0%   { opacity: 0.85; }
+    100% { opacity: 0.0; }
+}
+
+/* Hazard stripes: a clipped row of rotated bars. */
+.zone-hazard {
+    width: 100%;
+    height: 10px;
+    flow-children: right;
+    overflow: clip;
+    background-color: #12171ee6;
+}
+
+.zone-hazard-bar {
+    width: 16px;
+    height: 40px;
+    margin-left: 0px;
+    margin-right: 24px;
+    vertical-align: center;
+    transform: rotateZ( 40deg );
+    background-color: #f0a531;
+}
+
+.zone-alert-body {
+    width: 100%;
+    flow-children: down;
+    padding: 14px 24px 16px 24px;
+    border-left: 1px solid #f0a53166;
+    border-right: 1px solid #f0a53166;
+    background-color: #12171ef0;
+}
+
+.zone-alert-icon {
+    width: 34px;
+    height: 34px;
+    horizontal-align: center;
+    background-image: url( "s2r://panorama/images/custom_game/uikit/zone/closing.vsvg" );
+    background-size: contains;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    wash-color: #f0a531;
+}
+
+.zone-alert-kicker {
+    horizontal-align: center;
+    margin-top: 6px;
+    font-family: Stratum2 Bold;
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #f0a531;
+}
+
+.zone-alert-title {
+    width: 100%;
+    margin-top: 4px;
+    text-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 30px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: shrink min( 16px ) ellipsis;
+}
+
+.zone-alert-desc {
+    width: 100%;
+    margin-top: 4px;
+    text-align: center;
+    font-size: 15px;
+    color: #9aa2ac;
+    white-space: normal;
+}
+
+/* Styles (UiStyle): stripes, kicker, icon, edges ----------------------------- */
+
+.zone-alert.style-neutral .zone-hazard-bar { background-color: #9aa2ac; }
+.zone-alert.style-neutral .zone-alert-kicker { color: #9aa2ac; }
+.zone-alert.style-neutral .zone-alert-icon { wash-color: #9aa2ac; }
+.zone-alert.style-neutral .zone-alert-body { border-color: #9aa2ac66; }
+
+.zone-alert.style-info .zone-hazard-bar { background-color: #56a0dd; }
+.zone-alert.style-info .zone-alert-kicker { color: #56a0dd; }
+.zone-alert.style-info .zone-alert-icon { wash-color: #56a0dd; }
+.zone-alert.style-info .zone-alert-body { border-color: #56a0dd66; }
+
+.zone-alert.style-success .zone-hazard-bar { background-color: #9ccf4f; }
+.zone-alert.style-success .zone-alert-kicker { color: #9ccf4f; }
+.zone-alert.style-success .zone-alert-icon { wash-color: #9ccf4f; }
+.zone-alert.style-success .zone-alert-body { border-color: #9ccf4f66; }
+
+.zone-alert.style-warn .zone-hazard-bar { background-color: #f0a531; }
+.zone-alert.style-warn .zone-alert-kicker { color: #f0a531; }
+.zone-alert.style-warn .zone-alert-icon { wash-color: #f0a531; }
+.zone-alert.style-warn .zone-alert-body { border-color: #f0a53166; }
+
+.zone-alert.style-danger .zone-hazard-bar { background-color: #e0432f; }
+.zone-alert.style-danger .zone-alert-kicker { color: #e0432f; }
+.zone-alert.style-danger .zone-alert-icon { wash-color: #e0432f; }
+.zone-alert.style-danger .zone-alert-body { border-color: #e0432f66; }
+
+.zone-alert.style-purple .zone-hazard-bar { background-color: #8847ff; }
+.zone-alert.style-purple .zone-alert-kicker { color: #8847ff; }
+.zone-alert.style-purple .zone-alert-icon { wash-color: #8847ff; }
+.zone-alert.style-purple .zone-alert-body { border-color: #8847ff66; }
+
+.zone-alert.style-gold .zone-hazard-bar { background-color: #e0a24a; }
+.zone-alert.style-gold .zone-alert-kicker { color: #e0a24a; }
+.zone-alert.style-gold .zone-alert-icon { wash-color: #e0a24a; }
+.zone-alert.style-gold .zone-alert-body { border-color: #e0a24a66; }
+
+/* Icon (ZoneAlertOptions.Icon): last, so it wins over the style's tint. ------- */
+
+.zone-alert.icon-ring .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/ring.vsvg" ); }
+.zone-alert.icon-closing .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/closing.vsvg" ); }
+.zone-alert.icon-danger .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/danger.vsvg" ); }
+.zone-alert.icon-slot-1 .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_1_png.vtex" ); wash-color: #ffffff00; }
+.zone-alert.icon-slot-2 .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_2_png.vtex" ); wash-color: #ffffff00; }
+.zone-alert.icon-slot-3 .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_3_png.vtex" ); wash-color: #ffffff00; }
+.zone-alert.icon-slot-4 .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_4_png.vtex" ); wash-color: #ffffff00; }
+.zone-alert.icon-slot-5 .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_5_png.vtex" ); wash-color: #ffffff00; }
+.zone-alert.icon-slot-6 .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_6_png.vtex" ); wash-color: #ffffff00; }
+.zone-alert.icon-slot-7 .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_7_png.vtex" ); wash-color: #ffffff00; }
+.zone-alert.icon-slot-8 .zone-alert-icon { background-image: url( "s2r://panorama/images/custom_game/uikit/zone/slots/slot_8_png.vtex" ); wash-color: #ffffff00; }

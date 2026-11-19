@@ -2,7 +2,7 @@
 
 A full-screen picture with its sound, for one player, for a fraction of a second. For a jump scare.
 
-The picture is one class of the stylesheet, `scare-<name>`, whose `background-image` fills the screen. The sound is played by the kit on the player's client (`play <file>`) in the same tick. It is not a CSS `sound`: a stylesheet sound is loaded on use and starts after the picture.
+The picture is one class of the stylesheet, `scare-<name>`, whose `background-image` fills the screen. The sound is played by the kit on the player's client (`play <file>`), `SoundLeadSeconds` after the picture. It is not a CSS `sound`: a stylesheet sound is loaded on use and starts after the picture.
 
 The kit precaches the bundled sound and pictures on every map (`PrecacheScreamers` in the kit config, on by default). Pictures and sounds you add for your own names are not in that list: precache them from your plugin (`OnServerPrecacheResources`).
 
@@ -37,7 +37,7 @@ IUiHandle handle = kit.Screamers.Show(player, new ScreamerOptions
 |---|---|---|
 | `Name` | required | Which screamer, applied as `scare-<name>`. A blank name hides it. |
 | `Seconds` | `0.6` | Time on screen. `0` or less keeps it until it is hidden. |
-| `SoundLeadSeconds` | `1` | The sound starts this long before the picture, since the client is slow to start a sound. `0` = both at once. |
+| `SoundLeadSeconds` | `1` | The sound starts this long after the picture. `0` = both at once. |
 | `PlaySound` | `true` | Play `Sound` when the screamer shows. `false` = picture only. The server plays it on the client (`play`), not the stylesheet: a CSS `sound` is loaded on use and arrives late. |
 | `Sound` | `sounds/jumpscare.vsnd` | `.vsnd` file played on the player's client when the screamer shows. Blank = silent. |
 

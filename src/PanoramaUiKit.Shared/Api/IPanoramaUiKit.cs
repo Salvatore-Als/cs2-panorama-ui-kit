@@ -1,21 +1,28 @@
 using CounterStrikeSharp.API.Core;
 using PanoramaUiKit.Shared.Abilities;
 using PanoramaUiKit.Shared.Announcements;
+using PanoramaUiKit.Shared.Banners;
 using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Comms;
+using PanoramaUiKit.Shared.Compass;
 using PanoramaUiKit.Shared.Dials;
+using PanoramaUiKit.Shared.Inventory;
 using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
+using PanoramaUiKit.Shared.Minimap;
+using PanoramaUiKit.Shared.Overlays;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
+using PanoramaUiKit.Shared.Recap;
 using PanoramaUiKit.Shared.Roulette;
 using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
-using PanoramaUiKit.Shared.Banners;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
 using PanoramaUiKit.Shared.Votes;
+using PanoramaUiKit.Shared.Zone;
 
 namespace PanoramaUiKit.Shared.Api;
 
@@ -96,6 +103,27 @@ public interface IPanoramaUiKit
 
     /// <summary>Full-screen picture with its sound, the picture from one stylesheet class, the sound played by the kit. Per player.</summary>
     IScreamerService Screamers { get; }
+
+    /// <summary>Compass strip at the top of the screen that follows the player's view, with pins on world points. Per player.</summary>
+    ICompassService Compass { get; }
+
+    /// <summary>Row of item tiles (icon, count, key hint, one selected), the icons from stylesheet classes. Per player.</summary>
+    IInventoryService Inventory { get; }
+
+    /// <summary>Safe zone: status under the compass (phase, countdown, bar) and an alert when it moves. Per player.</summary>
+    IZoneService Zone { get; }
+
+    /// <summary>Radio transmission: a face as a glitching hologram, a name and a line of text. Per player.</summary>
+    ICommsService Comms { get; }
+
+    /// <summary>End of match screen: placement, headline, the player's name and stat tiles with icons. Per player.</summary>
+    IRecapService Recap { get; }
+
+    /// <summary>Map in a corner: the map picture, the zone circles and markers, the player's arrow followed by the kit. Zones and global marks for everyone, the rest per player.</summary>
+    IMinimapService Minimap { get; }
+
+    /// <summary>A full-screen effect over the view: frozen, burning, knocked down, poisoned, or your own (a logo) as a custom effect. Per player.</summary>
+    IOverlayService Overlays { get; }
 
     /// <summary>
     /// Spawns the layout entity now instead of on first use. Call it for every layout your plugin

@@ -19,8 +19,8 @@ public sealed partial class DemoPlugin
     /// countdown that turns urgent under 10, and the two team scores in tabs under the sides.
     /// <c>noscore</c> hides the score tabs.
     /// </summary>
-    [ConsoleCommand("css_uikit_demo_match", "Match bar: T / CT alive, team scores, 40 s countdown. Argument 'noscore' hides the scores.")]
-    [CommandHelper(usage: "[noscore]", whoCanExecute: CommandUsage.CLIENT_AND_SERVER)]
+    [ConsoleCommand("css_uikit_demo_match", "Match bar: T / CT alive, team scores, 40 s countdown. 'noscore' hides the scores, 'band' adds the strip across the top.")]
+    [CommandHelper(usage: "[noscore] [band]", whoCanExecute: CommandUsage.CLIENT_AND_SERVER)]
     public void OnDemoMatch(CCSPlayerController? player, CommandInfo command)
     {
         if (!TryKit(command, out IPanoramaUiKit kit))
@@ -28,7 +28,8 @@ public sealed partial class DemoPlugin
             return;
         }
 
-        bool showScore = !command.GetArg(1).Equals("noscore", StringComparison.OrdinalIgnoreCase);
+        bool showScore = !HasArg(command, "noscore");
+        bool band = HasArg(command, "band");
         int left = MatchDemoSeconds;
         RunEverySecond("match", () =>
         {
@@ -60,10 +61,25 @@ public sealed partial class DemoPlugin
                 RightScore = TeamScore(CsTeam.CounterTerrorist),
                 ShowScore = showScore,
                 Urgent = urgent,
+                Band = band,
             });
             left--;
             return true;
         });
+    }
+
+    /// <summary>Any argument equal to <paramref name="word"/>, case-insensitive.</summary>
+    private static bool HasArg(CommandInfo command, string word)
+    {
+        for (int i = 1; i < command.ArgCount; i++)
+        {
+            if (command.GetArg(i).Trim().Equals(word, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static int AliveCount(CsTeam team)

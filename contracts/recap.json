@@ -1,0 +1,254 @@
+{
+  "component": "recap",
+  "csharp": "RecapLayout / IRecapService",
+  "summary": "End of match screen for one player: placement, headline, and a strip at the bottom with the player's name and stat tiles (icon, value, label). Per player. Optionally a few player rows (a duo, a squad) instead of the single player.",
+  "params": {
+    "stats": {
+      "default": 8,
+      "doc": "Stat tiles in the pool (RecapLayout.Stats)."
+    },
+    "rows": {
+      "default": 4,
+      "doc": "Player rows in the pool (RecapLayout.Rows): a squad's names and stats instead of one player."
+    },
+    "row_stats": {
+      "default": 4,
+      "doc": "Stats per player row (RecapLayout.RowStats)."
+    }
+  },
+  "repeat": {
+    "n": "stats",
+    "r": "rows",
+    "s": "row_stats"
+  },
+  "panels": [
+    {
+      "id": "rc_screen",
+      "required": true,
+      "classes": [
+        "show",
+        "style-*"
+      ],
+      "doc": "The screen. Style = outcome colour. `show` plays the whole entry, staggered by the stylesheet.",
+      "once": true
+    },
+    {
+      "id": "rc_kicker",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the kicker, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "rc_place_row",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "doc": "Placement row, `hidden` without a placement.",
+      "once": true
+    },
+    {
+      "id": "rc_place_total",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the field size, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "rc_player_sub",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label under the player's name, `empty` when blank.",
+      "once": true
+    },
+    {
+      "id": "rc_stats",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "doc": "Tile row, `hidden` when there are no stats.",
+      "once": true
+    },
+    {
+      "id": "rc_stat_{n}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "style-*",
+        "best",
+        "pulse-a",
+        "pulse-b"
+      ],
+      "doc": "A stat tile. Author it `hidden`. `best` highlights it; `pulse-a` / `pulse-b` swap when its value changes while shown."
+    },
+    {
+      "id": "rc_stat_{n}_icon",
+      "required": false,
+      "classes": [
+        "icon-*"
+      ],
+      "doc": "The tile's icon: `icon-<name>` sets its picture (RecapStat.Icon, RecapIcons)."
+    },
+    {
+      "id": "rc_solo",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "once": true,
+      "doc": "The single player's name block. `hidden` when RecapOptions.Players is given."
+    },
+    {
+      "id": "rc_rows",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "once": true,
+      "doc": "The player rows. `hidden` unless RecapOptions.Players is given; then the single player and rc_stats are hidden."
+    },
+    {
+      "id": "rc_row_{r}",
+      "required": false,
+      "classes": [
+        "hidden",
+        "style-*"
+      ],
+      "doc": "A player row: name, sub line and its stats on one line. Author it `hidden`. style-* colours the name."
+    },
+    {
+      "id": "rc_row_{r}_sub",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label beside the name, `empty` when blank."
+    },
+    {
+      "id": "rc_row_{r}_stat_{s}",
+      "required": false,
+      "classes": [
+        "hidden",
+        "style-*",
+        "best"
+      ],
+      "doc": "A stat of the row. Author it `hidden`."
+    },
+    {
+      "id": "rc_row_{r}_stat_{s}_icon",
+      "required": false,
+      "classes": [
+        "icon-*"
+      ],
+      "doc": "Its icon, as rc_stat_{n}_icon."
+    },
+    {
+      "id": "rc_restart",
+      "required": false,
+      "classes": [
+        "hidden"
+      ],
+      "doc": "Countdown line, `hidden` without a countdown.",
+      "once": true
+    }
+  ],
+  "texts": [
+    {
+      "var": "rc_title",
+      "required": true,
+      "doc": "RecapOptions.Title"
+    },
+    {
+      "var": "rc_kicker",
+      "required": false,
+      "doc": "RecapOptions.Kicker"
+    },
+    {
+      "var": "rc_place",
+      "required": false,
+      "doc": "RecapOptions.Place, as RecapOptions.PlaceFormat"
+    },
+    {
+      "var": "rc_place_total",
+      "required": false,
+      "doc": "RecapOptions.Total, as RecapOptions.TotalFormat"
+    },
+    {
+      "var": "rc_player",
+      "required": true,
+      "doc": "RecapOptions.Player, or the player's name"
+    },
+    {
+      "var": "rc_player_sub",
+      "required": false,
+      "doc": "RecapOptions.PlayerSub"
+    },
+    {
+      "var": "rc_stat_{n}_value",
+      "required": true,
+      "doc": "RecapStat.Value"
+    },
+    {
+      "var": "rc_stat_{n}_label",
+      "required": false,
+      "doc": "RecapStat.Label"
+    },
+    {
+      "var": "rc_row_{r}_name",
+      "required": false,
+      "doc": "RecapPlayer.Name"
+    },
+    {
+      "var": "rc_row_{r}_sub",
+      "required": false,
+      "doc": "RecapPlayer.Sub"
+    },
+    {
+      "var": "rc_row_{r}_stat_{s}_value",
+      "required": false,
+      "doc": "RecapStat.Value"
+    },
+    {
+      "var": "rc_row_{r}_stat_{s}_label",
+      "required": false,
+      "doc": "RecapStat.Label"
+    },
+    {
+      "var": "rc_restart_label",
+      "required": false,
+      "doc": "RecapOptions.RestartLabel"
+    },
+    {
+      "var": "rc_restart_eta",
+      "required": false,
+      "doc": "Countdown, RecapOptions.RestartFormat"
+    },
+    {
+      "var": "rc_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "RecapOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "show",
+    "hidden",
+    "empty",
+    "best",
+    "pulse-a",
+    "pulse-b",
+    "icon-kills",
+    "style-neutral",
+    "style-success",
+    "style-danger",
+    "style-gold"
+  ]
+}

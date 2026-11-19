@@ -95,6 +95,14 @@ else
     rm -rf "$OUT/plugins/PanoramaUiKit.Demo"
 fi
 
+# The BR demo is local only (git-ignored): built and packaged when its folder is there.
+BR_DEMO="src/PanoramaUiKit.BrDemo/PanoramaUiKit.BrDemo.csproj"
+if [[ $DEMO -eq 1 && -f "$BR_DEMO" ]]; then
+    step "dotnet build BR demo ($CONFIG)"
+    dotnet build "$BR_DEMO" -c "$CONFIG" --nologo -v q -clp:NoSummary
+    package plugins PanoramaUiKit.BrDemo
+fi
+
 if [[ $PREVIEWS -eq 1 ]]; then
     step "Previews"
     for layout in workshop/panorama/layout/custom_game/uikit_*.xml; do

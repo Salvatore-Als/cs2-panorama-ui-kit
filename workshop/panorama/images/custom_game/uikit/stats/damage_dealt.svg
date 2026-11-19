@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+	<path fill="#ffffff" fill-rule="evenodd" d="M14 32 a18 18 0 1 0 36 0 a18 18 0 1 0 -36 0 Z M19 32 a13 13 0 1 0 26 0 a13 13 0 1 0 -26 0 Z" />
+	<rect fill="#ffffff" x="30" y="3" width="4" height="13" />
+	<rect fill="#ffffff" x="30" y="48" width="4" height="13" />
+	<rect fill="#ffffff" x="3" y="30" width="13" height="4" />
+	<rect fill="#ffffff" x="48" y="30" width="13" height="4" />
+	<circle fill="#ffffff" cx="32" cy="32" r="4" />
+	<polygon fill="#ffffff" points="52,8 50,17 47,12" />
+	<polygon fill="#ffffff" points="12,8 17,12 14,17" />
+	<polygon fill="#ffffff" points="12,56 14,47 17,52" />
+	<polygon fill="#ffffff" points="52,56 47,52 50,47" />
+</svg>

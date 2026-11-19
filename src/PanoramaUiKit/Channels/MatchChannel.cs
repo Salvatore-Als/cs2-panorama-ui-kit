@@ -56,6 +56,7 @@ internal sealed class MatchChannel : LayoutChannel<ViewerState>
             client.Group(player, BarId, "style", style);
             client.FreeClasses(player, BarId, options.Classes);
             client.Class(player, BarId, "urgent", options.Urgent);
+            client.Class(player, BarId, "band", options.Band);
             client.Class(player, "m_center_sub", "empty", subEmpty);
             client.Class(player, "m_scores", "hidden", scoresHidden);
             client.Group(player, "m_left", "style", leftStyle);

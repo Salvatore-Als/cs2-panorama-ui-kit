@@ -13,14 +13,14 @@ internal sealed record ScreamerContent(string Name, float Seconds, UiContent Ext
 
 /// <summary>
 /// The full-screen picture of one screamer layout (contract "screamer"): a single box, <c>sc_image</c>.
-/// <c>scare-&lt;name&gt;</c> carries the picture; the sound is played by the service, on the client, in the same tick.
+/// <c>scare-&lt;name&gt;</c> carries the picture; the sound is played on the client, after the picture.
 /// Retiring the box closes the layout, which scrubs the class.
 /// </summary>
 internal sealed class ScreamerChannel : AnchoredChannel<ScreamerContent>
 {
     public const string Key = "image";
 
-    /// <summary>Screamers waiting for their sound to start, per slot.</summary>
+    /// <summary>Sounds waiting to start after their picture, per slot.</summary>
     private readonly Dictionary<int, SafeTimer> _pending = new();
 
     public ScreamerChannel(BasePlugin plugin, ScreamerLayout layout) : base(plugin, layout, [Key])
@@ -31,15 +31,14 @@ internal sealed class ScreamerChannel : AnchoredChannel<ScreamerContent>
 
     public bool IsShowing(CCSPlayerController player)
     {
-        return _pending.ContainsKey(player.Slot)
-               || (Viewers.TryGetValue(player.Slot, out BoxViewer<ScreamerContent>? viewer) && viewer.AnyVisible);
+        return Viewers.TryGetValue(player.Slot, out BoxViewer<ScreamerContent>? viewer) && viewer.AnyVisible;
     }
 
     /// <summary>
-    /// Shows <paramref name="content"/> after <paramref name="seconds"/>, then links <paramref name="handle"/> to it.
-    /// A hide in the meantime cancels it.
+    /// Plays <paramref name="sound"/> on the player's client after <paramref name="seconds"/>. A hide in the
+    /// meantime cancels it.
     /// </summary>
-    public void ShowLater(CCSPlayerController player, float seconds, ScreamerContent content, UiHandle handle)
+    public void PlayLater(CCSPlayerController player, float seconds, string sound)
     {
         int slot = player.Slot;
         CancelPending(slot);
@@ -48,7 +47,7 @@ internal sealed class ScreamerChannel : AnchoredChannel<ScreamerContent>
             _pending.Remove(slot);
             if (player is { IsValid: true })
             {
-                handle.Link(Show(player, Key, content));
+                player.ExecuteClientCommand($"play {sound}");
             }
         });
     }
@@ -59,7 +58,7 @@ internal sealed class ScreamerChannel : AnchoredChannel<ScreamerContent>
         return base.Forget(slot) || pending;
     }
 
-    /// <summary>Round reset, map start, HideAll: the waiting screamers go too (a map change kills their timers).</summary>
+    /// <summary>Round reset, map start, HideAll: the waiting sounds go too (a map change kills their timers).</summary>
     public override void ClearEveryone()
     {
         foreach (int slot in _pending.Keys.ToList())

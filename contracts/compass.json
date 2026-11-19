@@ -1,0 +1,90 @@
+{
+  "component": "compass",
+  "csharp": "CompassLayout / ICompassService",
+  "summary": "Horizontal compass strip at the top of the screen, with pins on it. The kit follows the player's view and writes the heading as one class; pins sit at their bearing relative to it.",
+  "params": {
+    "pins": {
+      "default": 4,
+      "doc": "Pins in the pool (CompassLayout.Pins)."
+    }
+  },
+  "repeat": {
+    "n": "pins"
+  },
+  "panels": [
+    {
+      "id": "cp_bar",
+      "required": true,
+      "classes": [
+        "hidden",
+        "style-*",
+        "at-*"
+      ],
+      "doc": "The compass. Author it with class `hidden`. Style = accent of the caret and of the north. `at-*` is CompassOptions.Placement: `at-hud` under the game's team bar (default), `at-top` against the top edge, `at-bottom` above the inventory, `at-tl` under the radar, `at-tr` under the kill feed, `at-right` on the right edge, centred, `at-band` in the band of a match bar (MatchOptions.Band).",
+      "once": true
+    },
+    {
+      "id": "cp_strip",
+      "required": true,
+      "classes": [
+        "hd-*"
+      ],
+      "doc": "The strip of ticks and letters. `hd-N` puts the heading 2.5*N-90 degrees under the caret (N of 0..216: the strip runs from -180 to 540 degrees so the kit can follow a turn past north without sliding back).",
+      "once": true
+    },
+    {
+      "id": "cp_pin_{n}",
+      "required": false,
+      "classes": [
+        "hidden",
+        "rel-*",
+        "edge-l",
+        "edge-r",
+        "kind-*",
+        "style-*"
+      ],
+      "doc": "A pin. Author it `hidden`. `rel-N` places it 2.5*N-90 degrees from the caret (N of 0..72); beyond 90 degrees it gets `edge-l` or `edge-r` instead, at that edge. `kind-<name>` is its shape (CompassNames), `style-*` its colour."
+    },
+    {
+      "id": "cp_pin_{n}_dist",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the pin's distance, `empty` when there is none."
+    }
+  ],
+  "texts": [
+    {
+      "var": "cp_deg",
+      "required": false,
+      "doc": "Heading in whole degrees, 0 = north"
+    },
+    {
+      "var": "cp_pin_{n}_dist",
+      "required": false,
+      "doc": "Distance to the pin (CompassPin.ShowDistance), `240m` or `1.2km`"
+    },
+    {
+      "var": "cp_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "CompassOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "at-band",
+    "empty",
+    "hd-18",
+    "rel-18",
+    "edge-l",
+    "edge-r",
+    "kind-dot",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

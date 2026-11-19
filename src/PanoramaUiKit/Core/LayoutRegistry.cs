@@ -7,18 +7,25 @@ using PanoramaUiKit.Shared.Announcements;
 using PanoramaUiKit.Shared.Banners;
 using PanoramaUiKit.Shared.Cards;
 using PanoramaUiKit.Shared.Common;
+using PanoramaUiKit.Shared.Comms;
+using PanoramaUiKit.Shared.Compass;
 using PanoramaUiKit.Shared.Dials;
+using PanoramaUiKit.Shared.Inventory;
 using PanoramaUiKit.Shared.KillFeed;
 using PanoramaUiKit.Shared.Match;
 using PanoramaUiKit.Shared.Menus;
+using PanoramaUiKit.Shared.Minimap;
+using PanoramaUiKit.Shared.Overlays;
 using PanoramaUiKit.Shared.Panels;
 using PanoramaUiKit.Shared.Progress;
+using PanoramaUiKit.Shared.Recap;
 using PanoramaUiKit.Shared.Roulette;
 using PanoramaUiKit.Shared.Screamers;
 using PanoramaUiKit.Shared.Targets;
 using PanoramaUiKit.Shared.Toasts;
 using PanoramaUiKit.Shared.Victory;
 using PanoramaUiKit.Shared.Votes;
+using PanoramaUiKit.Shared.Zone;
 
 namespace PanoramaUiKit.Core;
 
@@ -41,7 +48,17 @@ internal sealed class LayoutRegistry : IDisposable
     {
         _plugin = plugin;
         _logger = logger;
+        Maps.Changed += () =>
+        {
+            foreach (MinimapChannel minimap in _channels.Values.OfType<MinimapChannel>())
+            {
+                minimap.RefreshMaps();
+            }
+        };
     }
+
+    /// <summary>How each map is drawn on the minimaps (dev, plugin, official), shared by every minimap layout.</summary>
+    public MapCatalog Maps { get; } = new();
 
     public IEnumerable<LayoutChannel> Channels => _channels.Values;
 
@@ -171,6 +188,13 @@ internal sealed class LayoutRegistry : IDisposable
         ProgressLayout progress => new FillChannel(_plugin, progress, progress.Placements.Select(p => p.Code()).ToList(), "pg", progress.Steps, progress.Durations),
         DialLayout dial => new FillChannel(_plugin, dial, dial.Placements.Select(p => p.Code()).ToList(), "dl", dial.Steps, dial.Durations),
         ScreamerLayout screamer => new ScreamerChannel(_plugin, screamer),
+        OverlayLayout overlay => new OverlayChannel(_plugin, overlay),
+        CompassLayout compass => new CompassChannel(_plugin, compass),
+        InventoryLayout inventory => new InventoryChannel(_plugin, inventory),
+        ZoneLayout zone => new ZoneChannel(_plugin, zone),
+        CommsLayout comms => new CommsChannel(_plugin, comms),
+        RecapLayout recap => new RecapChannel(_plugin, recap),
+        MinimapLayout minimap => new MinimapChannel(_plugin, minimap, Maps),
         _ => throw new ArgumentOutOfRangeException(nameof(layout), layout.GetType().Name, "Unknown layout type"),
     };
 
@@ -208,6 +232,17 @@ internal sealed class LayoutRegistry : IDisposable
             DialLayout { Placements.Count: 0 } => "no Placements",
             DialLayout { Steps: < 1 } => "Steps must be at least 1",
             DialLayout { Durations.Count: 0 } => "no Durations",
+            CompassLayout { Pins: < 0 } => "Pins cannot be negative",
+            InventoryLayout { Slots: < 1 } => "Slots must be at least 1",
+            ZoneLayout { Steps: < 1 } => "Steps must be at least 1",
+            ZoneLayout { Durations.Count: 0 } => "no Durations",
+            RecapLayout { Stats: < 0 } => "Stats cannot be negative",
+            RecapLayout { Rows: < 0 } => "Rows cannot be negative",
+            RecapLayout { RowStats: < 0 } => "RowStats cannot be negative",
+            MinimapLayout { Grid: < 1 } => "Grid must be at least 1",
+            MinimapLayout { Marks: < 0 } => "Marks cannot be negative",
+            MinimapLayout { Radii: < 1 } => "Radii must be at least 1",
+            MinimapLayout { Durations.Count: 0 } => "no Durations",
             _ => null,
         };
     }

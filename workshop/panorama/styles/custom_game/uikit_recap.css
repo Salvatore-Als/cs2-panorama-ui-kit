@@ -1,0 +1,542 @@
+/*
+    uikit_recap - end of match screen for one player. Contract "recap" (docs/CONTRACTS.md).
+
+    Dark veil and a glow in the outcome colour; placement and headline at the top; at the bottom, discreet,
+    the player's name and one line of stats. Elements enter one after the other through
+    transition-delay, so the whole sequence is one "show", one network write. style-* on rc_screen is the
+    outcome colour, style-* on a tile its own accent, "best" on a tile a gold highlight.
+
+    A tile's icon is ONE class, icon-<name>, on rc_stat_<n>_icon (RecapStat.Icon, RecapIcons): a white SVG
+    shipped with this addon, tinted by wash-color from the tile's style:
+      panorama/images/custom_game/uikit/stats/<name>.svg   -> <name>.vsvg_c
+    Adding another: one more icon rule below, then RecapStat.Icon = "<name>".
+
+    pulse-a / pulse-b: the kit swaps them on a tile whose value changed while shown. Two names, two
+    keyframes: the same class off and on in one tick never reaches the client.
+
+    Hidden stats collapse; the line is as wide as what is left, centred.
+*/
+
+.recap-screen {
+    width: 100%;
+    height: 100%;
+}
+
+/* Backdrop ----------------------------------------------------------------- */
+
+.recap-veil,
+.recap-glow {
+    ignore-parent-flow: true;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-out;
+}
+
+.recap-veil {
+    background-color: gradient( linear, 0% 0%, 0% 100%, from( #000000e6 ), color-stop( 0.45, #05080cb3 ), to( #000000f2 ) );
+}
+
+.recap-glow {
+    background-color: gradient( radial, 50% 22%, 0% 0%, 55% 40%, from( #9aa2ac40 ), to( #9aa2ac00 ) );
+    transition-delay: 0.15s;
+}
+
+.recap-screen.show .recap-veil,
+.recap-screen.show .recap-glow {
+    opacity: 1;
+}
+
+/* Head: kicker, placement, headline ---------------------------------------- */
+
+.recap-head {
+    ignore-parent-flow: true;
+    width: 100%;
+    flow-children: down;
+    vertical-align: top;
+    margin-top: 150px;
+}
+
+.recap-kicker,
+.recap-place-row,
+.recap-title {
+    horizontal-align: center;
+    opacity: 0;
+    transform: translateY( 16px );
+    transition-property: opacity, transform;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-out;
+}
+
+.recap-screen.show .recap-kicker,
+.recap-screen.show .recap-title {
+    opacity: 1;
+    transform: translateY( 0px );
+}
+
+.recap-kicker {
+    font-size: 15px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+    transition-delay: 0.1s;
+}
+
+.recap-place-row {
+    flow-children: right;
+    margin-top: 6px;
+    transform: scale3d( 1.4, 1.4, 1.0 );
+}
+
+.recap-screen.show .recap-place-row {
+    opacity: 1;
+    transform: scale3d( 1.0, 1.0, 1.0 );
+    transition-duration: 0.45s;
+    transition-delay: 0.2s;
+    sound: "UIPanorama.container_reveal";
+}
+
+.recap-place {
+    font-family: Stratum2 Bold;
+    font-size: 132px;
+    color: #f2f4f7;
+    text-shadow: 0px 0px 24px 2.0 #00000099;
+}
+
+.recap-place-total {
+    vertical-align: bottom;
+    margin: 0px 0px 26px 12px;
+    font-family: Stratum2 Bold;
+    font-size: 34px;
+    color: #61686f;
+}
+
+.recap-title {
+    width: 1200px;
+    margin-top: 2px;
+    text-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 44px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: shrink min( 22px ) ellipsis;
+    transition-delay: 0.32s;
+}
+
+.recap-rule {
+    width: 120px;
+    height: 3px;
+    margin-top: 18px;
+    horizontal-align: center;
+    border-radius: 2px;
+    background-color: #9aa2ac;
+    clip: rect( 0%, 50%, 100%, 50% );
+    transition-property: clip;
+    transition-duration: 0.5s;
+    transition-delay: 0.42s;
+}
+
+.recap-screen.show .recap-rule { clip: rect( 0%, 100%, 100%, 0% ); }
+
+/*
+    Foot: discreet on purpose. No panel, no tiles: the player's name, then one line of stats - icon, value,
+    label - split by hairlines, centred low on the screen. The head carries the moment; the numbers are there
+    to be read, not to compete with it.
+*/
+
+.recap-foot {
+    ignore-parent-flow: true;
+    width: 100%;
+    flow-children: down;
+    vertical-align: bottom;
+    margin-bottom: 64px;
+}
+
+.recap-strip {
+    horizontal-align: center;
+    flow-children: down;
+    overflow: noclip;
+
+    opacity: 0;
+    transform: translateY( 20px );
+    transition-property: opacity, transform;
+    transition-duration: 0.45s;
+    transition-timing-function: ease-out;
+    transition-delay: 0.45s;
+}
+
+.recap-screen.show .recap-strip {
+    opacity: 1;
+    transform: translateY( 0px );
+}
+
+/* A short rule over the name, in the outcome colour. */
+.recap-strip-accent {
+    width: 48px;
+    height: 2px;
+    horizontal-align: center;
+    margin-bottom: 12px;
+    border-radius: 1px;
+    background-color: #9aa2ac;
+}
+
+.recap-strip-body {
+    horizontal-align: center;
+    flow-children: down;
+}
+
+.recap-player {
+    horizontal-align: center;
+    flow-children: right;
+}
+
+.recap-player-name {
+    max-width: 520px;
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: shrink min( 13px ) ellipsis;
+    text-shadow: 0px 1px 3px 1.0 #000000cc;
+}
+
+.recap-player-sub {
+    vertical-align: center;
+    margin-left: 12px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+    white-space: nowrap;
+}
+
+.recap-player-sub.empty { visibility: collapse; }
+
+.recap-stats {
+    horizontal-align: center;
+    flow-children: right;
+    margin-top: 12px;
+}
+
+/* Stats: one line each, hairline between them --------------------------------- */
+
+.recap-stat {
+    height: 30px;
+    flow-children: right;
+    padding: 0px 18px;
+    border-left: 1px solid #ffffff1f;
+    overflow: noclip;
+
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.35s;
+    transition-timing-function: ease-out;
+}
+
+.recap-stat:first-child {
+    border-left: 0px solid #ffffff00;
+}
+
+.recap-screen.show .recap-stat {
+    opacity: 1;
+}
+
+.recap-stat:nth-child(1) { transition-delay: 0.6s; }
+.recap-stat:nth-child(2) { transition-delay: 0.65s; }
+.recap-stat:nth-child(3) { transition-delay: 0.7s; }
+.recap-stat:nth-child(4) { transition-delay: 0.75s; }
+.recap-stat:nth-child(5) { transition-delay: 0.8s; }
+.recap-stat:nth-child(6) { transition-delay: 0.85s; }
+.recap-stat:nth-child(7) { transition-delay: 0.9s; }
+.recap-stat:nth-child(8) { transition-delay: 0.95s; }
+
+/* Kept in the layout for custom stylesheets; this one does not draw it. */
+.recap-stat-accent {
+    visibility: collapse;
+}
+
+.recap-stat-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: center;
+    margin-right: 8px;
+    background-size: contains;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    wash-color: #9aa2ac;
+}
+
+.recap-stat-value {
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 20px;
+    color: #f2f4f7;
+    white-space: nowrap;
+}
+
+.recap-stat-label {
+    vertical-align: center;
+    margin-left: 7px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #61686f;
+    white-space: nowrap;
+}
+
+/* Best: a personal best, the value in gold (icon and label at the end, after the styles). */
+.recap-stat.best .recap-stat-value {
+    color: #e0a24a;
+}
+
+/*
+    Player rows (RecapOptions.Players): a duo or a squad instead of the single player. One line each - the
+    name on the left, its stats on the same line, the same quiet look as the single player's line - stacked
+    and centred. The stats reuse .recap-stat, so icons, styles, "best" and the stagger are the same.
+*/
+.recap-rows {
+    horizontal-align: center;
+    flow-children: down;
+}
+
+.recap-row {
+    horizontal-align: center;
+    flow-children: right;
+    margin-top: 8px;
+}
+
+.recap-row:first-child {
+    margin-top: 0px;
+}
+
+.recap-row-who {
+    width: 220px;
+    flow-children: right;
+    vertical-align: center;
+    padding-right: 18px;
+}
+
+.recap-row-name {
+    max-width: 200px;
+    horizontal-align: right;
+    vertical-align: center;
+    font-family: Stratum2 Bold;
+    font-size: 18px;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-overflow: shrink min( 12px ) ellipsis;
+    text-shadow: 0px 1px 3px 1.0 #000000cc;
+}
+
+.recap-row-sub {
+    horizontal-align: right;
+    vertical-align: center;
+    margin-left: 8px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #9aa2ac;
+    white-space: nowrap;
+}
+
+.recap-row-sub.empty { visibility: collapse; }
+
+.recap-row-stats {
+    flow-children: right;
+    vertical-align: center;
+}
+
+.recap-row.style-info .recap-row-name { color: #56a0dd; }
+.recap-row.style-success .recap-row-name { color: #9ccf4f; }
+.recap-row.style-warn .recap-row-name { color: #f0a531; }
+.recap-row.style-danger .recap-row-name { color: #e0432f; }
+.recap-row.style-purple .recap-row-name { color: #8847ff; }
+.recap-row.style-gold .recap-row-name { color: #e0a24a; }
+
+ Two names so a swap always restarts it. */
+.recap-stat.pulse-a {
+    animation-name: recap-pulse-a;
+    animation-duration: 0.6s;
+    animation-timing-function: ease-out;
+}
+
+.recap-stat.pulse-b {
+    animation-name: recap-pulse-b;
+    animation-duration: 0.6s;
+    animation-timing-function: ease-out;
+}
+
+@keyframes 'recap-pulse-a' {
+    0%   { transform: scale3d( 1.0, 1.0, 1.0 ); brightness: 1.0; }
+    30%  { transform: scale3d( 1.06, 1.06, 1.0 ); brightness: 1.8; }
+    100% { transform: scale3d( 1.0, 1.0, 1.0 ); brightness: 1.0; }
+}
+
+@keyframes 'recap-pulse-b' {
+    0%   { transform: scale3d( 1.0, 1.0, 1.0 ); brightness: 1.0; }
+    30%  { transform: scale3d( 1.06, 1.06, 1.0 ); brightness: 1.8; }
+    100% { transform: scale3d( 1.0, 1.0, 1.0 ); brightness: 1.0; }
+}
+
+/* Countdown ---------------------------------------------------------------- */
+
+.recap-restart {
+    flow-children: right;
+    horizontal-align: center;
+    margin-top: 16px;
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 0.4s;
+    transition-delay: 1.2s;
+}
+
+.recap-screen.show .recap-restart { opacity: 1; }
+
+.recap-restart-label {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #61686f;
+    vertical-align: center;
+}
+
+.recap-restart-eta {
+    margin-left: 10px;
+    font-family: Stratum2 Bold;
+    font-size: 18px;
+    color: #f2f4f7;
+    vertical-align: center;
+}
+
+/* Icons (RecapIcons) ------------------------------------------------------ */
+
+.recap-stat-icon.icon-kills {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/kills.vsvg" );
+}
+
+.recap-stat-icon.icon-knockouts {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/knockouts.vsvg" );
+}
+
+.recap-stat-icon.icon-points {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/points.vsvg" );
+}
+
+.recap-stat-icon.icon-shots {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/shots.vsvg" );
+}
+
+.recap-stat-icon.icon-damage_dealt {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/damage_dealt.vsvg" );
+}
+
+.recap-stat-icon.icon-damage_taken {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/damage_taken.vsvg" );
+}
+
+.recap-stat-icon.icon-headshots {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/headshots.vsvg" );
+}
+
+.recap-stat-icon.icon-revives {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/revives.vsvg" );
+}
+
+.recap-stat-icon.icon-survival {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/survival.vsvg" );
+}
+
+.recap-stat-icon.icon-accuracy {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/accuracy.vsvg" );
+}
+
+.recap-stat-icon.icon-distance {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/distance.vsvg" );
+}
+
+.recap-stat-icon.icon-assists {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/stats/assists.vsvg" );
+}
+
+/* Outcome (UiStyle on rc_screen) ----------------------------------------- */
+
+.recap-screen.style-neutral .recap-strip-accent { background-color: #9aa2ac; }
+.recap-screen.style-neutral .recap-kicker { color: #9aa2ac; }
+.recap-screen.style-neutral .recap-rule { background-color: #9aa2ac; }
+.recap-screen.style-neutral .recap-restart-eta { color: #9aa2ac; }
+.recap-screen.style-neutral .recap-glow { background-color: gradient( radial, 50% 22%, 0% 0%, 55% 40%, from( #9aa2ac40 ), to( #9aa2ac00 ) ); }
+
+.recap-screen.style-info .recap-strip-accent { background-color: #56a0dd; }
+.recap-screen.style-info .recap-kicker { color: #56a0dd; }
+.recap-screen.style-info .recap-rule { background-color: #56a0dd; }
+.recap-screen.style-info .recap-restart-eta { color: #56a0dd; }
+.recap-screen.style-info .recap-glow { background-color: gradient( radial, 50% 22%, 0% 0%, 55% 40%, from( #56a0dd40 ), to( #56a0dd00 ) ); }
+.recap-screen.style-info .recap-place { color: #56a0dd; }
+
+.recap-screen.style-success .recap-strip-accent { background-color: #9ccf4f; }
+.recap-screen.style-success .recap-kicker { color: #9ccf4f; }
+.recap-screen.style-success .recap-rule { background-color: #9ccf4f; }
+.recap-screen.style-success .recap-restart-eta { color: #9ccf4f; }
+.recap-screen.style-success .recap-glow { background-color: gradient( radial, 50% 22%, 0% 0%, 55% 40%, from( #9ccf4f40 ), to( #9ccf4f00 ) ); }
+.recap-screen.style-success .recap-place { color: #9ccf4f; }
+
+.recap-screen.style-warn .recap-strip-accent { background-color: #f0a531; }
+.recap-screen.style-warn .recap-kicker { color: #f0a531; }
+.recap-screen.style-warn .recap-rule { background-color: #f0a531; }
+.recap-screen.style-warn .recap-restart-eta { color: #f0a531; }
+.recap-screen.style-warn .recap-glow { background-color: gradient( radial, 50% 22%, 0% 0%, 55% 40%, from( #f0a53140 ), to( #f0a53100 ) ); }
+.recap-screen.style-warn .recap-place { color: #f0a531; }
+
+.recap-screen.style-danger .recap-strip-accent { background-color: #e0432f; }
+.recap-screen.style-danger .recap-kicker { color: #e0432f; }
+.recap-screen.style-danger .recap-rule { background-color: #e0432f; }
+.recap-screen.style-danger .recap-restart-eta { color: #e0432f; }
+.recap-screen.style-danger .recap-glow { background-color: gradient( radial, 50% 22%, 0% 0%, 55% 40%, from( #e0432f40 ), to( #e0432f00 ) ); }
+.recap-screen.style-danger .recap-place { color: #e0432f; }
+
+.recap-screen.style-purple .recap-strip-accent { background-color: #8847ff; }
+.recap-screen.style-purple .recap-kicker { color: #8847ff; }
+.recap-screen.style-purple .recap-rule { background-color: #8847ff; }
+.recap-screen.style-purple .recap-restart-eta { color: #8847ff; }
+.recap-screen.style-purple .recap-glow { background-color: gradient( radial, 50% 22%, 0% 0%, 55% 40%, from( #8847ff40 ), to( #8847ff00 ) ); }
+.recap-screen.style-purple .recap-place { color: #8847ff; }
+
+.recap-screen.style-gold .recap-strip-accent { background-color: #e0a24a; }
+.recap-screen.style-gold .recap-kicker { color: #e0a24a; }
+.recap-screen.style-gold .recap-rule { background-color: #e0a24a; }
+.recap-screen.style-gold .recap-restart-eta { color: #e0a24a; }
+.recap-screen.style-gold .recap-glow { background-color: gradient( radial, 50% 22%, 0% 0%, 55% 40%, from( #e0a24a40 ), to( #e0a24a00 ) ); }
+.recap-screen.style-gold .recap-place { color: #e0a24a; }
+
+/* Tiles (UiStyle on rc_stat_<n>) ------------------------------------------ */
+
+.recap-stat.style-neutral .recap-stat-accent { background-color: #9aa2ac; }
+.recap-stat.style-neutral .recap-stat-icon { wash-color: #9aa2ac; }
+
+.recap-stat.style-info .recap-stat-accent { background-color: #56a0dd; }
+.recap-stat.style-info .recap-stat-icon { wash-color: #56a0dd; }
+
+.recap-stat.style-success .recap-stat-accent { background-color: #9ccf4f; }
+.recap-stat.style-success .recap-stat-icon { wash-color: #9ccf4f; }
+
+.recap-stat.style-warn .recap-stat-accent { background-color: #f0a531; }
+.recap-stat.style-warn .recap-stat-icon { wash-color: #f0a531; }
+
+.recap-stat.style-danger .recap-stat-accent { background-color: #e0432f; }
+.recap-stat.style-danger .recap-stat-icon { wash-color: #e0432f; }
+
+.recap-stat.style-purple .recap-stat-accent { background-color: #8847ff; }
+.recap-stat.style-purple .recap-stat-icon { wash-color: #8847ff; }
+
+.recap-stat.style-gold .recap-stat-accent { background-color: #e0a24a; }
+.recap-stat.style-gold .recap-stat-icon { wash-color: #e0a24a; }
+
+/* Best wins over the tile's style: same specificity, so it comes last. */
+.recap-stat.best .recap-stat-icon { wash-color: #e0a24a; }
+.recap-stat.best .recap-stat-label { color: #e0a24a; }

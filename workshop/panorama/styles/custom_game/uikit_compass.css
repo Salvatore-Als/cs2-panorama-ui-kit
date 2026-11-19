@@ -1,0 +1,599 @@
+/*
+    uikit_compass - a horizontal compass at the top of the screen, with pins. at-hud (default) puts it
+    under the game's team bar, at-top against the edge, at-bottom above the inventory,
+    at-tl under the radar, at-tr under the kill feed, at-right on the right edge, at-band in the strip of a
+    match bar with "band" (uikit_match). Contract "compass".
+
+    The strip (#cp_strip) is a row of 15-degree cells from -180 to 540 degrees, 36px each (2.4px a degree),
+    in a 432px viewport that clips it: 90 degrees either side of the caret. The kit writes the heading as
+    ONE class, hd-N = heading 2.5*N-90 (N of 0..216), which slides the strip with a transform. The kit keeps
+    the heading unwrapped near the last one, so turning past north moves the strip on instead of back.
+    transform, not margin or width: it does not lay anything out again when the degree label changes.
+
+    Pins (#cp_pin_<n>) sit in their own layer over the viewport, not on the strip: rel-N puts one 2.5*N-90
+    degrees from the caret (N of 0..72), edge-l / edge-r at an edge with an arrow when it is behind.
+    kind-<name> is its picture (CompassNames), style-* its colour, tinted with wash-color.
+
+    Pictures ship with this addon, white, tinted here:
+      panorama/images/custom_game/uikit/compass/<name>.svg   -> <name>.vsvg_c
+    UNVERIFIED IN GAME: a .vsvg from an addon as background-image (Valve's own layouts use .vsvg that way).
+*/
+
+.compass {
+    horizontal-align: center;
+    vertical-align: top;
+    margin-top: 104px;
+    flow-children: right;
+}
+
+/*
+    Placement (CompassOptions.Placement). The game's team bar (alive players, round timer) takes the top
+    centre down to ~95px at 1080p: by default the compass sits under it.
+*/
+.compass.at-hud { vertical-align: top; margin-top: 104px; }
+.compass.at-top { vertical-align: top; margin-top: 14px; }
+/*
+    In the 62px strip of uikit_match's band, melted into it: no frame, no panel, no shadow - the strip is the
+    background, and the edge fades are already its colour. A little high, so the pin distances stay in it.
+*/
+/* translateX: the degree label beside the frame (8 + 44px) would push the frame 26px left of the bar's centre. */
+.compass.at-band { vertical-align: top; margin-top: 6px; transform: translateX( 26px ); }
+
+.compass.at-band .compass-view {
+    border: 0px solid #ffffff00;
+    background-color: #12171e00;
+    box-shadow: #00000000 0px 0px 0px 0px;
+}
+.compass.at-bottom { vertical-align: bottom; margin-top: 0px; margin-bottom: 132px; }
+.compass.at-tl { horizontal-align: left; vertical-align: top; margin-top: 330px; margin-left: 16px; }
+.compass.at-tr { horizontal-align: right; vertical-align: top; margin-top: 270px; margin-right: 16px; }
+
+/* Centred on the right edge: a transform, not a margin, so it does not depend on the screen height. */
+.compass.at-right { horizontal-align: right; vertical-align: center; margin-top: 0px; margin-right: 16px; transform: translateY( -60px ); }
+
+/* Frame: the viewport, the pin layer over it and the caret, stacked (no flow). */
+.compass-frame {
+    width: 432px;
+    height: 58px;
+    overflow: noclip;
+}
+
+.compass-view {
+    width: 432px;
+    height: 38px;
+    border-radius: 3px;
+    border: 1px solid #ffffff14;
+    background-color: #12171ecc;
+    box-shadow: #00000070 0px 4px 12px 0px;
+    overflow: clip;
+}
+
+/* Strip --------------------------------------------------------------------- */
+
+.compass-strip {
+    width: 1764px;
+    height: 100%;
+    flow-children: right;
+    transform: translateX( -234px );
+    transition-property: transform;
+    transition-duration: 0.06s;
+    transition-timing-function: linear;
+}
+
+.compass-cell {
+    width: 36px;
+    height: 100%;
+}
+
+.compass-tick {
+    width: 2px;
+    height: 7px;
+    horizontal-align: center;
+    vertical-align: bottom;
+    margin-bottom: 3px;
+    background-color: #61686f;
+}
+
+.compass-letter {
+    horizontal-align: center;
+    vertical-align: top;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #9aa2ac;
+}
+
+.compass-cardinal .compass-letter {
+    margin-top: 2px;
+    font-family: Stratum2 Bold;
+    font-size: 18px;
+    color: #f2f4f7;
+}
+
+.compass-cardinal .compass-tick {
+    height: 10px;
+    background-color: #f2f4f7;
+}
+
+.compass-ordinal .compass-tick {
+    background-color: #9aa2ac;
+}
+
+/* Edges fade into the panel colour. */
+.compass-fade {
+    width: 64px;
+    height: 100%;
+}
+
+.compass-fade-l {
+    horizontal-align: left;
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #12171eff ), to( #12171e00 ) );
+}
+
+.compass-fade-r {
+    horizontal-align: right;
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #12171e00 ), to( #12171eff ) );
+}
+
+/* Caret: a notch over the centre of the viewport. */
+.compass-caret {
+    width: 2px;
+    height: 44px;
+    horizontal-align: center;
+    y: -3px;
+    background-color: #9aa2ac;
+}
+
+/* Degrees, beside the bar: outside the strip, so writing it never touches the strip. */
+.compass-deg {
+    width: 44px;
+    margin: 10px 0px 0px 8px;
+    vertical-align: top;
+    font-family: Stratum2 Bold;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #f2f4f7;
+    text-shadow: 0px 1px 2px 1.0 #000000cc;
+}
+
+/* Pins ---------------------------------------------------------------------- */
+
+.compass-pins {
+    width: 432px;
+    height: 58px;
+    overflow: noclip;
+}
+
+/* 40px wide, centred on its heading: translateX = centre - 20. */
+.compass-pin {
+    width: 40px;
+    height: 58px;
+    flow-children: down;
+    transform: translateX( 196px );
+    transition-property: transform;
+    transition-duration: 0.06s;
+    transition-timing-function: linear;
+}
+
+.compass-pin-icon {
+    width: 16px;
+    height: 16px;
+    margin-top: 11px;
+    horizontal-align: center;
+    background-image: url( "s2r://panorama/images/custom_game/uikit/compass/dot.vsvg" );
+    background-size: contains;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    wash-color: #9aa2ac;
+}
+
+/* The arrow only shows at an edge, pointing outwards. */
+.compass-pin-arrow {
+    visibility: collapse;
+    width: 10px;
+    height: 10px;
+    horizontal-align: center;
+    background-image: url( "s2r://panorama/images/custom_game/uikit/compass/chevron.vsvg" );
+    background-size: contains;
+    background-repeat: no-repeat;
+    wash-color: #9aa2ac;
+}
+
+.compass-pin.edge-l .compass-pin-arrow,
+.compass-pin.edge-r .compass-pin-arrow {
+    visibility: visible;
+}
+
+.compass-pin.edge-l .compass-pin-arrow { transform: rotateZ( 180deg ); }
+
+.compass-pin.edge-l,
+.compass-pin.edge-r {
+    opacity: 0.7;
+}
+
+.compass-pin.edge-l { transform: translateX( -14px ); }
+.compass-pin.edge-r { transform: translateX( 406px ); }
+
+/* Under the viewport. */
+.compass-pin-dist {
+    horizontal-align: center;
+    margin-top: 12px;
+    font-family: Stratum2 Bold;
+    font-size: 11px;
+    color: #f2f4f7;
+    white-space: nowrap;
+    text-shadow: 0px 1px 2px 1.0 #000000cc;
+}
+
+.compass-pin.edge-l .compass-pin-dist,
+.compass-pin.edge-r .compass-pin-dist {
+    margin-top: 2px;
+}
+
+/* Kinds (CompassNames) ----------------------------------------------------- */
+
+.compass-pin.kind-dot .compass-pin-icon {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/compass/dot.vsvg" );
+}
+
+.compass-pin.kind-diamond .compass-pin-icon {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/compass/diamond.vsvg" );
+}
+
+.compass-pin.kind-zone .compass-pin-icon {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/compass/zone.vsvg" );
+}
+
+.compass-pin.kind-skull .compass-pin-icon {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/compass/skull.vsvg" );
+}
+
+.compass-pin.kind-flag .compass-pin-icon {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/compass/flag.vsvg" );
+}
+
+.compass-pin.kind-crate .compass-pin-icon {
+    background-image: url( "s2r://panorama/images/custom_game/uikit/compass/crate.vsvg" );
+}
+
+/* Heading: hd-N = 2.5*N-90 degrees under the caret (2.5 degrees a step, for a smooth turn) ---- */
+
+.compass-strip.hd-0 { transform: translateX( -18px ); }
+.compass-strip.hd-1 { transform: translateX( -24px ); }
+.compass-strip.hd-2 { transform: translateX( -30px ); }
+.compass-strip.hd-3 { transform: translateX( -36px ); }
+.compass-strip.hd-4 { transform: translateX( -42px ); }
+.compass-strip.hd-5 { transform: translateX( -48px ); }
+.compass-strip.hd-6 { transform: translateX( -54px ); }
+.compass-strip.hd-7 { transform: translateX( -60px ); }
+.compass-strip.hd-8 { transform: translateX( -66px ); }
+.compass-strip.hd-9 { transform: translateX( -72px ); }
+.compass-strip.hd-10 { transform: translateX( -78px ); }
+.compass-strip.hd-11 { transform: translateX( -84px ); }
+.compass-strip.hd-12 { transform: translateX( -90px ); }
+.compass-strip.hd-13 { transform: translateX( -96px ); }
+.compass-strip.hd-14 { transform: translateX( -102px ); }
+.compass-strip.hd-15 { transform: translateX( -108px ); }
+.compass-strip.hd-16 { transform: translateX( -114px ); }
+.compass-strip.hd-17 { transform: translateX( -120px ); }
+.compass-strip.hd-18 { transform: translateX( -126px ); }
+.compass-strip.hd-19 { transform: translateX( -132px ); }
+.compass-strip.hd-20 { transform: translateX( -138px ); }
+.compass-strip.hd-21 { transform: translateX( -144px ); }
+.compass-strip.hd-22 { transform: translateX( -150px ); }
+.compass-strip.hd-23 { transform: translateX( -156px ); }
+.compass-strip.hd-24 { transform: translateX( -162px ); }
+.compass-strip.hd-25 { transform: translateX( -168px ); }
+.compass-strip.hd-26 { transform: translateX( -174px ); }
+.compass-strip.hd-27 { transform: translateX( -180px ); }
+.compass-strip.hd-28 { transform: translateX( -186px ); }
+.compass-strip.hd-29 { transform: translateX( -192px ); }
+.compass-strip.hd-30 { transform: translateX( -198px ); }
+.compass-strip.hd-31 { transform: translateX( -204px ); }
+.compass-strip.hd-32 { transform: translateX( -210px ); }
+.compass-strip.hd-33 { transform: translateX( -216px ); }
+.compass-strip.hd-34 { transform: translateX( -222px ); }
+.compass-strip.hd-35 { transform: translateX( -228px ); }
+.compass-strip.hd-36 { transform: translateX( -234px ); }
+.compass-strip.hd-37 { transform: translateX( -240px ); }
+.compass-strip.hd-38 { transform: translateX( -246px ); }
+.compass-strip.hd-39 { transform: translateX( -252px ); }
+.compass-strip.hd-40 { transform: translateX( -258px ); }
+.compass-strip.hd-41 { transform: translateX( -264px ); }
+.compass-strip.hd-42 { transform: translateX( -270px ); }
+.compass-strip.hd-43 { transform: translateX( -276px ); }
+.compass-strip.hd-44 { transform: translateX( -282px ); }
+.compass-strip.hd-45 { transform: translateX( -288px ); }
+.compass-strip.hd-46 { transform: translateX( -294px ); }
+.compass-strip.hd-47 { transform: translateX( -300px ); }
+.compass-strip.hd-48 { transform: translateX( -306px ); }
+.compass-strip.hd-49 { transform: translateX( -312px ); }
+.compass-strip.hd-50 { transform: translateX( -318px ); }
+.compass-strip.hd-51 { transform: translateX( -324px ); }
+.compass-strip.hd-52 { transform: translateX( -330px ); }
+.compass-strip.hd-53 { transform: translateX( -336px ); }
+.compass-strip.hd-54 { transform: translateX( -342px ); }
+.compass-strip.hd-55 { transform: translateX( -348px ); }
+.compass-strip.hd-56 { transform: translateX( -354px ); }
+.compass-strip.hd-57 { transform: translateX( -360px ); }
+.compass-strip.hd-58 { transform: translateX( -366px ); }
+.compass-strip.hd-59 { transform: translateX( -372px ); }
+.compass-strip.hd-60 { transform: translateX( -378px ); }
+.compass-strip.hd-61 { transform: translateX( -384px ); }
+.compass-strip.hd-62 { transform: translateX( -390px ); }
+.compass-strip.hd-63 { transform: translateX( -396px ); }
+.compass-strip.hd-64 { transform: translateX( -402px ); }
+.compass-strip.hd-65 { transform: translateX( -408px ); }
+.compass-strip.hd-66 { transform: translateX( -414px ); }
+.compass-strip.hd-67 { transform: translateX( -420px ); }
+.compass-strip.hd-68 { transform: translateX( -426px ); }
+.compass-strip.hd-69 { transform: translateX( -432px ); }
+.compass-strip.hd-70 { transform: translateX( -438px ); }
+.compass-strip.hd-71 { transform: translateX( -444px ); }
+.compass-strip.hd-72 { transform: translateX( -450px ); }
+.compass-strip.hd-73 { transform: translateX( -456px ); }
+.compass-strip.hd-74 { transform: translateX( -462px ); }
+.compass-strip.hd-75 { transform: translateX( -468px ); }
+.compass-strip.hd-76 { transform: translateX( -474px ); }
+.compass-strip.hd-77 { transform: translateX( -480px ); }
+.compass-strip.hd-78 { transform: translateX( -486px ); }
+.compass-strip.hd-79 { transform: translateX( -492px ); }
+.compass-strip.hd-80 { transform: translateX( -498px ); }
+.compass-strip.hd-81 { transform: translateX( -504px ); }
+.compass-strip.hd-82 { transform: translateX( -510px ); }
+.compass-strip.hd-83 { transform: translateX( -516px ); }
+.compass-strip.hd-84 { transform: translateX( -522px ); }
+.compass-strip.hd-85 { transform: translateX( -528px ); }
+.compass-strip.hd-86 { transform: translateX( -534px ); }
+.compass-strip.hd-87 { transform: translateX( -540px ); }
+.compass-strip.hd-88 { transform: translateX( -546px ); }
+.compass-strip.hd-89 { transform: translateX( -552px ); }
+.compass-strip.hd-90 { transform: translateX( -558px ); }
+.compass-strip.hd-91 { transform: translateX( -564px ); }
+.compass-strip.hd-92 { transform: translateX( -570px ); }
+.compass-strip.hd-93 { transform: translateX( -576px ); }
+.compass-strip.hd-94 { transform: translateX( -582px ); }
+.compass-strip.hd-95 { transform: translateX( -588px ); }
+.compass-strip.hd-96 { transform: translateX( -594px ); }
+.compass-strip.hd-97 { transform: translateX( -600px ); }
+.compass-strip.hd-98 { transform: translateX( -606px ); }
+.compass-strip.hd-99 { transform: translateX( -612px ); }
+.compass-strip.hd-100 { transform: translateX( -618px ); }
+.compass-strip.hd-101 { transform: translateX( -624px ); }
+.compass-strip.hd-102 { transform: translateX( -630px ); }
+.compass-strip.hd-103 { transform: translateX( -636px ); }
+.compass-strip.hd-104 { transform: translateX( -642px ); }
+.compass-strip.hd-105 { transform: translateX( -648px ); }
+.compass-strip.hd-106 { transform: translateX( -654px ); }
+.compass-strip.hd-107 { transform: translateX( -660px ); }
+.compass-strip.hd-108 { transform: translateX( -666px ); }
+.compass-strip.hd-109 { transform: translateX( -672px ); }
+.compass-strip.hd-110 { transform: translateX( -678px ); }
+.compass-strip.hd-111 { transform: translateX( -684px ); }
+.compass-strip.hd-112 { transform: translateX( -690px ); }
+.compass-strip.hd-113 { transform: translateX( -696px ); }
+.compass-strip.hd-114 { transform: translateX( -702px ); }
+.compass-strip.hd-115 { transform: translateX( -708px ); }
+.compass-strip.hd-116 { transform: translateX( -714px ); }
+.compass-strip.hd-117 { transform: translateX( -720px ); }
+.compass-strip.hd-118 { transform: translateX( -726px ); }
+.compass-strip.hd-119 { transform: translateX( -732px ); }
+.compass-strip.hd-120 { transform: translateX( -738px ); }
+.compass-strip.hd-121 { transform: translateX( -744px ); }
+.compass-strip.hd-122 { transform: translateX( -750px ); }
+.compass-strip.hd-123 { transform: translateX( -756px ); }
+.compass-strip.hd-124 { transform: translateX( -762px ); }
+.compass-strip.hd-125 { transform: translateX( -768px ); }
+.compass-strip.hd-126 { transform: translateX( -774px ); }
+.compass-strip.hd-127 { transform: translateX( -780px ); }
+.compass-strip.hd-128 { transform: translateX( -786px ); }
+.compass-strip.hd-129 { transform: translateX( -792px ); }
+.compass-strip.hd-130 { transform: translateX( -798px ); }
+.compass-strip.hd-131 { transform: translateX( -804px ); }
+.compass-strip.hd-132 { transform: translateX( -810px ); }
+.compass-strip.hd-133 { transform: translateX( -816px ); }
+.compass-strip.hd-134 { transform: translateX( -822px ); }
+.compass-strip.hd-135 { transform: translateX( -828px ); }
+.compass-strip.hd-136 { transform: translateX( -834px ); }
+.compass-strip.hd-137 { transform: translateX( -840px ); }
+.compass-strip.hd-138 { transform: translateX( -846px ); }
+.compass-strip.hd-139 { transform: translateX( -852px ); }
+.compass-strip.hd-140 { transform: translateX( -858px ); }
+.compass-strip.hd-141 { transform: translateX( -864px ); }
+.compass-strip.hd-142 { transform: translateX( -870px ); }
+.compass-strip.hd-143 { transform: translateX( -876px ); }
+.compass-strip.hd-144 { transform: translateX( -882px ); }
+.compass-strip.hd-145 { transform: translateX( -888px ); }
+.compass-strip.hd-146 { transform: translateX( -894px ); }
+.compass-strip.hd-147 { transform: translateX( -900px ); }
+.compass-strip.hd-148 { transform: translateX( -906px ); }
+.compass-strip.hd-149 { transform: translateX( -912px ); }
+.compass-strip.hd-150 { transform: translateX( -918px ); }
+.compass-strip.hd-151 { transform: translateX( -924px ); }
+.compass-strip.hd-152 { transform: translateX( -930px ); }
+.compass-strip.hd-153 { transform: translateX( -936px ); }
+.compass-strip.hd-154 { transform: translateX( -942px ); }
+.compass-strip.hd-155 { transform: translateX( -948px ); }
+.compass-strip.hd-156 { transform: translateX( -954px ); }
+.compass-strip.hd-157 { transform: translateX( -960px ); }
+.compass-strip.hd-158 { transform: translateX( -966px ); }
+.compass-strip.hd-159 { transform: translateX( -972px ); }
+.compass-strip.hd-160 { transform: translateX( -978px ); }
+.compass-strip.hd-161 { transform: translateX( -984px ); }
+.compass-strip.hd-162 { transform: translateX( -990px ); }
+.compass-strip.hd-163 { transform: translateX( -996px ); }
+.compass-strip.hd-164 { transform: translateX( -1002px ); }
+.compass-strip.hd-165 { transform: translateX( -1008px ); }
+.compass-strip.hd-166 { transform: translateX( -1014px ); }
+.compass-strip.hd-167 { transform: translateX( -1020px ); }
+.compass-strip.hd-168 { transform: translateX( -1026px ); }
+.compass-strip.hd-169 { transform: translateX( -1032px ); }
+.compass-strip.hd-170 { transform: translateX( -1038px ); }
+.compass-strip.hd-171 { transform: translateX( -1044px ); }
+.compass-strip.hd-172 { transform: translateX( -1050px ); }
+.compass-strip.hd-173 { transform: translateX( -1056px ); }
+.compass-strip.hd-174 { transform: translateX( -1062px ); }
+.compass-strip.hd-175 { transform: translateX( -1068px ); }
+.compass-strip.hd-176 { transform: translateX( -1074px ); }
+.compass-strip.hd-177 { transform: translateX( -1080px ); }
+.compass-strip.hd-178 { transform: translateX( -1086px ); }
+.compass-strip.hd-179 { transform: translateX( -1092px ); }
+.compass-strip.hd-180 { transform: translateX( -1098px ); }
+.compass-strip.hd-181 { transform: translateX( -1104px ); }
+.compass-strip.hd-182 { transform: translateX( -1110px ); }
+.compass-strip.hd-183 { transform: translateX( -1116px ); }
+.compass-strip.hd-184 { transform: translateX( -1122px ); }
+.compass-strip.hd-185 { transform: translateX( -1128px ); }
+.compass-strip.hd-186 { transform: translateX( -1134px ); }
+.compass-strip.hd-187 { transform: translateX( -1140px ); }
+.compass-strip.hd-188 { transform: translateX( -1146px ); }
+.compass-strip.hd-189 { transform: translateX( -1152px ); }
+.compass-strip.hd-190 { transform: translateX( -1158px ); }
+.compass-strip.hd-191 { transform: translateX( -1164px ); }
+.compass-strip.hd-192 { transform: translateX( -1170px ); }
+.compass-strip.hd-193 { transform: translateX( -1176px ); }
+.compass-strip.hd-194 { transform: translateX( -1182px ); }
+.compass-strip.hd-195 { transform: translateX( -1188px ); }
+.compass-strip.hd-196 { transform: translateX( -1194px ); }
+.compass-strip.hd-197 { transform: translateX( -1200px ); }
+.compass-strip.hd-198 { transform: translateX( -1206px ); }
+.compass-strip.hd-199 { transform: translateX( -1212px ); }
+.compass-strip.hd-200 { transform: translateX( -1218px ); }
+.compass-strip.hd-201 { transform: translateX( -1224px ); }
+.compass-strip.hd-202 { transform: translateX( -1230px ); }
+.compass-strip.hd-203 { transform: translateX( -1236px ); }
+.compass-strip.hd-204 { transform: translateX( -1242px ); }
+.compass-strip.hd-205 { transform: translateX( -1248px ); }
+.compass-strip.hd-206 { transform: translateX( -1254px ); }
+.compass-strip.hd-207 { transform: translateX( -1260px ); }
+.compass-strip.hd-208 { transform: translateX( -1266px ); }
+.compass-strip.hd-209 { transform: translateX( -1272px ); }
+.compass-strip.hd-210 { transform: translateX( -1278px ); }
+.compass-strip.hd-211 { transform: translateX( -1284px ); }
+.compass-strip.hd-212 { transform: translateX( -1290px ); }
+.compass-strip.hd-213 { transform: translateX( -1296px ); }
+.compass-strip.hd-214 { transform: translateX( -1302px ); }
+.compass-strip.hd-215 { transform: translateX( -1308px ); }
+.compass-strip.hd-216 { transform: translateX( -1314px ); }
+
+/* Pin heading from the caret: rel-N = 2.5*N-90 degrees ----------------------- */
+
+.compass-pin.rel-0 { transform: translateX( -20px ); }
+.compass-pin.rel-1 { transform: translateX( -14px ); }
+.compass-pin.rel-2 { transform: translateX( -8px ); }
+.compass-pin.rel-3 { transform: translateX( -2px ); }
+.compass-pin.rel-4 { transform: translateX( 4px ); }
+.compass-pin.rel-5 { transform: translateX( 10px ); }
+.compass-pin.rel-6 { transform: translateX( 16px ); }
+.compass-pin.rel-7 { transform: translateX( 22px ); }
+.compass-pin.rel-8 { transform: translateX( 28px ); }
+.compass-pin.rel-9 { transform: translateX( 34px ); }
+.compass-pin.rel-10 { transform: translateX( 40px ); }
+.compass-pin.rel-11 { transform: translateX( 46px ); }
+.compass-pin.rel-12 { transform: translateX( 52px ); }
+.compass-pin.rel-13 { transform: translateX( 58px ); }
+.compass-pin.rel-14 { transform: translateX( 64px ); }
+.compass-pin.rel-15 { transform: translateX( 70px ); }
+.compass-pin.rel-16 { transform: translateX( 76px ); }
+.compass-pin.rel-17 { transform: translateX( 82px ); }
+.compass-pin.rel-18 { transform: translateX( 88px ); }
+.compass-pin.rel-19 { transform: translateX( 94px ); }
+.compass-pin.rel-20 { transform: translateX( 100px ); }
+.compass-pin.rel-21 { transform: translateX( 106px ); }
+.compass-pin.rel-22 { transform: translateX( 112px ); }
+.compass-pin.rel-23 { transform: translateX( 118px ); }
+.compass-pin.rel-24 { transform: translateX( 124px ); }
+.compass-pin.rel-25 { transform: translateX( 130px ); }
+.compass-pin.rel-26 { transform: translateX( 136px ); }
+.compass-pin.rel-27 { transform: translateX( 142px ); }
+.compass-pin.rel-28 { transform: translateX( 148px ); }
+.compass-pin.rel-29 { transform: translateX( 154px ); }
+.compass-pin.rel-30 { transform: translateX( 160px ); }
+.compass-pin.rel-31 { transform: translateX( 166px ); }
+.compass-pin.rel-32 { transform: translateX( 172px ); }
+.compass-pin.rel-33 { transform: translateX( 178px ); }
+.compass-pin.rel-34 { transform: translateX( 184px ); }
+.compass-pin.rel-35 { transform: translateX( 190px ); }
+.compass-pin.rel-36 { transform: translateX( 196px ); }
+.compass-pin.rel-37 { transform: translateX( 202px ); }
+.compass-pin.rel-38 { transform: translateX( 208px ); }
+.compass-pin.rel-39 { transform: translateX( 214px ); }
+.compass-pin.rel-40 { transform: translateX( 220px ); }
+.compass-pin.rel-41 { transform: translateX( 226px ); }
+.compass-pin.rel-42 { transform: translateX( 232px ); }
+.compass-pin.rel-43 { transform: translateX( 238px ); }
+.compass-pin.rel-44 { transform: translateX( 244px ); }
+.compass-pin.rel-45 { transform: translateX( 250px ); }
+.compass-pin.rel-46 { transform: translateX( 256px ); }
+.compass-pin.rel-47 { transform: translateX( 262px ); }
+.compass-pin.rel-48 { transform: translateX( 268px ); }
+.compass-pin.rel-49 { transform: translateX( 274px ); }
+.compass-pin.rel-50 { transform: translateX( 280px ); }
+.compass-pin.rel-51 { transform: translateX( 286px ); }
+.compass-pin.rel-52 { transform: translateX( 292px ); }
+.compass-pin.rel-53 { transform: translateX( 298px ); }
+.compass-pin.rel-54 { transform: translateX( 304px ); }
+.compass-pin.rel-55 { transform: translateX( 310px ); }
+.compass-pin.rel-56 { transform: translateX( 316px ); }
+.compass-pin.rel-57 { transform: translateX( 322px ); }
+.compass-pin.rel-58 { transform: translateX( 328px ); }
+.compass-pin.rel-59 { transform: translateX( 334px ); }
+.compass-pin.rel-60 { transform: translateX( 340px ); }
+.compass-pin.rel-61 { transform: translateX( 346px ); }
+.compass-pin.rel-62 { transform: translateX( 352px ); }
+.compass-pin.rel-63 { transform: translateX( 358px ); }
+.compass-pin.rel-64 { transform: translateX( 364px ); }
+.compass-pin.rel-65 { transform: translateX( 370px ); }
+.compass-pin.rel-66 { transform: translateX( 376px ); }
+.compass-pin.rel-67 { transform: translateX( 382px ); }
+.compass-pin.rel-68 { transform: translateX( 388px ); }
+.compass-pin.rel-69 { transform: translateX( 394px ); }
+.compass-pin.rel-70 { transform: translateX( 400px ); }
+.compass-pin.rel-71 { transform: translateX( 406px ); }
+.compass-pin.rel-72 { transform: translateX( 412px ); }
+
+/* Styles (UiStyle) on cp_bar: caret and north ------------------------------ */
+
+.compass.style-neutral .compass-caret { background-color: #9aa2ac; }
+.compass.style-neutral .compass-north .compass-letter { color: #9aa2ac; }
+.compass.style-neutral .compass-north .compass-tick { background-color: #9aa2ac; }
+
+.compass.style-info .compass-caret { background-color: #56a0dd; }
+.compass.style-info .compass-north .compass-letter { color: #56a0dd; }
+.compass.style-info .compass-north .compass-tick { background-color: #56a0dd; }
+
+.compass.style-success .compass-caret { background-color: #9ccf4f; }
+.compass.style-success .compass-north .compass-letter { color: #9ccf4f; }
+.compass.style-success .compass-north .compass-tick { background-color: #9ccf4f; }
+
+.compass.style-warn .compass-caret { background-color: #f0a531; }
+.compass.style-warn .compass-north .compass-letter { color: #f0a531; }
+.compass.style-warn .compass-north .compass-tick { background-color: #f0a531; }
+
+.compass.style-danger .compass-caret { background-color: #e0432f; }
+.compass.style-danger .compass-north .compass-letter { color: #e0432f; }
+.compass.style-danger .compass-north .compass-tick { background-color: #e0432f; }
+
+.compass.style-purple .compass-caret { background-color: #8847ff; }
+.compass.style-purple .compass-north .compass-letter { color: #8847ff; }
+.compass.style-purple .compass-north .compass-tick { background-color: #8847ff; }
+
+.compass.style-gold .compass-caret { background-color: #e0a24a; }
+.compass.style-gold .compass-north .compass-letter { color: #e0a24a; }
+.compass.style-gold .compass-north .compass-tick { background-color: #e0a24a; }
+
+/* Styles (UiStyle) on a pin: its colour ------------------------------------ */
+
+.compass-pin.style-neutral .compass-pin-icon,
+.compass-pin.style-neutral .compass-pin-arrow { wash-color: #9aa2ac; }
+.compass-pin.style-info .compass-pin-icon,
+.compass-pin.style-info .compass-pin-arrow { wash-color: #56a0dd; }
+.compass-pin.style-success .compass-pin-icon,
+.compass-pin.style-success .compass-pin-arrow { wash-color: #9ccf4f; }
+.compass-pin.style-warn .compass-pin-icon,
+.compass-pin.style-warn .compass-pin-arrow { wash-color: #f0a531; }
+.compass-pin.style-danger .compass-pin-icon,
+.compass-pin.style-danger .compass-pin-arrow { wash-color: #e0432f; }
+.compass-pin.style-purple .compass-pin-icon,
+.compass-pin.style-purple .compass-pin-arrow { wash-color: #8847ff; }
+.compass-pin.style-gold .compass-pin-icon,
+.compass-pin.style-gold .compass-pin-arrow { wash-color: #e0a24a; }

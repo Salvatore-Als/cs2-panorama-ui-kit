@@ -1,0 +1,106 @@
+{
+  "component": "inventory",
+  "csharp": "InventoryLayout / IInventoryService",
+  "summary": "Row of item tiles, per player: icon, count, key hint, one tile selected. A count that changes pulses its tile.",
+  "params": {
+    "slots": {
+      "default": 6,
+      "doc": "Tiles in the pool (InventoryLayout.Slots)."
+    }
+  },
+  "repeat": {
+    "n": "slots"
+  },
+  "panels": [
+    {
+      "id": "inv_bar",
+      "required": true,
+      "classes": [
+        "style-*"
+      ],
+      "doc": "The row. Style = colour of the selected tile. InventoryOptions.Classes go here too."
+    },
+    {
+      "id": "inv_{n}",
+      "required": true,
+      "classes": [
+        "hidden",
+        "selected",
+        "depleted",
+        "style-*",
+        "pulse-a",
+        "pulse-b"
+      ],
+      "doc": "A tile. Author it `hidden`. `selected` for InventoryOptions.Selected, `depleted` when the count is 0. `pulse-a` and `pulse-b` swap when the count changes: give both the same animation under two names, so each swap restarts it. Style = the tile's accent and icon tint."
+    },
+    {
+      "id": "inv_{n}_icon",
+      "required": true,
+      "classes": [
+        "item-*"
+      ],
+      "doc": "The icon. `item-<name>` sets its `background-image`: one rule per item in the stylesheet (InventorySlot.Item)."
+    },
+    {
+      "id": "inv_{n}_count",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the count, `empty` when there is no number."
+    },
+    {
+      "id": "inv_{n}_key",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the key hint, `empty` when blank."
+    },
+    {
+      "id": "inv_{n}_name",
+      "required": false,
+      "classes": [
+        "empty"
+      ],
+      "doc": "Label of the item name, `empty` when blank. The bundled stylesheet shows it only under a `selected` tile."
+    }
+  ],
+  "texts": [
+    {
+      "var": "inv_{n}_count",
+      "required": true,
+      "doc": "InventorySlot.Count"
+    },
+    {
+      "var": "inv_{n}_key",
+      "required": false,
+      "doc": "InventorySlot.Key"
+    },
+    {
+      "var": "inv_{n}_name",
+      "required": false,
+      "doc": "InventorySlot.Name"
+    },
+    {
+      "var": "inv_<key>",
+      "required": false,
+      "extra": true,
+      "doc": "InventoryOptions.Texts[key]"
+    }
+  ],
+  "css": [
+    "hidden",
+    "empty",
+    "selected",
+    "depleted",
+    "pulse-a",
+    "pulse-b",
+    "item-ammo",
+    "style-neutral",
+    "style-info",
+    "style-success",
+    "style-warn",
+    "style-danger"
+  ]
+}

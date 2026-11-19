@@ -7,13 +7,71 @@
 
     style-* on m_left / m_right colours a side's count, title and score tab (MatchOptions.LeftStyle /
     RightStyle). "urgent" on m_bar turns the timer red and pulses it. Contract "match" (docs/CONTRACTS.md).
+
+    "band" on m_bar (MatchOptions.Band): a long opaque strip across the top, fading out at both ends, over
+    the game's team bar, and the bar hangs under it instead of against the edge:
+
+        ====================[  compass, at-band  ]====================   .match-band, 62px
+                           [  6  |  1:45  |  6  ]                        .match-core, dropped
+                           [ALIVE| ZONE 2 |KILLS]
+
+    The strip is empty: a compass at CompassPlacement.Band sits in it, a zone status at the same placement
+    under the bar. style-* on m_bar colours the hairline under the strip.
 */
 
+/*
+    Under the other uikit layouts (99999 in uikit_shared), still over the game's HUD: a compass or a zone
+    status put on the band draws on top of it whatever order the layouts spawned in. Only this layout
+    includes this stylesheet, so the override stays here.
+*/
+.uikit-screen {
+    z-index: 99990;
+}
+
+/* Full width, so the strip can be wider than the bar. */
 .match-bar {
+    width: 100%;
+    vertical-align: top;
+}
+
+.match-core {
     flow-children: down;
     width: 460px;
     horizontal-align: center;
     vertical-align: top;
+}
+
+/* Band --------------------------------------------------------------------- */
+
+.match-band {
+    visibility: collapse;
+    width: 1400px;
+    height: 62px;
+    horizontal-align: center;
+    vertical-align: top;
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #12171e00 ), color-stop( 0.14, #12171e ), color-stop( 0.86, #12171e ), to( #12171e00 ) );
+}
+
+.match-band-line {
+    width: 100%;
+    height: 2px;
+    vertical-align: bottom;
+    background-color: gradient( linear, 0% 0%, 100% 0%, from( #9aa2ac00 ), color-stop( 0.2, #9aa2ac66 ), color-stop( 0.8, #9aa2ac66 ), to( #9aa2ac00 ) );
+}
+
+.match-bar.band .match-band {
+    visibility: visible;
+}
+
+/* Under the strip: the hairline runs into the top of the bar. */
+.match-bar.band .match-core {
+    margin-top: 62px;
+}
+
+.match-bar.band .match-row {
+    border-top: 1px solid #ffffff14;
+    border-radius: 0px 0px 8px 8px;
+    box-shadow: #00000080 0px 6px 14px 0px;
 }
 
 /* Row ---------------------------------------------------------------------- */
@@ -143,6 +201,15 @@
     font-size: 17px;
     color: #f2f4f7;
 }
+
+/* Styles (UiStyle) on m_bar: the band's hairline ---------------------------- */
+
+.match-bar.style-info .match-band-line { background-color: gradient( linear, 0% 0%, 100% 0%, from( #56a0dd00 ), color-stop( 0.2, #56a0dd ), color-stop( 0.8, #56a0dd ), to( #56a0dd00 ) ); }
+.match-bar.style-success .match-band-line { background-color: gradient( linear, 0% 0%, 100% 0%, from( #9ccf4f00 ), color-stop( 0.2, #9ccf4f ), color-stop( 0.8, #9ccf4f ), to( #9ccf4f00 ) ); }
+.match-bar.style-warn .match-band-line { background-color: gradient( linear, 0% 0%, 100% 0%, from( #f0a53100 ), color-stop( 0.2, #f0a531 ), color-stop( 0.8, #f0a531 ), to( #f0a53100 ) ); }
+.match-bar.style-danger .match-band-line { background-color: gradient( linear, 0% 0%, 100% 0%, from( #e0432f00 ), color-stop( 0.2, #e0432f ), color-stop( 0.8, #e0432f ), to( #e0432f00 ) ); }
+.match-bar.style-purple .match-band-line { background-color: gradient( linear, 0% 0%, 100% 0%, from( #8847ff00 ), color-stop( 0.2, #8847ff ), color-stop( 0.8, #8847ff ), to( #8847ff00 ) ); }
+.match-bar.style-gold .match-band-line { background-color: gradient( linear, 0% 0%, 100% 0%, from( #e0a24a00 ), color-stop( 0.2, #e0a24a ), color-stop( 0.8, #e0a24a ), to( #e0a24a00 ) ); }
 
 /* Styles (UiStyle): a side's count, title and score tab ---- */
 

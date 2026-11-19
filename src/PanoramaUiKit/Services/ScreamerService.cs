@@ -44,16 +44,19 @@ internal sealed class ScreamerService(LayoutRegistry registry) : ComponentServic
                 return screamer.Show(player, ScreamerChannel.Key, content);
             }
 
-            // From the server, not CSS `sound`: a stylesheet sound loads on use and starts after the picture.
-            player.ExecuteClientCommand($"play {sound}");
+            IUiHandle handle = screamer.Show(player, ScreamerChannel.Key, content);
+
+            // From the server, not CSS `sound`: a stylesheet sound loads on use and arrives at an unknown time.
             if (options.SoundLeadSeconds <= 0f)
             {
-                return screamer.Show(player, ScreamerChannel.Key, content);
+                screamer.CancelPending(player.Slot);
+                player.ExecuteClientCommand($"play {sound}");
+            }
+            else
+            {
+                screamer.PlayLater(player, options.SoundLeadSeconds, sound);
             }
 
-            // The client is slow to start a sound: the picture waits for it.
-            UiHandle handle = new(player);
-            screamer.ShowLater(player, options.SoundLeadSeconds, content, handle);
             return handle;
         });
     }

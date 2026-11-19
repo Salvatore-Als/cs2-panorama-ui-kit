@@ -13,11 +13,12 @@ namespace PanoramaUiKit.Demo;
 /// <summary>
 /// Demo consumer of the kit. One partial file per component, one command each:
 ///
+///   UI/DemoPlugin.Showcase.cs   css_uikit_demo  (menu: every demo below, one click each)
 ///   UI/DemoPlugin.Toast.cs      css_uikit_demo_toast
 ///   UI/DemoPlugin.Banner.cs     css_uikit_demo_banner [text]
 ///   UI/DemoPlugin.Announce.cs   css_uikit_demo_announce
 ///   UI/DemoPlugin.Abilities.cs  css_uikit_demo_abilities
-///   UI/DemoPlugin.Match.cs      css_uikit_demo_match
+///   UI/DemoPlugin.Match.cs      css_uikit_demo_match [noscore] [band]
 ///   UI/DemoPlugin.KillFeed.cs   css_uikit_demo_killfeed
 ///   UI/DemoPlugin.Victory.cs    css_uikit_demo_victory
 ///   UI/DemoPlugin.Roulette.cs   css_uikit_demo_roulette [fast|slow]
@@ -29,6 +30,12 @@ namespace PanoramaUiKit.Demo;
 ///   UI/DemoPlugin.Progress.cs   css_uikit_demo_progress
 ///   UI/DemoPlugin.Dial.cs       css_uikit_demo_dial
 ///   UI/DemoPlugin.Screamer.cs   css_uikit_demo_screamer [name] [seconds]
+///   UI/DemoPlugin.Compass.cs    css_uikit_demo_compass [pins] [band]
+///   UI/DemoPlugin.Inventory.cs  css_uikit_demo_inventory [select <n> | off]
+///   UI/DemoPlugin.Zone.cs       css_uikit_demo_zone [seconds|alert|out|off] [placement] [slot]
+///   UI/DemoPlugin.Comms.cs      css_uikit_demo_comms [face] [text...]
+///   UI/DemoPlugin.Recap.cs      css_uikit_demo_recap [win|lose|duo]
+///   UI/DemoPlugin.Minimap.cs    css_uikit_demo_minimap [tl|tr|bl|br] [sm|md|lg] [zoom <n>] [map <name>] [shrink|track|off]
 ///
 /// Every demo names the layout file it draws on (DemoLayouts.cs): there is no default.
 /// This file holds what they share: the capability, and the helpers to resolve it and to loop.

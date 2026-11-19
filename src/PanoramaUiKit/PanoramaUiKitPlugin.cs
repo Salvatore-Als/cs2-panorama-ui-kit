@@ -17,11 +17,11 @@ namespace PanoramaUiKit;
 /// Panorama UI Kit: toasts, banners, announcements, ability bar, match bar, kill feed and victory
 /// screen for every plugin on the server, through the <see cref="IPanoramaUiKit"/> capability.
 /// </summary>
-public sealed class PanoramaUiKitPlugin : BasePlugin, IPluginConfig<UiKitConfig>
+public sealed partial class PanoramaUiKitPlugin : BasePlugin, IPluginConfig<UiKitConfig>
 {
     public override string ModuleName => "Panorama UI Kit";
 
-    public override string ModuleVersion => "1.3.0";
+    public override string ModuleVersion => "1.4.0";
 
     public override string ModuleAuthor => "Kriax";
 
@@ -54,8 +54,18 @@ public sealed class PanoramaUiKitPlugin : BasePlugin, IPluginConfig<UiKitConfig>
 
         _registry = registry;
         registry.WarmWanted += ScheduleWarmUp;
+        LoadDevMaps(registry);
 
         RegisterListener<Listeners.OnClientDisconnect>(slot => registry.Forget(slot));
+        RegisterEventHandler<EventPlayerDeath>((@event, _) =>
+        {
+            if (@event.Userid is { IsValid: true } victim)
+            {
+                _kit?.PlayerDied(victim);
+            }
+
+            return HookResult.Continue;
+        });
         RegisterListener<Listeners.OnClientPutInServer>(_ => ScheduleWarmUp());
         RegisterListener<Listeners.OnMapStart>(_ =>
         {

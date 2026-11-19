@@ -42,6 +42,27 @@ kit.Match.Update(new MatchOptions
 | `Center` | dash | Centre text. `MatchOptions.FormatTime(seconds)` formats a `m:ss` clock. |
 | `CenterSub` | none | Small line under the centre. Collapsed when blank. |
 | `Urgent` | `false` | Last seconds: the timer turns red and pulses. |
+| `Band` | `false` | `band` on `m_bar`: a long opaque strip across the top (1400 px, fading at both ends) over the game's team bar, and the bar hangs under it. `Style` colours the strip's hairline. |
+
+### Band
+
+The strip is empty on purpose: it is room for other components, which take the `Band` placement.
+
+```
+==========[ compass: CompassPlacement.Band ]==========    strip, 62 px
+          [   6   |    1:45    |    6   ]                 the bar, under it
+          [ ALIVE |   ZONE 2   |  KILLS ]
+              [ zone status: Band ]
+              [ banner: BannerPlacement.UnderBand ]
+```
+
+```csharp
+kit.Match.Update(new MatchOptions { Layout = Match, Band = true, /* ... */ });
+kit.Compass.Show(player, new CompassOptions { Layout = Compass, Placement = CompassPlacement.Band });
+kit.Zone.Show(player, new ZoneOptions { Layout = Zones, Placement = CompassPlacement.Band, /* ... */ });
+```
+
+The match layout draws under the other kit layouts (`z-index` 99990 against 99999), so whatever sits on the strip stays on top of it. The width and the height of the strip live in `uikit_match.css` (`.match-band`); the gap under the bar for the zone status in `uikit_zone.css` (`.zone-status.at-band`). Score tabs, when shown, overlap a zone status at `Band`.
 
 ## Other calls
 

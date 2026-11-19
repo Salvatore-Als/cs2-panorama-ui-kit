@@ -54,6 +54,14 @@ public sealed record MatchOptions : UiContent
     /// <summary>Class <c>urgent</c> on <c>m_bar</c>: last seconds, the timer turns red and pulses.</summary>
     public bool Urgent { get; init; }
 
+    /// <summary>
+    /// Class <c>band</c> on <c>m_bar</c>: a long opaque strip across the top of the screen, over the game's
+    /// team bar, and the bar hangs under it instead of against the edge. The strip is empty: put a compass
+    /// in it with <see cref="Compass.CompassPlacement.Band"/>, and a zone status at
+    /// <see cref="Zone.ZonePlacement.Band"/> lands under the bar. <see cref="UiContent.Style"/> colours the strip's hairline.
+    /// </summary>
+    public bool Band { get; init; }
+
     /// <summary>Layout file to draw on, by name (<c>Name = "uikit_...")</c>. Required: there is no default.</summary>
     public required MatchLayout Layout { get; init; }
 

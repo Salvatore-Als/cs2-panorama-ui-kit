@@ -15,3 +15,5 @@ __pycache__/
 previews/
 .claude/
 discord.md
+# Local battle royale demo plugin (build.sh packages it when present)
+src/PanoramaUiKit.BrDemo/
